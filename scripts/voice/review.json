@@ -1,0 +1,230 @@
+{
+ "ph/a": {
+  "verdict": "ok",
+  "hash": "b8c758b28b",
+  "at": "2026-10-04T18:43:23.673Z"
+ },
+ "ph/ai": {
+  "verdict": "ok",
+  "hash": "dca4dc867d",
+  "at": "2026-10-04T18:46:27.909Z"
+ },
+ "ph/air": {
+  "verdict": "ok",
+  "hash": "904666eedb",
+  "at": "2026-10-04T18:47:00.614Z"
+ },
+ "ph/ar": {
+  "verdict": "ok",
+  "hash": "29acfb3591",
+  "at": "2026-10-04T18:46:37.317Z"
+ },
+ "ph/b": {
+  "verdict": "ok",
+  "hash": "8743c4cf1c",
+  "at": "2026-10-04T18:45:20.091Z"
+ },
+ "ph/ch": {
+  "verdict": "ok",
+  "hash": "fdf50400ed",
+  "at": "2026-10-04T18:46:13.572Z"
+ },
+ "ph/d": {
+  "verdict": "ok",
+  "hash": "ec5045a248",
+  "at": "2026-10-04T18:43:35.785Z"
+ },
+ "ph/e": {
+  "verdict": "ok",
+  "hash": "be32c68e62",
+  "at": "2026-10-04T18:44:39.994Z"
+ },
+ "ph/ear": {
+  "verdict": "ok",
+  "hash": "e53414bd63",
+  "at": "2026-10-04T18:46:57.277Z"
+ },
+ "ph/ee": {
+  "verdict": "ok",
+  "hash": "a4213c9a2c",
+  "at": "2026-10-04T18:46:30.301Z"
+ },
+ "ph/er": {
+  "verdict": "ok",
+  "hash": "f54bf5df25",
+  "at": "2026-10-04T18:47:03.067Z"
+ },
+ "ph/f": {
+  "verdict": "ok",
+  "hash": "af77183d6f",
+  "at": "2026-10-04T18:45:22.587Z"
+ },
+ "ph/g": {
+  "verdict": "ok",
+  "hash": "7d5d777bc4",
+  "at": "2026-10-04T18:43:37.209Z"
+ },
+ "ph/h": {
+  "verdict": "ok",
+  "hash": "86b27c61e5",
+  "at": "2026-10-04T18:45:18.678Z"
+ },
+ "ph/i": {
+  "verdict": "ok",
+  "hash": "28966d3327",
+  "at": "2026-10-04T18:43:31.345Z"
+ },
+ "ph/igh": {
+  "verdict": "ok",
+  "hash": "a284b1c28b",
+  "at": "2026-10-04T18:46:31.349Z"
+ },
+ "ph/j": {
+  "verdict": "ok",
+  "hash": "50ce9afd2f",
+  "at": "2026-10-04T18:45:25.707Z"
+ },
+ "ph/k": {
+  "verdict": "ok",
+  "hash": "d904137d3a",
+  "at": "2026-10-04T18:44:37.890Z"
+ },
+ "ph/l": {
+  "verdict": "ok",
+  "hash": "ff9b0e7a9a",
+  "at": "2026-10-04T18:45:23.835Z"
+ },
+ "ph/m": {
+  "verdict": "ok",
+  "hash": "7379341e6b",
+  "at": "2026-10-04T18:43:34.513Z"
+ },
+ "ph/n": {
+  "verdict": "ok",
+  "hash": "adba120416",
+  "at": "2026-10-04T18:43:33.004Z"
+ },
+ "ph/ng": {
+  "verdict": "ok",
+  "hash": "b234de124c",
+  "at": "2026-10-04T18:46:24.653Z"
+ },
+ "ph/nk": {
+  "verdict": "ok",
+  "hash": "ec722385b7",
+  "at": "2026-10-04T18:46:26.597Z"
+ },
+ "ph/o": {
+  "verdict": "bad",
+  "note": "none of those sounds like o in octopus",
+  "hash": "65ba4f131e",
+  "at": "2026-10-04T18:44:30.792Z"
+ },
+ "ph/oa": {
+  "verdict": "ok",
+  "hash": "15088b41a5",
+  "at": "2026-10-04T18:46:34.181Z"
+ },
+ "ph/oi": {
+  "verdict": "ok",
+  "hash": "d33ac8718f",
+  "at": "2026-10-04T18:46:54.637Z"
+ },
+ "ph/oo-long": {
+  "verdict": "ok",
+  "hash": "17f17ac48c",
+  "at": "2026-10-04T18:46:35.128Z"
+ },
+ "ph/oo-short": {
+  "verdict": "bad",
+  "note": "this sounds like the phonetic single o",
+  "hash": "877c629e4e",
+  "at": "2026-10-04T18:47:22.467Z"
+ },
+ "ph/or": {
+  "verdict": "ok",
+  "hash": "f6a9ecf5f0",
+  "at": "2026-10-04T18:46:39.733Z"
+ },
+ "ph/ow": {
+  "verdict": "ok",
+  "hash": "544ef20dae",
+  "at": "2026-10-04T18:46:51.085Z"
+ },
+ "ph/p": {
+  "verdict": "ok",
+  "hash": "2aaae409d4",
+  "at": "2026-10-04T18:43:29.737Z"
+ },
+ "ph/qu": {
+  "verdict": "ok",
+  "hash": "f57c7553b2",
+  "at": "2026-10-04T18:46:11.892Z"
+ },
+ "ph/r": {
+  "verdict": "ok",
+  "hash": "2040acaab7",
+  "at": "2026-10-04T18:45:13.497Z"
+ },
+ "ph/s": {
+  "verdict": "ok",
+  "hash": "5ca63e205b",
+  "at": "2026-10-04T18:43:18.732Z"
+ },
+ "ph/schwa": {
+  "verdict": "bad",
+  "hash": "44061bba8b",
+  "at": "2026-10-04T18:47:30.769Z"
+ },
+ "ph/sh": {
+  "verdict": "ok",
+  "hash": "7e40d8a5fc",
+  "at": "2026-10-04T18:46:14.876Z"
+ },
+ "ph/t": {
+  "verdict": "ok",
+  "hash": "123a2d8ab8",
+  "at": "2026-10-04T18:43:27.785Z"
+ },
+ "ph/th": {
+  "verdict": "ok",
+  "hash": "e039a8bf1e",
+  "at": "2026-10-04T18:46:16.085Z"
+ },
+ "ph/u": {
+  "verdict": "ok",
+  "hash": "c2c1369952",
+  "at": "2026-10-04T18:44:41.555Z"
+ },
+ "ph/ur": {
+  "verdict": "bad",
+  "hash": "e737b2e249",
+  "at": "2026-10-04T18:46:46.198Z"
+ },
+ "ph/v": {
+  "verdict": "ok",
+  "hash": "6edf685c88",
+  "at": "2026-10-04T18:45:27.243Z"
+ },
+ "ph/w": {
+  "verdict": "ok",
+  "hash": "1fae70ab2e",
+  "at": "2026-10-04T18:45:29.748Z"
+ },
+ "ph/x": {
+  "verdict": "ok",
+  "hash": "f81b1d1ced",
+  "at": "2026-10-04T18:45:33.572Z"
+ },
+ "ph/y": {
+  "verdict": "bad",
+  "note": "complte wrong hard to explain",
+  "hash": "1ad83d1b3e",
+  "at": "2026-10-04T18:46:02.675Z"
+ },
+ "ph/z": {
+  "verdict": "ok",
+  "hash": "8500f95e1a",
+  "at": "2026-10-04T18:46:04.940Z"
+ }
+}
