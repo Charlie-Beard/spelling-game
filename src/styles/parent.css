@@ -1,5 +1,10 @@
 /* Grown-ups' corner: a normal, scrollable settings page on parchment. */
 
+.parent input,
+.parent textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
 .parent {
   -webkit-user-select: text;
   user-select: text;
