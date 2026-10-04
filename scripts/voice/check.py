@@ -157,14 +157,22 @@ class Ears:
         from faster_whisper import WhisperModel
         self.m = WhisperModel("small.en", device="cpu", compute_type="int8")
 
-    def __call__(self, path):
+    def _segments(self, path):
         raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-f", "f32le", "-ac", "1", "-ar", "16000", "-"],
                              capture_output=True, check=True).stdout
         segs, _ = self.m.transcribe(np.frombuffer(raw, dtype=np.float32), beam_size=5, language="en",
                                     word_timestamps=True, condition_on_previous_text=False)
-        segs = list(segs)
+        return list(segs)
+
+    def __call__(self, path):
+        segs = self._segments(path)
         probs = [w.probability for s in segs for w in (s.words or [])]
         return " ".join(s.text.strip() for s in segs), (min(probs) if probs else 0.0)
+
+    def words(self, path):
+        """Each word heard, with its start and end in seconds."""
+        return [(re.sub(r"[^a-z']", "", w.word.lower()), w.start, w.end)
+                for s in self._segments(path) for w in (s.words or [])]
 
 
 def norm(text):

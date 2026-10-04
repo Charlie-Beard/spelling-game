@@ -1173,7 +1173,7 @@
   },
   "ph/o": {
    "flags": [],
-   "hash": "65ba4f131e",
+   "hash": "877c629e4e",
    "hints": []
   },
   "ph/o#elevenlabs": {
@@ -1183,14 +1183,34 @@
    "hash": "c1ad611cd1",
    "hints": []
   },
-  "ph/o#from-rock": {
+  "ph/o#from-clock": {
    "flags": [],
-   "hash": "65ba4f131e",
+   "hash": "79ba9185f0",
+   "hints": []
+  },
+  "ph/o#from-moth": {
+   "flags": [],
+   "hash": "025029d709",
+   "hints": []
+  },
+  "ph/o#from-sock": {
+   "flags": [],
+   "hash": "7a963ff12d",
    "hints": []
   },
   "ph/o#kokoro": {
    "flags": [],
    "hash": "084781806c",
+   "hints": []
+  },
+  "ph/o#old-oo-short": {
+   "flags": [],
+   "hash": "877c629e4e",
+   "hints": []
+  },
+  "ph/o#previous": {
+   "flags": [],
+   "hash": "65ba4f131e",
    "hints": []
   },
   "ph/oa": {
@@ -1225,12 +1245,32 @@
   },
   "ph/oo-short": {
    "flags": [],
-   "hash": "877c629e4e",
+   "hash": "00a06f0836",
+   "hints": []
+  },
+  "ph/oo-short#from-book-1ulfpge": {
+   "flags": [],
+   "hash": "55b0e005c6",
+   "hints": []
+  },
+  "ph/oo-short#from-book-40p4m6": {
+   "flags": [],
+   "hash": "5371bbd88f",
+   "hints": []
+  },
+  "ph/oo-short#from-book-s1kbfs": {
+   "flags": [],
+   "hash": "00a06f0836",
    "hints": []
   },
   "ph/oo-short#kokoro": {
    "flags": [],
    "hash": "f06de1845f",
+   "hints": []
+  },
+  "ph/oo-short#previous": {
+   "flags": [],
+   "hash": "877c629e4e",
    "hints": []
   },
   "ph/or": {
@@ -1274,8 +1314,10 @@
    "hints": []
   },
   "ph/r": {
-   "flags": [],
-   "hash": "2624c852ac",
+   "flags": [
+    "Opens into a vowel (“ruh”) for 370 ms"
+   ],
+   "hash": "2040acaab7",
    "hints": []
   },
   "ph/r#elevenlabs": {
@@ -1323,12 +1365,32 @@
   },
   "ph/schwa": {
    "flags": [],
-   "hash": "44061bba8b",
+   "hash": "b845f90047",
+   "hints": []
+  },
+  "ph/schwa#from-potter-ccvp7u": {
+   "flags": [],
+   "hash": "468b54e560",
+   "hints": []
+  },
+  "ph/schwa#from-wizard-17tg8zn": {
+   "flags": [],
+   "hash": "e8eaab9219",
    "hints": []
   },
   "ph/schwa#kokoro": {
    "flags": [],
    "hash": "155a28a24d",
+   "hints": []
+  },
+  "ph/schwa#previous": {
+   "flags": [],
+   "hash": "44061bba8b",
+   "hints": []
+  },
+  "ph/schwa#short-er": {
+   "flags": [],
+   "hash": "b845f90047",
    "hints": []
   },
   "ph/sh": {
@@ -1401,12 +1463,32 @@
   },
   "ph/ur": {
    "flags": [],
-   "hash": "e737b2e249",
+   "hash": "90769fc301",
+   "hints": []
+  },
+  "ph/ur#from-words-1ew38yc": {
+   "flags": [],
+   "hash": "90769fc301",
+   "hints": []
+  },
+  "ph/ur#from-words-8czfkz": {
+   "flags": [],
+   "hash": "144c21b2bd",
+   "hints": []
+  },
+  "ph/ur#from-world-1f1yx1x": {
+   "flags": [],
+   "hash": "c2aeecb480",
    "hints": []
   },
   "ph/ur#kokoro": {
    "flags": [],
    "hash": "12b4baeaf8",
+   "hints": []
+  },
+  "ph/ur#previous": {
+   "flags": [],
+   "hash": "e737b2e249",
    "hints": []
   },
   "ph/v": {
@@ -1457,12 +1539,32 @@
   },
   "ph/y": {
    "flags": [],
-   "hash": "1ad83d1b3e",
+   "hash": "9db2f0a76b",
+   "hints": []
+  },
+  "ph/y#from-you-17tg8zn": {
+   "flags": [],
+   "hash": "9db2f0a76b",
+   "hints": []
+  },
+  "ph/y#from-you-19455hi": {
+   "flags": [],
+   "hash": "01956b2083",
+   "hints": []
+  },
+  "ph/y#from-you-1h586n5": {
+   "flags": [],
+   "hash": "a7fff93fef",
    "hints": []
   },
   "ph/y#kokoro": {
    "flags": [],
    "hash": "c3e1c591fd",
+   "hints": []
+  },
+  "ph/y#previous": {
+   "flags": [],
+   "hash": "1ad83d1b3e",
    "hints": []
   },
   "ph/z": {
