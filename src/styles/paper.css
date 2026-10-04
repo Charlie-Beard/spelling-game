@@ -1,0 +1,60 @@
+/*
+ * Paper art: stop-motion "boil" cycling and the global paper grain.
+ */
+
+svg.paper {
+  display: block;
+  overflow: visible;
+}
+
+/* Boil: each piece has 3 slightly different frames; show one at a time. */
+.paper .f {
+  visibility: hidden;
+  animation: boil var(--boil-cycle, 0.9s) steps(1, end) infinite;
+}
+.paper .f1 {
+  animation-delay: calc(var(--boil-cycle, 0.9s) / -3);
+}
+.paper .f2 {
+  animation-delay: calc(var(--boil-cycle, 0.9s) / -1.5);
+}
+
+@keyframes boil {
+  0% {
+    visibility: visible;
+  }
+  33.333% {
+    visibility: hidden;
+  }
+}
+
+/* Still: freeze the boil (while the child is concentrating, or calm mode). */
+.still .paper .f,
+.calm .paper .f {
+  animation: none;
+}
+.still .paper .f0,
+.calm .paper .f0 {
+  visibility: visible;
+}
+
+/* Global paper grain over the whole stage. */
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 900;
+  pointer-events: none;
+  background-image: var(--grain-url);
+  background-size: 256px 256px;
+  mix-blend-mode: multiply;
+  opacity: 0.32;
+}
+
+/* Vignette to keep the eye in the middle of the stage. */
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 899;
+  pointer-events: none;
+  background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 60%, rgba(10, 8, 20, 0.35));
+}
