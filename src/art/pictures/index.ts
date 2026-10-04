@@ -2,10 +2,12 @@ import { C } from '../palette';
 import { curve, ink, piece, rect, svg } from '../paper';
 import { book1Pictures } from './book1';
 import { book2Pictures } from './book2';
+import { book3Pictures } from './book3';
 
 const registry: Record<string, () => string> = {
   ...book1Pictures,
   ...book2Pictures,
+  ...book3Pictures,
 };
 
 const cache = new Map<string, string>();
