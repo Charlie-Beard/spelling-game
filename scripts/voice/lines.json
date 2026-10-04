@@ -1,0 +1,653 @@
+{
+  "words": [
+    "cat",
+    "hat",
+    "mat",
+    "rat",
+    "bat",
+    "map",
+    "bag",
+    "cap",
+    "pan",
+    "fan",
+    "pig",
+    "pin",
+    "bin",
+    "tin",
+    "lid",
+    "pot",
+    "cup",
+    "mug",
+    "bun",
+    "nut",
+    "bug",
+    "web",
+    "bell",
+    "rock",
+    "net",
+    "sock",
+    "chip",
+    "chick",
+    "duck",
+    "lock",
+    "fish",
+    "ship",
+    "shell",
+    "dish",
+    "shed",
+    "wing",
+    "king",
+    "ring",
+    "moth",
+    "sink",
+    "box",
+    "fox",
+    "jam",
+    "van",
+    "zip",
+    "quill",
+    "chess",
+    "jug",
+    "bang",
+    "wig",
+    "frog",
+    "crab",
+    "drum",
+    "flag",
+    "slug",
+    "wand",
+    "lamp",
+    "desk",
+    "tent",
+    "nest",
+    "twig",
+    "stick",
+    "clock",
+    "plum",
+    "milk",
+    "gift",
+    "belt",
+    "pond",
+    "cliff",
+    "mask",
+    "rain",
+    "tail",
+    "bee",
+    "feet",
+    "sheep",
+    "night",
+    "light",
+    "boat",
+    "goat",
+    "coat",
+    "moon",
+    "broom",
+    "boot",
+    "book",
+    "hook",
+    "toad",
+    "chain",
+    "tree",
+    "soap",
+    "sail",
+    "star",
+    "car",
+    "jar",
+    "fork",
+    "horn",
+    "owl",
+    "cow",
+    "crown",
+    "coin",
+    "oil",
+    "chair",
+    "hair",
+    "stairs",
+    "beard",
+    "letter",
+    "shark",
+    "storm",
+    "hammer",
+    "corn",
+    "boil",
+    "cake",
+    "snake",
+    "cave",
+    "kite",
+    "five",
+    "bone",
+    "stone",
+    "rope",
+    "smoke",
+    "cube",
+    "tray",
+    "mouth",
+    "cloud",
+    "pie",
+    "leaf",
+    "skull",
+    "crow",
+    "flame",
+    "throne",
+    "spike",
+    "rabbit",
+    "basket",
+    "carpet",
+    "kitten",
+    "picnic",
+    "goblin",
+    "dragon",
+    "helmet",
+    "pocket",
+    "magic",
+    "pumpkin",
+    "cobweb",
+    "lantern",
+    "thunder",
+    "sunset"
+  ],
+  "phonemes": [
+    "s",
+    "a",
+    "t",
+    "p",
+    "i",
+    "n",
+    "m",
+    "d",
+    "g",
+    "o",
+    "k",
+    "e",
+    "u",
+    "r",
+    "h",
+    "b",
+    "f",
+    "l",
+    "j",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+    "qu",
+    "ch",
+    "sh",
+    "th",
+    "ng",
+    "nk",
+    "ai",
+    "ee",
+    "igh",
+    "oa",
+    "oo-long",
+    "ar",
+    "or",
+    "ur",
+    "ow",
+    "oi",
+    "ear",
+    "air",
+    "er",
+    "oo-short",
+    "schwa"
+  ],
+  "lines": [
+    {
+      "id": "1x5t2vp",
+      "text": "Welcome to Wizard Words!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "19455hi",
+      "text": "Who do you want to be?",
+      "speaker": "narrator"
+    },
+    {
+      "id": "ccvp7u",
+      "text": "Harry Potter!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1fi20vj",
+      "text": "Ron Weasley!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "y16pab",
+      "text": "Hermione Granger!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "116n8nh",
+      "text": "Let’s go!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "ujnztm",
+      "text": "Can you spell…",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1ov17dm",
+      "text": "Listen…",
+      "speaker": "narrator"
+    },
+    {
+      "id": "18d4qj7",
+      "text": "Hmm, try another one.",
+      "speaker": "narrator"
+    },
+    {
+      "id": "16ba1dz",
+      "text": "Listen to the sound…",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1nhz3y1",
+      "text": "Hedwig can help!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "vp2a8t",
+      "text": "Here you go!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "le3t5h",
+      "text": "You finished the chapter!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "17tg8zn",
+      "text": "You got a new wizard card!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "6ptbcb",
+      "text": "You found a Horcrux!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1yrow8r",
+      "text": "Spell each word to cast a shield!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1h586n5",
+      "text": "You saved Hogwarts! Expelliarmus!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "qyvcus",
+      "text": "Great work! Time for a little break.",
+      "speaker": "narrator"
+    },
+    {
+      "id": "19cm7lq",
+      "text": "Please turn the iPad sideways.",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1caejgi",
+      "text": "Ready for the next one?",
+      "speaker": "narrator"
+    },
+    {
+      "id": "dos1g8",
+      "text": "Hooray! All done!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "10m1apz",
+      "text": "Brilliant!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "gn8ww",
+      "text": "Well done!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "bd280t",
+      "text": "Wicked!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1qhyaqz",
+      "text": "Amazing spelling!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1ie9iyr",
+      "text": "Fantastic!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1m9m385",
+      "text": "Super!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "zu1pt3",
+      "text": "Ten points to Gryffindor!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "px2c4b",
+      "text": "Spell-tastic!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1p30gsx",
+      "text": "You did it!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1hzi10n",
+      "text": "Magic!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "ksa1q5",
+      "text": "Hello there! I’m Hagrid. Can you help me tidy up my hut?",
+      "speaker": "hagrid"
+    },
+    {
+      "id": "1g6k4x",
+      "text": "Hagrid’s Hut",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1my3rvv",
+      "text": "Welcome to Diagon Alley! Let’s find everything you need for school.",
+      "speaker": "ollivander"
+    },
+    {
+      "id": "jefoy6",
+      "text": "Diagon Alley",
+      "speaker": "narrator"
+    },
+    {
+      "id": "ubh4bv",
+      "text": "Ribbit! I’m Trevor the toad. I hopped all over the train. Help me find these!",
+      "speaker": "trevor"
+    },
+    {
+      "id": "gpoi5b",
+      "text": "The Hogwarts Express",
+      "speaker": "narrator"
+    },
+    {
+      "id": "xpupj",
+      "text": "Good evening! I’m Nearly Headless Nick. Let’s spell the feast!",
+      "speaker": "nick"
+    },
+    {
+      "id": "1rxbubx",
+      "text": "The Great Hall Feast",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1sezzb4",
+      "text": "I have hidden a ring. You will never find it… unless you can spell!",
+      "speaker": "voldemort"
+    },
+    {
+      "id": "14tf5u",
+      "text": "The Hidden Ring",
+      "speaker": "narrator"
+    },
+    {
+      "id": "128vgum",
+      "text": "Dobby has come to help! Dobby likes socks very much.",
+      "speaker": "dobby"
+    },
+    {
+      "id": "xd2k53",
+      "text": "Dobby’s Warning",
+      "speaker": "narrator"
+    },
+    {
+      "id": "7fw2ya",
+      "text": "Oi! A garden gnome, that’s me. Let’s spell things at the Burrow.",
+      "speaker": "gnome"
+    },
+    {
+      "id": "n5czbb",
+      "text": "The Burrow",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1ydkjpj",
+      "text": "Who crashed a car into ME? Spell these words and I’ll calm down.",
+      "speaker": "willow"
+    },
+    {
+      "id": "gv0l8l",
+      "text": "The Flying Car",
+      "speaker": "narrator"
+    },
+    {
+      "id": "invcst",
+      "text": "Fawkes the phoenix sings a song. Spell these words to make him glow!",
+      "speaker": "fawkes"
+    },
+    {
+      "id": "1jfeojm",
+      "text": "Fawkes the Phoenix",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1wcc7bm",
+      "text": "Hissss… The diary is down in the Chamber. Spell bravely to find it.",
+      "speaker": "basilisk"
+    },
+    {
+      "id": "1dsxqp1",
+      "text": "The Secret Diary",
+      "speaker": "narrator"
+    },
+    {
+      "id": "11q8hul",
+      "text": "Mrrow. I am Crookshanks. I like chasing things. Spell what I chase!",
+      "speaker": "crookshanks"
+    },
+    {
+      "id": "1mcl8ff",
+      "text": "Crookshanks",
+      "speaker": "narrator"
+    },
+    {
+      "id": "10s3mzo",
+      "text": "Hello, I’m Professor Lupin. Have some chocolate, then let’s spell!",
+      "speaker": "lupin"
+    },
+    {
+      "id": "1ez3s7k",
+      "text": "Professor Lupin",
+      "speaker": "narrator"
+    },
+    {
+      "id": "15m03pu",
+      "text": "Bow to Buckbeak the hippogriff… he bows back! Now spell these.",
+      "speaker": "buckbeak"
+    },
+    {
+      "id": "1001tlp",
+      "text": "Buckbeak",
+      "speaker": "narrator"
+    },
+    {
+      "id": "hed4dh",
+      "text": "Squeak! I know where the locket is. But you’ll have to spell for it!",
+      "speaker": "wormtail"
+    },
+    {
+      "id": "1hacv8q",
+      "text": "The Lost Locket",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1poldt2",
+      "text": "Constant vigilance! I’m Mad-Eye Moody. Keep your eyes on these words.",
+      "speaker": "moody"
+    },
+    {
+      "id": "1f1yx1x",
+      "text": "The Quidditch World Cup",
+      "speaker": "narrator"
+    },
+    {
+      "id": "10lg9sf",
+      "text": "ROAR! I’m the Hungarian Horntail. Spell these and I’ll guard my golden egg.",
+      "speaker": "horntail"
+    },
+    {
+      "id": "yfm08k",
+      "text": "The Dragon Task",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1mq2n7s",
+      "text": "Oooh, a visitor! I’m Moaning Myrtle. Help me with these words.",
+      "speaker": "myrtle"
+    },
+    {
+      "id": "cdz4u8",
+      "text": "The Black Lake",
+      "speaker": "narrator"
+    },
+    {
+      "id": "6jese2",
+      "text": "Ha ha! The golden cup is MINE. Spell well if you want to take it.",
+      "speaker": "bellatrix"
+    },
+    {
+      "id": "2namlj",
+      "text": "The Golden Cup",
+      "speaker": "narrator"
+    },
+    {
+      "id": "nds4n3",
+      "text": "Welcome to my house! I’m Sirius, Harry’s godfather. Let’s spell!",
+      "speaker": "sirius"
+    },
+    {
+      "id": "javk6k",
+      "text": "Grimmauld Place",
+      "speaker": "narrator"
+    },
+    {
+      "id": "15my7cv",
+      "text": "Hello. I’m Luna. I can see lovely creatures. Can you spell them?",
+      "speaker": "luna"
+    },
+    {
+      "id": "qrq02c",
+      "text": "Luna Lovegood",
+      "speaker": "narrator"
+    },
+    {
+      "id": "8hzz43",
+      "text": "I’m Neville. We practise spells in secret. Let’s practise spelling too!",
+      "speaker": "neville"
+    },
+    {
+      "id": "1nhfa19",
+      "text": "Dumbledore’s Army",
+      "speaker": "narrator"
+    },
+    {
+      "id": "b4k2ga",
+      "text": "The Death Eaters are hiding the diadem. Spell to sneak past them!",
+      "speaker": "deatheater"
+    },
+    {
+      "id": "1bzo70s",
+      "text": "The Lost Diadem",
+      "speaker": "narrator"
+    },
+    {
+      "id": "wnj9ar",
+      "text": "Ah, a new student! I’m Professor Slughorn. Let’s brew some spelling!",
+      "speaker": "slughorn"
+    },
+    {
+      "id": "3nas7j",
+      "text": "Slughorn’s Potions",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1ibhjg2",
+      "text": "Hello, I am Professor Dumbledore. Come with me to the cave, and spell.",
+      "speaker": "dumbledore"
+    },
+    {
+      "id": "2177rb",
+      "text": "The Crystal Cave",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1qamnv1",
+      "text": "Hi! I’m Ginny, the best flyer in Gryffindor. Ready for practice?",
+      "speaker": "ginny"
+    },
+    {
+      "id": "k48sa7",
+      "text": "Quidditch Practice",
+      "speaker": "narrator"
+    },
+    {
+      "id": "opg03a",
+      "text": "Sssss. I am Nagini. Spell very carefully… if you dare.",
+      "speaker": "nagini"
+    },
+    {
+      "id": "9ri8a3",
+      "text": "The Great Snake",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1bjcwz7",
+      "text": "Kreacher will help Master. Kreacher has packed a picnic.",
+      "speaker": "kreacher"
+    },
+    {
+      "id": "cgjbrw",
+      "text": "Kreacher’s Kitchen",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1skt8hj",
+      "text": "I am Griphook the goblin. Spell well and I’ll open the vault.",
+      "speaker": "griphook"
+    },
+    {
+      "id": "nnt46a",
+      "text": "Gringotts Bank",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1ces7iq",
+      "text": "I am Professor McGonagall. Hogwarts needs you. Let’s get ready!",
+      "speaker": "mcgonagall"
+    },
+    {
+      "id": "zohmaw",
+      "text": "Back to Hogwarts",
+      "speaker": "narrator"
+    },
+    {
+      "id": "m95twi",
+      "text": "The Death Eaters are coming! Spell each word to cast a shield over the castle.",
+      "speaker": "voldemort"
+    },
+    {
+      "id": "jrglie",
+      "text": "The Battle of Hogwarts",
+      "speaker": "narrator"
+    }
+  ]
+}
