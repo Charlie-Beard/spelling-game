@@ -25,10 +25,9 @@
   "at": "2026-10-04T19:06:55.336Z"
  },
  "lines/11q8hul": {
-  "verdict": "bad",
-  "note": "stil not a chat meow at the start",
-  "hash": "27415b516f",
-  "at": "2026-10-04T19:26:12.859Z"
+  "verdict": "ok",
+  "hash": "b5772389c0",
+  "at": "2026-10-04T19:31:32.729Z"
  },
  "lines/128vgum": {
   "verdict": "ok",
@@ -36,10 +35,9 @@
   "at": "2026-10-04T19:10:42.006Z"
  },
  "lines/12mkg1a": {
-  "verdict": "bad",
-  "note": "stil not a chat meow at the start",
-  "hash": "5a56bb1474",
-  "at": "2026-10-04T19:26:06.747Z"
+  "verdict": "ok",
+  "hash": "847deb2b2e",
+  "at": "2026-10-04T19:31:31.079Z"
  },
  "lines/14tf5u": {
   "verdict": "ok",
@@ -997,10 +995,9 @@
   "at": "2026-10-04T18:46:35.128Z"
  },
  "ph/oo-short": {
-  "verdict": "bad",
-  "note": "still not quite right",
-  "hash": "c0c7f84c56",
-  "at": "2026-10-04T19:24:44.531Z"
+  "verdict": "ok",
+  "hash": "71e54b9608",
+  "at": "2026-10-04T19:31:40.325Z"
  },
  "ph/or": {
   "verdict": "ok",
@@ -1033,10 +1030,9 @@
   "at": "2026-10-04T18:43:18.732Z"
  },
  "ph/schwa": {
-  "verdict": "bad",
-  "note": "is this sound really in dragon?",
-  "hash": "62220957b1",
-  "at": "2026-10-04T19:25:42.461Z"
+  "verdict": "ok",
+  "hash": "49600f6970",
+  "at": "2026-10-04T19:32:20.323Z"
  },
  "ph/sh": {
   "verdict": "ok",
