@@ -8,9 +8,9 @@ Reads scripts/voice/lines.json (from export.ts) and writes trimmed,
 loudness-matched mono MP3s to public/audio/{words,ph,lines}/ plus
 public/audio/manifest.json. Existing files are kept unless --force.
 
-ElevenLabs voices live in scripts/voice/elevenlabs.json. It can't be told
-exact pronunciations, so it skips the pure phonics sounds (ph/) and those
-keep their Kokoro (or hand-recorded) clips.
+ElevenLabs voices live in scripts/voice/elevenlabs.json. It skips the pure
+phonics sounds (ph/), which keep their Kokoro (or hand-recorded) clips,
+unless --phonemes asks it to try them via Eleven v4's IPA support.
 """
 import argparse, json, os, subprocess, sys, tempfile, time, urllib.error, urllib.request
 
@@ -87,15 +87,16 @@ class KokoroVoice:
 
 
 class ElevenLabsVoice:
-    can_phonemes = False
     API = "https://api.elevenlabs.io/v1"
 
-    def __init__(self):
+    def __init__(self, phonemes=False):
         self.key = os.environ.get("ELEVENLABS_API_KEY")
         if not self.key:
             sys.exit("Set ELEVENLABS_API_KEY (from elevenlabs.io → Profile → API keys).")
         cfg = json.load(open(os.path.join(HERE, "elevenlabs.json")))
         self.model = cfg["model_id"]
+        self.phoneme_model = cfg.get("phoneme_model", "eleven_v4")
+        self.can_phonemes = phonemes
         self.word_speed = cfg.get("word_speed", 0.85)
         self.speakers = cfg["speakers"]
 
@@ -120,10 +121,10 @@ class ElevenLabsVoice:
             labels = ", ".join(f"{k}={x}" for k, x in (v.get("labels") or {}).items())
             print(f"{v['voice_id']}  {v['name']:<24} {labels}")
 
-    def _render(self, text, spec, tmp, speed=None):
+    def _render(self, text, spec, tmp, speed=None, model=None):
         audio = self._request("POST", f"/text-to-speech/{spec['voice_id']}?output_format=mp3_44100_128", {
             "text": text,
-            "model_id": self.model,
+            "model_id": model or self.model,
             "language_code": "en",
             "voice_settings": {
                 "stability": spec.get("stability", 0.5),
@@ -138,6 +139,10 @@ class ElevenLabsVoice:
     def word(self, w, tmp):
         self._render(f"{w}.", self.speakers["narrator"], tmp, speed=self.word_speed)
 
+    def phoneme(self, ph, tmp):
+        # Experimental: Eleven v4 reads IPA between slashes. Listen before keeping.
+        self._render(f"/{PHONEME_IPA[ph]}/", self.speakers["narrator"], tmp, speed=0.9, model=self.phoneme_model)
+
     def line(self, text, speaker, tmp):
         self._render(text, self.speakers.get(speaker, self.speakers["narrator"]), tmp)
 
@@ -151,10 +156,12 @@ def main():
     ap.add_argument("--limit", type=int, help="at most N clips of each kind, for auditioning voices")
     ap.add_argument("--force", action="store_true", help="redo clips that already exist")
     ap.add_argument("--list-voices", action="store_true", help="ElevenLabs only: print your voice IDs")
+    ap.add_argument("--phonemes", action="store_true",
+                    help="ElevenLabs only, experimental: also record pure sounds (ph/) via Eleven v4 IPA")
     args = ap.parse_args()
 
     if args.provider == "elevenlabs":
-        v = ElevenLabsVoice()
+        v = ElevenLabsVoice(args.phonemes)
         if args.list_voices:
             return v.list_voices()
     else:
@@ -187,7 +194,7 @@ def main():
             for ph in take(data["phonemes"]):
                 make(os.path.join(OUT, "ph", f"{ph}.mp3"), lambda tmp, ph=ph: v.phoneme(ph, tmp))
         else:
-            print("skipping ph/: this provider can't say pure sounds; keeping existing clips")
+            print("skipping ph/: keeping existing clips (pass --phonemes to try Eleven v4 IPA)")
 
     if "lines" in only:
         lines = [l for l in data["lines"] if not args.speaker or l["speaker"] == args.speaker]
