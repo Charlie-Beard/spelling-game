@@ -1170,10 +1170,9 @@
   "at": "2026-10-04T19:04:22.838Z"
  },
  "words/bun": {
-  "verdict": "bad",
-  "note": "sounds like BOOn",
-  "hash": "80423ff0a9",
-  "at": "2026-10-04T19:03:47.400Z"
+  "verdict": "ok",
+  "hash": "9d824871ec",
+  "at": "2026-10-04T19:36:59.395Z"
  },
  "words/cake": {
   "verdict": "ok",
@@ -1181,10 +1180,9 @@
   "at": "2026-10-04T19:05:51.888Z"
  },
  "words/cap": {
-  "verdict": "bad",
-  "note": "cu",
-  "hash": "2bad4c1219",
-  "at": "2026-10-04T19:03:06.194Z"
+  "verdict": "ok",
+  "hash": "f30d001a30",
+  "at": "2026-10-04T19:36:55.054Z"
  },
  "words/car": {
   "verdict": "ok",
@@ -1392,10 +1390,9 @@
   "at": "2026-10-04T19:05:49.632Z"
  },
  "words/hat": {
-  "verdict": "bad",
-  "note": "sounds like hot",
-  "hash": "5bbb1eab84",
-  "at": "2026-10-04T19:02:46.928Z"
+  "verdict": "ok",
+  "hash": "0f2a7bc5c6",
+  "at": "2026-10-04T19:36:52.782Z"
  },
  "words/helmet": {
   "verdict": "ok",
@@ -1418,10 +1415,9 @@
   "at": "2026-10-04T19:04:47.622Z"
  },
  "words/jar": {
-  "verdict": "bad",
-  "note": "sounds like jyah",
-  "hash": "25c8e32499",
-  "at": "2026-10-04T19:05:38.296Z"
+  "verdict": "ok",
+  "hash": "76ebd713af",
+  "at": "2026-10-04T19:37:03.453Z"
  },
  "words/jug": {
   "verdict": "ok",
@@ -1434,10 +1430,9 @@
   "at": "2026-10-04T19:03:53.333Z"
  },
  "words/kite": {
-  "verdict": "bad",
-  "note": "sounds like Kitie",
-  "hash": "a8b37ef789",
-  "at": "2026-10-04T19:06:13.145Z"
+  "verdict": "ok",
+  "hash": "b078b145c3",
+  "at": "2026-10-04T19:37:05.486Z"
  },
  "words/kitten": {
   "verdict": "ok",
@@ -1555,10 +1550,9 @@
   "at": "2026-10-04T19:05:41.511Z"
  },
  "words/pan": {
-  "verdict": "bad",
-  "note": "sounds like pun or pon",
-  "hash": "dc6e6d8b02",
-  "at": "2026-10-04T19:03:19.597Z"
+  "verdict": "ok",
+  "hash": "f65b027e65",
+  "at": "2026-10-04T19:36:57.034Z"
  },
  "words/picnic": {
   "verdict": "ok",
@@ -1786,10 +1780,9 @@
   "at": "2026-10-04T19:04:59.078Z"
  },
  "words/van": {
-  "verdict": "bad",
-  "note": "sounds like vun",
-  "hash": "19c4918f20",
-  "at": "2026-10-04T19:04:01.898Z"
+  "verdict": "ok",
+  "hash": "c0103f4a2e",
+  "at": "2026-10-04T19:37:01.488Z"
  },
  "words/wand": {
   "verdict": "ok",
