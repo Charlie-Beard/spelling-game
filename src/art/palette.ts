@@ -21,6 +21,7 @@ export const C = {
   ginger: '#c8622e',
   gold: '#d8a43f',
   goldLight: '#f0cd7c',
+  candle: '#f7d283',
   yellow: '#e8c45a',
   green: '#6f9a5a',
   greenDark: '#3f6b4c',
