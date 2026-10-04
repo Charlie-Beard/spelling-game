@@ -4,12 +4,14 @@ import { book1Pictures } from './book1';
 import { book2Pictures } from './book2';
 import { book3Pictures } from './book3';
 import { book4Pictures } from './book4';
+import { book5Pictures } from './book5';
 
 const registry: Record<string, () => string> = {
   ...book1Pictures,
   ...book2Pictures,
   ...book3Pictures,
   ...book4Pictures,
+  ...book5Pictures,
 };
 
 const cache = new Map<string, string>();
