@@ -28,7 +28,7 @@
   },
   "lines/11q8hul": {
    "flags": [],
-   "hash": "7f3b13aa0d",
+   "hash": "27415b516f",
    "hints": []
   },
   "lines/128vgum": {
@@ -38,7 +38,7 @@
   },
   "lines/12mkg1a": {
    "flags": [],
-   "hash": "64e2daedd1",
+   "hash": "5a56bb1474",
    "hints": []
   },
   "lines/14tf5u": {
@@ -182,10 +182,8 @@
   },
   "lines/1etroql": {
    "flags": [],
-   "hash": "d171a1079c",
-   "hints": [
-    "Whisper heard “Hedvig”"
-   ]
+   "hash": "8c64084f72",
+   "hints": []
   },
   "lines/1ew38yc": {
    "flags": [],
@@ -740,12 +738,12 @@
   },
   "lines/opg03a": {
    "flags": [],
-   "hash": "3cff2f3cd8",
+   "hash": "a78efe69e2",
    "hints": []
   },
   "lines/p8r1n0": {
    "flags": [],
-   "hash": "5017994cb6",
+   "hash": "9691d34b64",
    "hints": []
   },
   "lines/pmisf5": {
@@ -783,16 +781,6 @@
   "lines/qtls4m": {
    "flags": [],
    "hash": "c88e41f12e",
-   "hints": []
-  },
-  "lines/qyvcus": {
-   "flags": [],
-   "hash": "dee7bc49a8",
-   "hints": []
-  },
-  "lines/rxxvid": {
-   "flags": [],
-   "hash": "8378bf36a9",
    "hints": []
   },
   "lines/s1kbfs": {
@@ -1245,22 +1233,22 @@
   },
   "ph/oo-short": {
    "flags": [],
-   "hash": "00a06f0836",
+   "hash": "71e54b9608",
+   "hints": []
+  },
+  "ph/oo-short#from-book-1b85i8d": {
+   "flags": [],
+   "hash": "8c68fead3d",
    "hints": []
   },
   "ph/oo-short#from-book-1ulfpge": {
    "flags": [],
-   "hash": "55b0e005c6",
+   "hash": "71e54b9608",
    "hints": []
   },
-  "ph/oo-short#from-book-40p4m6": {
+  "ph/oo-short#from-look-8czfkz": {
    "flags": [],
-   "hash": "5371bbd88f",
-   "hints": []
-  },
-  "ph/oo-short#from-book-s1kbfs": {
-   "flags": [],
-   "hash": "00a06f0836",
+   "hash": "43e0a1f537",
    "hints": []
   },
   "ph/oo-short#kokoro": {
@@ -1268,9 +1256,24 @@
    "hash": "f06de1845f",
    "hints": []
   },
+  "ph/oo-short#longer": {
+   "flags": [],
+   "hash": "c0c7f84c56",
+   "hints": []
+  },
   "ph/oo-short#previous": {
    "flags": [],
    "hash": "877c629e4e",
+   "hints": []
+  },
+  "ph/oo-short#previous-00a06f": {
+   "flags": [],
+   "hash": "00a06f0836",
+   "hints": []
+  },
+  "ph/oo-short#previous-da8b2b": {
+   "flags": [],
+   "hash": "da8b2b973a",
    "hints": []
   },
   "ph/or": {
@@ -1365,17 +1368,17 @@
   },
   "ph/schwa": {
    "flags": [],
-   "hash": "b845f90047",
+   "hash": "49600f6970",
    "hints": []
   },
-  "ph/schwa#from-potter-ccvp7u": {
+  "ph/schwa#from-dragon": {
    "flags": [],
-   "hash": "468b54e560",
+   "hash": "a5c19b9095",
    "hints": []
   },
-  "ph/schwa#from-wizard-17tg8zn": {
+  "ph/schwa#from-dragon-yfm08k": {
    "flags": [],
-   "hash": "e8eaab9219",
+   "hash": "49600f6970",
    "hints": []
   },
   "ph/schwa#kokoro": {
@@ -1388,9 +1391,24 @@
    "hash": "44061bba8b",
    "hints": []
   },
+  "ph/schwa#previous-622209": {
+   "flags": [],
+   "hash": "62220957b1",
+   "hints": []
+  },
+  "ph/schwa#previous-ffe5de": {
+   "flags": [],
+   "hash": "ffe5deeaef",
+   "hints": []
+  },
   "ph/schwa#short-er": {
    "flags": [],
    "hash": "b845f90047",
+   "hints": []
+  },
+  "ph/schwa#short-u": {
+   "flags": [],
+   "hash": "3d3638f57f",
    "hints": []
   },
   "ph/sh": {
@@ -1539,7 +1557,7 @@
   },
   "ph/y": {
    "flags": [],
-   "hash": "9db2f0a76b",
+   "hash": "c3e1c591fd",
    "hints": []
   },
   "ph/y#from-you-17tg8zn": {
@@ -1627,11 +1645,12 @@
   },
   "words/bat": {
    "flags": [
-    "Whispered or breathy: only 40 ms of it is voiced",
     "Whisper heard “That.” (unsure)"
    ],
    "hash": "27e8175167",
-   "hints": []
+   "hints": [
+    "Whispered or breathy: only 40 ms of it is voiced"
+   ]
   },
   "words/bat#kokoro": {
    "flags": [
@@ -1757,11 +1776,11 @@
    "hints": []
   },
   "words/box": {
-   "flags": [
-    "Whispered or breathy: only 60 ms of it is voiced"
-   ],
+   "flags": [],
    "hash": "53206674b4",
-   "hints": []
+   "hints": [
+    "Whispered or breathy: only 60 ms of it is voiced"
+   ]
   },
   "words/box#kokoro": {
    "flags": [
@@ -1796,12 +1815,13 @@
   },
   "words/bun": {
    "flags": [
-    "Squeaky: about 13 semitones above the narrator's usual pitch",
     "Vowel sounds nearer “o” (rock) than “u” (mug)",
     "Whisper heard “Good one.” (unsure)"
    ],
    "hash": "80423ff0a9",
-   "hints": []
+   "hints": [
+    "Squeaky: about 13 semitones above the narrator's usual pitch"
+   ]
   },
   "words/bun#kokoro": {
    "flags": [
@@ -1824,11 +1844,11 @@
   },
   "words/cap": {
    "flags": [
-    "Whispered or breathy: only 25 ms of it is voiced",
     "Vowel sounds nearer “u” (mug) than “a” (cat)"
    ],
    "hash": "2bad4c1219",
    "hints": [
+    "Whispered or breathy: only 25 ms of it is voiced",
     "Whisper heard “cup.”"
    ]
   },
@@ -1868,11 +1888,11 @@
    ]
   },
   "words/cat": {
-   "flags": [
-    "Whispered or breathy: only 70 ms of it is voiced"
-   ],
+   "flags": [],
    "hash": "81940b6a80",
-   "hints": []
+   "hints": [
+    "Whispered or breathy: only 70 ms of it is voiced"
+   ]
   },
   "words/cat#kokoro": {
    "flags": [
@@ -1918,11 +1938,11 @@
    ]
   },
   "words/chess": {
-   "flags": [
-    "Whispered or breathy: only 35 ms of it is voiced"
-   ],
+   "flags": [],
    "hash": "145b98cfc4",
-   "hints": []
+   "hints": [
+    "Whispered or breathy: only 35 ms of it is voiced"
+   ]
   },
   "words/chess#kokoro": {
    "flags": [],
@@ -1932,12 +1952,12 @@
    ]
   },
   "words/chick": {
-   "flags": [
+   "flags": [],
+   "hash": "6f97027f3e",
+   "hints": [
     "Whispered or breathy: only 50 ms of it is voiced",
     "Squeaky: about 19 semitones above the narrator's usual pitch"
-   ],
-   "hash": "6f97027f3e",
-   "hints": []
+   ]
   },
   "words/chick#kokoro": {
    "flags": [
@@ -2109,11 +2129,11 @@
    ]
   },
   "words/cup": {
-   "flags": [
-    "Squeaky: about 12 semitones above the narrator's usual pitch"
-   ],
+   "flags": [],
    "hash": "75627f7760",
-   "hints": []
+   "hints": [
+    "Squeaky: about 12 semitones above the narrator's usual pitch"
+   ]
   },
   "words/cup#kokoro": {
    "flags": [],
@@ -2171,11 +2191,10 @@
    ]
   },
   "words/duck": {
-   "flags": [
-    "Squeaky: about 15 semitones above the narrator's usual pitch"
-   ],
+   "flags": [],
    "hash": "e7976935ec",
    "hints": [
+    "Squeaky: about 15 semitones above the narrator's usual pitch",
     "Whisper heard “doc.”"
    ]
   },
@@ -2223,11 +2242,10 @@
    ]
   },
   "words/five": {
-   "flags": [
-    "Whispered or breathy: only 65 ms of it is voiced"
-   ],
+   "flags": [],
    "hash": "948a60e997",
    "hints": [
+    "Whispered or breathy: only 65 ms of it is voiced",
     "Whisper heard “5.”"
    ]
   },
@@ -2275,11 +2293,11 @@
    "hints": []
   },
   "words/fox": {
-   "flags": [
-    "Squeaky: about 11 semitones above the narrator's usual pitch"
-   ],
+   "flags": [],
    "hash": "685ee91ab8",
-   "hints": []
+   "hints": [
+    "Squeaky: about 11 semitones above the narrator's usual pitch"
+   ]
   },
   "words/fox#kokoro": {
    "flags": [],
@@ -2360,11 +2378,12 @@
   },
   "words/hat": {
    "flags": [
-    "Whispered or breathy: only 0 ms of it is voiced",
     "Whisper heard “Hot.” (unsure)"
    ],
    "hash": "5bbb1eab84",
-   "hints": []
+   "hints": [
+    "Whispered or breathy: only 0 ms of it is voiced"
+   ]
   },
   "words/hat#kokoro": {
    "flags": [],
@@ -2388,11 +2407,11 @@
    ]
   },
   "words/hook": {
-   "flags": [
-    "Squeaky: about 11 semitones above the narrator's usual pitch"
-   ],
+   "flags": [],
    "hash": "b6a104acf5",
-   "hints": []
+   "hints": [
+    "Squeaky: about 11 semitones above the narrator's usual pitch"
+   ]
   },
   "words/hook#kokoro": {
    "flags": [],
@@ -2440,11 +2459,10 @@
    ]
   },
   "words/jug": {
-   "flags": [
-    "Whispered or breathy: only 0 ms of it is voiced"
-   ],
+   "flags": [],
    "hash": "9a106f20f0",
    "hints": [
+    "Whispered or breathy: only 0 ms of it is voiced",
     "Whisper heard “Chuck.”"
    ]
   },
@@ -2456,11 +2474,11 @@
    ]
   },
   "words/king": {
-   "flags": [
-    "Squeaky: about 11 semitones above the narrator's usual pitch"
-   ],
+   "flags": [],
    "hash": "858f95655a",
-   "hints": []
+   "hints": [
+    "Squeaky: about 11 semitones above the narrator's usual pitch"
+   ]
   },
   "words/king#kokoro": {
    "flags": [],
@@ -2784,11 +2802,11 @@
    "hints": []
   },
   "words/picnic": {
-   "flags": [
-    "Squeaky: about 11 semitones above the narrator's usual pitch"
-   ],
+   "flags": [],
    "hash": "f321cb31d8",
-   "hints": []
+   "hints": [
+    "Squeaky: about 11 semitones above the narrator's usual pitch"
+   ]
   },
   "words/picnic#kokoro": {
    "flags": [],
@@ -2876,11 +2894,11 @@
    "hints": []
   },
   "words/pot": {
-   "flags": [
-    "Whispered or breathy: only 0 ms of it is voiced"
-   ],
+   "flags": [],
    "hash": "bae2faba77",
-   "hints": []
+   "hints": [
+    "Whispered or breathy: only 0 ms of it is voiced"
+   ]
   },
   "words/pot#kokoro": {
    "flags": [],
@@ -2996,11 +3014,10 @@
    ]
   },
   "words/shark": {
-   "flags": [
-    "Whispered or breathy: only 0 ms of it is voiced"
-   ],
+   "flags": [],
    "hash": "7a14083f2e",
    "hints": [
+    "Whispered or breathy: only 0 ms of it is voiced",
     "Whisper heard “shock.”"
    ]
   },
@@ -3048,12 +3065,12 @@
    ]
   },
   "words/ship": {
-   "flags": [
+   "flags": [],
+   "hash": "11161ec8eb",
+   "hints": [
     "Whispered or breathy: only 70 ms of it is voiced",
     "Squeaky: about 19 semitones above the narrator's usual pitch"
-   ],
-   "hash": "11161ec8eb",
-   "hints": []
+   ]
   },
   "words/ship#kokoro": {
    "flags": [],
@@ -3187,12 +3204,12 @@
    "hints": []
   },
   "words/stick": {
-   "flags": [
+   "flags": [],
+   "hash": "04b31c5666",
+   "hints": [
     "Whispered or breathy: only 60 ms of it is voiced",
     "Squeaky: about 20 semitones above the narrator's usual pitch"
-   ],
-   "hash": "04b31c5666",
-   "hints": []
+   ]
   },
   "words/stick#kokoro": {
    "flags": [],
@@ -3286,11 +3303,11 @@
    ]
   },
   "words/tin": {
-   "flags": [
-    "Squeaky: about 12 semitones above the narrator's usual pitch"
-   ],
+   "flags": [],
    "hash": "dae6766e69",
-   "hints": []
+   "hints": [
+    "Squeaky: about 12 semitones above the narrator's usual pitch"
+   ]
   },
   "words/tin#kokoro": {
    "flags": [],

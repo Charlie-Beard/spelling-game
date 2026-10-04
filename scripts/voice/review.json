@@ -26,9 +26,9 @@
  },
  "lines/11q8hul": {
   "verdict": "bad",
-  "note": "the MEOW doesnt sounds like a cat at the start",
-  "hash": "7f3b13aa0d",
-  "at": "2026-10-04T19:12:14.830Z"
+  "note": "stil not a chat meow at the start",
+  "hash": "27415b516f",
+  "at": "2026-10-04T19:26:12.859Z"
  },
  "lines/128vgum": {
   "verdict": "ok",
@@ -37,9 +37,9 @@
  },
  "lines/12mkg1a": {
   "verdict": "bad",
-  "note": "the MEOW doesnt sounds like a cat at the start",
-  "hash": "64e2daedd1",
-  "at": "2026-10-04T19:12:04.776Z"
+  "note": "stil not a chat meow at the start",
+  "hash": "5a56bb1474",
+  "at": "2026-10-04T19:26:06.747Z"
  },
  "lines/14tf5u": {
   "verdict": "ok",
@@ -177,10 +177,9 @@
   "at": "2026-10-04T19:07:41.353Z"
  },
  "lines/1etroql": {
-  "verdict": "bad",
-  "note": "hedvig",
-  "hash": "d171a1079c",
-  "at": "2026-10-04T19:08:48.485Z"
+  "verdict": "ok",
+  "hash": "8c64084f72",
+  "at": "2026-10-04T19:25:50.276Z"
  },
  "lines/1ew38yc": {
   "verdict": "ok",
@@ -708,16 +707,14 @@
   "at": "2026-10-04T19:08:55.892Z"
  },
  "lines/opg03a": {
-  "verdict": "bad",
-  "note": "the ssssss is not right",
-  "hash": "3cff2f3cd8",
-  "at": "2026-10-04T19:15:27.445Z"
+  "verdict": "ok",
+  "hash": "a78efe69e2",
+  "at": "2026-10-04T19:26:16.683Z"
  },
  "lines/p8r1n0": {
-  "verdict": "bad",
-  "note": "gnome is said with a heavy G",
-  "hash": "5017994cb6",
-  "at": "2026-10-04T19:08:04.196Z"
+  "verdict": "ok",
+  "hash": "9691d34b64",
+  "at": "2026-10-04T19:25:48.108Z"
  },
  "lines/pmisf5": {
   "verdict": "ok",
@@ -753,16 +750,6 @@
   "verdict": "ok",
   "hash": "c88e41f12e",
   "at": "2026-10-04T19:08:17.939Z"
- },
- "lines/qyvcus": {
-  "verdict": "ok",
-  "hash": "dee7bc49a8",
-  "at": "2026-10-04T19:07:25.201Z"
- },
- "lines/rxxvid": {
-  "verdict": "ok",
-  "hash": "8378bf36a9",
-  "at": "2026-10-04T19:07:23.121Z"
  },
  "lines/s1kbfs": {
   "verdict": "ok",
@@ -1011,9 +998,9 @@
  },
  "ph/oo-short": {
   "verdict": "bad",
-  "note": "sort of right just needs to last for a little longer",
-  "hash": "00a06f0836",
-  "at": "2026-10-04T19:18:01.590Z"
+  "note": "still not quite right",
+  "hash": "c0c7f84c56",
+  "at": "2026-10-04T19:24:44.531Z"
  },
  "ph/or": {
   "verdict": "ok",
@@ -1047,9 +1034,9 @@
  },
  "ph/schwa": {
   "verdict": "bad",
-  "note": "i have no idea what this sounds is",
-  "hash": "b845f90047",
-  "at": "2026-10-04T19:18:21.402Z"
+  "note": "is this sound really in dragon?",
+  "hash": "62220957b1",
+  "at": "2026-10-04T19:25:42.461Z"
  },
  "ph/sh": {
   "verdict": "ok",

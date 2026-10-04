@@ -45,7 +45,7 @@ CLEAN_EDGE = set("pbtdkgcfsvzhjx") | {"sh", "ch", "th", "ck", "ss"}
 # don't (or not cleanly). Lines are whole sentences, where ElevenLabs speaks best.
 LINE_WORDS = {
     "o": ["hogwarts", "got"],
-    "oo-short": ["book", "look"],
+    "oo-short": ["look", "book"],
     "ur": ["word", "words", "work", "turn", "world", "myrtle", "hermione"],
     "schwa": ["potter", "wizard", "dragon"],
     "y": ["you"],
@@ -58,9 +58,10 @@ SAME_VOWEL = {"schwa": "u"}
 # Where a vowel should sit (F1, F2 Hz) when the narrator's words can't say:
 # typical values for a young woman's southern British English.
 TARGET = {"oo-short": (450, 1500), "ur": (600, 1650), "schwa": (650, 1550)}
-# How long to hold each vowel, in seconds (others 0.28). The review found
-# oo-short at 0.17 s too short to hear.
-LENGTH = {"ur": 0.42, "oo-short": 0.36, "schwa": 0.18}
+# How long to hold each vowel, in seconds (others 0.28). oo-short lasts only
+# 30-90 ms in speech, so it can't be held long without sounding stretched;
+# the review found 0.17 s too short and 0.3 s (stretched 2x) still not right.
+LENGTH = {"ur": 0.42, "oo-short": 0.2, "schwa": 0.18}
 
 
 def fade(x, sr, fade_in=0.02, fade_out=0.06):
@@ -236,7 +237,8 @@ def source_words(check, ph):
 def write(x, sr, dst, normalise):
     with tempfile.TemporaryDirectory() as td:
         wav = os.path.join(td, "x.wav")
-        parselmouth.Sound(x, sr).save(wav, "WAV")
+        # Stretching can overshoot full scale; a WAV file would clip it.
+        parselmouth.Sound(x / max(1.0, np.abs(x).max() / 0.98), sr).save(wav, "WAV")
         if normalise:
             encode(wav, dst)
         else:
@@ -295,6 +297,11 @@ def candidates(check, ph):
     if ph in SAME_VOWEL:
         if r := vowel(path_of("ph", SAME_VOWEL[ph]), length=length):
             out.append((f"short-{SAME_VOWEL[ph]}", *r, True))
+    if ph in LAST_VOWEL:
+        # The word the sound is taught in: schwa is the "o" of dragon.
+        for w, phs in check.units.items():
+            if ph in phs and (r := vowel(path_of("words", w), last=True, length=length)):
+                out.append((f"from-{w}", *r, True))
     if ph in SHORT_VOWELS or ph in TARGET:
         made = 0
         # Many words' vowels are too short to cut; keep going down the list.
@@ -324,20 +331,27 @@ def repair(check, ph, apply=False, was="previous", keep=3):
         return None
 
     os.makedirs(os.path.join(TAKES, "ph", ph), exist_ok=True)
+    taught_in = [w for w, phs in check.units.items() if ph in phs]
     scored = []
     for label, x, sr, normalise in cands:
         dst = path_of("ph", ph, label)
         write(x, sr, dst, normalise)
         flags = check("ph", ph, dst, label)[0]
-        # Prefer one made from a sound a grown-up already passed (schwa from u).
-        scored.append((len(flags), not label.startswith("short-"), round(distance(check, ph, dst), 2), label, flags))
+        # Prefer a sound cut from a word the game teaches it in (schwa from
+        # dragon), then one made from a sound a grown-up already passed.
+        taught = any(label == f"from-{w}" or label.startswith(f"from-{w}-") for w in taught_in)
+        d = distance(check, ph, dst)
+        if d > 4:  # Caught a consonant or noise, not the vowel.
+            os.remove(dst)
+            continue
+        scored.append((len(flags), not taught, not label.startswith("short-"), round(d, 2), label, flags))
     scored.sort()
-    for i, (_, _, d, label, flags) in enumerate(scored):
+    for i, (_, _, _, d, label, flags) in enumerate(scored):
         if i >= keep:
             os.remove(path_of("ph", ph, label))
             continue
         print(f"{ph:9} {label:24} {'; '.join(flags) or 'passes'}" + (f"  (vowel off by {d})" if d else ""))
-    best = scored[0][3] if not scored[0][0] else None
+    best = scored[0][4] if scored and not scored[0][0] else None
     if apply and best:
         stash("ph", ph, was)
         shutil.copyfile(path_of("ph", ph, best), path_of("ph", ph))
