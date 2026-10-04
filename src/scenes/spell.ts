@@ -37,7 +37,7 @@ export interface SpellOptions {
 // Layout (stage coordinates)
 const PANEL = { x: 24, y: 96, w: 1132, h: 700 };
 const PIC = { x: 78, y: 128, s: 360 };
-const SLOTS = { cx: 800, cy: 300, maxW: 600, gap: 16 };
+const SLOTS = { cx: 795, cy: 300, maxW: 650, gap: 14 };
 const TRAY = { cx: 585, cy: 638, maxW: 770, gap: 22 };
 const MAX_U = 124;
 

@@ -7,6 +7,7 @@ import { gsap } from 'gsap';
 import { sfx } from '../audio/sfx';
 import { voice } from '../audio/voice';
 import { characters } from '../art/characters';
+import { hedwig } from '../art/characters/hedwig';
 import { HORCRUX_NAMES, horcruxArt } from '../art/horcruxes';
 import { C } from '../art/palette';
 import { nightSky } from '../art/scenery';
@@ -50,7 +51,8 @@ export class CompleteScene extends Scene {
     const r = this.root;
     const c = this.o.chapter;
     r.append(h('div', { class: 'backdrop-wrap', html: nightSky('complete-sky') }));
-    r.append(place(h('div', { class: 'big-title', style: 'font-size:72px' }, 'Well done!'), 0, 36));
+    const heading = c.kind === 'battle' ? 'You saved Hogwarts!' : 'Well done!';
+    r.append(place(h('div', { class: 'big-title', style: 'font-size:64px' }, heading), 0, 30));
 
     this.glow = place(h('div', { class: 'reward-glow', html: glowBlob() }), 340, 120, 500, 560);
     r.append(this.glow);
@@ -74,8 +76,10 @@ export class CompleteScene extends Scene {
 
     // The child's character cheering at the side.
     const avatar = this.app.progress.avatar ?? 'harry';
-    const me = place(h('div', { class: 'cheer', html: crop(characters[avatar](), '20 10 260 330') }), 70, 400, 260, 330);
-    me.setAttribute('aria-label', AVATAR_NAMES[avatar]);
+    // After the battle the card already shows the child's character, so Hedwig cheers instead.
+    const cheerer = c.kind === 'battle' ? hedwig('cheer-owl') : crop(characters[avatar](), '20 10 260 330');
+    const me = place(h('div', { class: 'cheer', html: cheerer }), 70, c.kind === 'battle' ? 470 : 400, 260, c.kind === 'battle' ? 260 : 330);
+    me.setAttribute('aria-label', c.kind === 'battle' ? 'Hedwig' : AVATAR_NAMES[avatar]);
     r.append(me);
     this.onCleanup(breathe(me, 0.03, 1.4));
 
