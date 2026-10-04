@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Voice review</title>
+    <style>
+      :root {
+        --bg: #f6f1e7;
+        --card: #fffdf8;
+        --ink: #2a2420;
+        --muted: #786b5f;
+        --line: #e4d9c6;
+        --sel: #fff3d6;
+        --sel-edge: #d9a441;
+        --ok: #2f7d4f;
+        --ok-bg: #e3f2e8;
+        --bad: #b23a2f;
+        --bad-bg: #fbe5e2;
+        --hint-bg: #efe8dc;
+        --btn: #ece3d3;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1d1a17;
+          --card: #262220;
+          --ink: #f1e9dd;
+          --muted: #ab9d8e;
+          --line: #3b3530;
+          --sel: #3a3122;
+          --sel-edge: #d9a441;
+          --ok: #7fd09c;
+          --ok-bg: #20392a;
+          --bad: #f08a7e;
+          --bad-bg: #44241f;
+          --hint-bg: #34302b;
+          --btn: #3a342e;
+        }
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.4 system-ui, sans-serif; }
+      header { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); padding: 12px 16px 10px; }
+      h1 { font-size: 20px; margin: 0 0 4px; }
+      .intro { margin: 0 0 10px; color: var(--muted); max-width: 70em; }
+      .bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+      .tabs { display: flex; gap: 4px; }
+      .tabs button { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 8px; padding: 6px 12px; font: inherit; cursor: pointer; }
+      .tabs button[aria-selected='true'] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+      .tabs small { opacity: 0.75; }
+      select, label { font: inherit; color: var(--ink); }
+      select { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 4px 6px; }
+      .keys { color: var(--muted); font-size: 13px; }
+      kbd { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; font: 12px ui-monospace, monospace; }
+      ol { list-style: none; margin: 0; padding: 12px 16px 60vh; display: grid; gap: 8px; }
+      .row { display: grid; grid-template-columns: 52px 1fr minmax(240px, 34%); gap: 12px; align-items: start; background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+      .row.sel { background: var(--sel); border-color: var(--sel-edge); border-left-color: var(--sel-edge); }
+      .row.ok { border-left-color: var(--ok); }
+      .row.bad { border-left-color: var(--bad); }
+      .play { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg); font-size: 18px; cursor: pointer; }
+      .name { font: 700 24px Andika, system-ui, sans-serif; }
+      .lines .name { font: 500 17px/1.35 system-ui, sans-serif; }
+      .sub { color: var(--muted); font-size: 13px; }
+      .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+      .chip { font-size: 12.5px; border-radius: 6px; padding: 2px 7px; background: var(--hint-bg); color: var(--muted); }
+      .chip.flag { background: var(--bad-bg); color: var(--bad); }
+      .takes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+      .take { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+      .take button { border: 0; background: var(--btn); color: var(--ink); font: 13px system-ui, sans-serif; padding: 4px 8px; cursor: pointer; }
+      .take button + button { border-left: 1px solid var(--line); }
+      .take .warn { color: var(--bad); }
+      .judge { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+      .judge button { border: 1px solid var(--line); background: var(--btn); color: var(--ink); border-radius: 8px; padding: 7px; font: 600 14px system-ui, sans-serif; cursor: pointer; }
+      .judge .ok[aria-pressed='true'] { background: var(--ok); border-color: var(--ok); color: var(--card); }
+      .judge .bad[aria-pressed='true'] { background: var(--bad); border-color: var(--bad); color: var(--card); }
+      .note { grid-column: 1 / -1; border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; font: inherit; background: var(--bg); color: var(--ink); }
+      .stale { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); }
+      .empty { color: var(--muted); padding: 24px 16px; }
+      @media (max-width: 720px) {
+        .row { grid-template-columns: 52px 1fr; }
+        .judge { grid-column: 1 / -1; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Voice review</h1>
+      <p class="intro">
+        Play each clip and mark it <b>✓ Right</b> or <b>✗ Wrong</b>. If it's wrong, say what it sounds like instead or
+        what's odd (whispered, squeaky, wrong vowel, has an “uh” on the end, robotic). Red notes come from the automatic
+        checks: usually right, not always. Everything saves as you go.
+      </p>
+      <div class="bar">
+        <div class="tabs" role="tablist"></div>
+        <label>Show <select id="filter">
+          <option value="suspects">everything, suspects first</option>
+          <option value="order">everything, in game order</option>
+          <option value="todo">not checked yet</option>
+          <option value="bad">marked wrong</option>
+        </select></label>
+        <label><input type="checkbox" id="autoplay" checked /> Play when I move</label>
+        <span class="keys"><kbd>↓</kbd><kbd>↑</kbd> move · <kbd>Space</kbd> play · <kbd>Y</kbd> right · <kbd>N</kbd> wrong · <kbd>1</kbd>–<kbd>9</kbd> play a take</span>
+      </div>
+    </header>
+    <ol id="list"></ol>
+    <script type="module" src="/src/review.ts"></script>
+  </body>
+</html>

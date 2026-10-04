@@ -151,7 +151,7 @@ npm run build        # production build to dist/ (with offline service worker)
 | `src/art/characters/` | 33 character portraits |
 | `src/scenes/` | Title, choose, map, intro, spell, battle, complete, album, break, grown-ups |
 | `src/audio/` | Web Audio engine, synthesised sound effects, narrator, recordings |
-| `scripts/voice/` | Regenerates narration with Kokoro (offline neural TTS) or ElevenLabs |
+| `scripts/voice/` | Records narration with Kokoro (offline neural TTS) or ElevenLabs, and checks it |
 | `scripts/icons.ts` | Renders the app icons from the game's own art |
 
 ### Regenerating the voice
@@ -164,9 +164,8 @@ python3 scripts/voice/generate.py --model DIR   # add --force to redo existing c
 ```
 
 For more natural, characterful voices, render words and lines with
-[ElevenLabs](https://elevenlabs.io) instead (pure phonics sounds stay on Kokoro or
-your own recordings, since no cloud voice says them cleanly). The API key stays on
-your machine; the game only ships the resulting MP3s.
+[ElevenLabs](https://elevenlabs.io) instead. The API key stays on your machine;
+the game only ships the resulting MP3s.
 
 ```bash
 export ELEVENLABS_API_KEY=...                   # elevenlabs.io → Profile → API keys
@@ -179,5 +178,32 @@ python3 scripts/voice/generate.py --provider elevenlabs --force                 
 Pick voices per character in `scripts/voice/elevenlabs.json`. Its defaults are
 ElevenLabs' stock British voices; for distinct characters, add voices from the
 Voice Library or create them with Voice Design and paste their IDs in.
+
+### Checking the voice
+
+ElevenLabs credits are worth spending only on clips that are actually broken,
+so check and listen before re-recording anything:
+
+```bash
+pip install faster-whisper praat-parselmouth numpy
+python3 scripts/voice/check.py          # flags suspect clips → scripts/voice/qa.json
+python3 scripts/voice/sounds.py --apply # repairs flagged phonics sounds locally, for free
+npm run dev                             # then open /review.html
+python3 scripts/voice/generate.py --provider elevenlabs --redo --dry-run   # what it would send
+python3 scripts/voice/generate.py --provider elevenlabs --redo             # re-record what you marked wrong
+```
+
+- **check.py** measures every clip: whispered or squeaky words, vowels nearer a
+  different vowel in the narrator's own speech (cap sounding like "cup"), pure
+  sounds with an "uh" on the end, and what Whisper hears.
+- **/review.html** (dev only) plays every sound, word and line with the checks'
+  notes beside it. Mark each one right or wrong and say what's wrong; switch a
+  clip to another take (older recordings, repairs, retakes) with one click.
+  Verdicts are saved in `scripts/voice/review.json`.
+- **sounds.py** fixes pure sounds without ElevenLabs: it trims the "uh" off
+  sss/fff/shh/zzz and cuts vowels out of the narrator's own clean words.
+- **generate.py --redo** re-records only the clips marked wrong. Each word gets
+  three takes (a few characters each) said mid-sentence, and the checks keep the
+  best; the replaced clip is kept as a take in case the new one is worse.
 
 See [`docs/PLAN.md`](docs/PLAN.md) for the full design.

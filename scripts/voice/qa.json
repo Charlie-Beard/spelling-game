@@ -1,0 +1,3328 @@
+{
+ "checked": "2026-10-04",
+ "clips": {
+  "lines/1001tlp": {
+   "flags": [],
+   "hash": "029390e3ed",
+   "hints": []
+  },
+  "lines/1026o4x": {
+   "flags": [],
+   "hash": "2075d7a1a2",
+   "hints": []
+  },
+  "lines/10m1apz": {
+   "flags": [],
+   "hash": "9c55dff97d",
+   "hints": []
+  },
+  "lines/10s3mzo": {
+   "flags": [],
+   "hash": "ce3ab5a7c3",
+   "hints": []
+  },
+  "lines/116n8nh": {
+   "flags": [],
+   "hash": "a622496b1a",
+   "hints": []
+  },
+  "lines/11q8hul": {
+   "flags": [],
+   "hash": "7f3b13aa0d",
+   "hints": []
+  },
+  "lines/128vgum": {
+   "flags": [],
+   "hash": "39c7226812",
+   "hints": []
+  },
+  "lines/12mkg1a": {
+   "flags": [],
+   "hash": "64e2daedd1",
+   "hints": []
+  },
+  "lines/14tf5u": {
+   "flags": [],
+   "hash": "6c8564a88c",
+   "hints": []
+  },
+  "lines/14uhgy9": {
+   "flags": [],
+   "hash": "e7cd3f712a",
+   "hints": []
+  },
+  "lines/15fh1zy": {
+   "flags": [],
+   "hash": "cda46736e7",
+   "hints": []
+  },
+  "lines/15m03pu": {
+   "flags": [],
+   "hash": "345e5c72d2",
+   "hints": []
+  },
+  "lines/15my7cv": {
+   "flags": [],
+   "hash": "bf50c0edea",
+   "hints": []
+  },
+  "lines/16azk88": {
+   "flags": [],
+   "hash": "c7c22f2799",
+   "hints": []
+  },
+  "lines/16ba1dz": {
+   "flags": [],
+   "hash": "65a17fab5d",
+   "hints": []
+  },
+  "lines/17ifmvi": {
+   "flags": [],
+   "hash": "1ac73ab1fb",
+   "hints": []
+  },
+  "lines/17tg8zn": {
+   "flags": [],
+   "hash": "3be192b08e",
+   "hints": []
+  },
+  "lines/18d4qj7": {
+   "flags": [],
+   "hash": "bd017fd3f2",
+   "hints": [
+    "Whisper heard “Hm, try another one.”"
+   ]
+  },
+  "lines/19455hi": {
+   "flags": [],
+   "hash": "eb441e6dea",
+   "hints": []
+  },
+  "lines/19cm7lq": {
+   "flags": [],
+   "hash": "d01f75965b",
+   "hints": []
+  },
+  "lines/19pst6c": {
+   "flags": [],
+   "hash": "12f6b5d6da",
+   "hints": []
+  },
+  "lines/1amy3vw": {
+   "flags": [],
+   "hash": "7a62631a56",
+   "hints": []
+  },
+  "lines/1asxsp5": {
+   "flags": [],
+   "hash": "ee0f45ceec",
+   "hints": []
+  },
+  "lines/1b85i8d": {
+   "flags": [],
+   "hash": "b93ebe3c65",
+   "hints": []
+  },
+  "lines/1bxso98": {
+   "flags": [],
+   "hash": "3d84eff81d",
+   "hints": []
+  },
+  "lines/1bzo70s": {
+   "flags": [],
+   "hash": "6a1ea55b6d",
+   "hints": []
+  },
+  "lines/1caejgi": {
+   "flags": [],
+   "hash": "882f4937b0",
+   "hints": []
+  },
+  "lines/1ces7iq": {
+   "flags": [],
+   "hash": "e344084f2e",
+   "hints": []
+  },
+  "lines/1dgqr1i": {
+   "flags": [],
+   "hash": "825f388eaf",
+   "hints": [
+    "Whisper heard “Forks.”"
+   ]
+  },
+  "lines/1dn2ok9": {
+   "flags": [],
+   "hash": "85c595c5eb",
+   "hints": []
+  },
+  "lines/1dp09fi": {
+   "flags": [],
+   "hash": "c1f45e6b96",
+   "hints": []
+  },
+  "lines/1dsxqp1": {
+   "flags": [],
+   "hash": "3a2e9a10d1",
+   "hints": []
+  },
+  "lines/1enssqk": {
+   "flags": [],
+   "hash": "70f2908a34",
+   "hints": []
+  },
+  "lines/1eo08po": {
+   "flags": [],
+   "hash": "181468ef05",
+   "hints": []
+  },
+  "lines/1er07h0": {
+   "flags": [],
+   "hash": "78218ff34d",
+   "hints": []
+  },
+  "lines/1etroql": {
+   "flags": [],
+   "hash": "d171a1079c",
+   "hints": [
+    "Whisper heard “Hedvig”"
+   ]
+  },
+  "lines/1ew38yc": {
+   "flags": [],
+   "hash": "ec6e1639c7",
+   "hints": []
+  },
+  "lines/1ez3s7k": {
+   "flags": [],
+   "hash": "4785b42cd0",
+   "hints": []
+  },
+  "lines/1f1yx1x": {
+   "flags": [],
+   "hash": "634225e44f",
+   "hints": []
+  },
+  "lines/1f6it5h": {
+   "flags": [],
+   "hash": "e9730e9513",
+   "hints": [
+    "Whisper heard “Hi, I'm Neville. We practice spells in secret. Let's practice spelling too.”"
+   ]
+  },
+  "lines/1f77emo": {
+   "flags": [],
+   "hash": "5276b4633c",
+   "hints": []
+  },
+  "lines/1fi20vj": {
+   "flags": [],
+   "hash": "b5773587ba",
+   "hints": []
+  },
+  "lines/1fva6or": {
+   "flags": [],
+   "hash": "48437a3526",
+   "hints": []
+  },
+  "lines/1g6k4x": {
+   "flags": [],
+   "hash": "1cb84870e8",
+   "hints": [
+    "Whisper heard “Hagrid's Hot.”"
+   ]
+  },
+  "lines/1h586n5": {
+   "flags": [],
+   "hash": "55213c3c15",
+   "hints": []
+  },
+  "lines/1hacv8q": {
+   "flags": [],
+   "hash": "bd62c7988b",
+   "hints": []
+  },
+  "lines/1hzi10n": {
+   "flags": [],
+   "hash": "b4d7cf6b0e",
+   "hints": []
+  },
+  "lines/1icnfug": {
+   "flags": [],
+   "hash": "c339e7d428",
+   "hints": []
+  },
+  "lines/1ie9iyr": {
+   "flags": [],
+   "hash": "a56ca76b2c",
+   "hints": []
+  },
+  "lines/1imsuez": {
+   "flags": [],
+   "hash": "d8ffd1f4c0",
+   "hints": []
+  },
+  "lines/1jfeojm": {
+   "flags": [],
+   "hash": "fb43744d0d",
+   "hints": [
+    "Whisper heard “Forks the Phoenix”"
+   ]
+  },
+  "lines/1jtzaw6": {
+   "flags": [],
+   "hash": "eedacc0371",
+   "hints": [
+    "Whisper heard “Hi Jasper, I'm Neville. We practice spells in secret. Let's practice spelling too.”"
+   ]
+  },
+  "lines/1jys883": {
+   "flags": [],
+   "hash": "4fe6098b78",
+   "hints": [
+    "Whisper heard “About a buckbeak, the hippogriff, he bows back. Now spell these, Jasper.”"
+   ]
+  },
+  "lines/1kpm1n7": {
+   "flags": [],
+   "hash": "859b8bb6cc",
+   "hints": []
+  },
+  "lines/1l0xngd": {
+   "flags": [],
+   "hash": "ebe944e6d1",
+   "hints": [
+    "Whisper heard “Professor McGonigal.”"
+   ]
+  },
+  "lines/1m9m385": {
+   "flags": [],
+   "hash": "71296aecfe",
+   "hints": []
+  },
+  "lines/1mcl8ff": {
+   "flags": [],
+   "hash": "3ea5bef285",
+   "hints": []
+  },
+  "lines/1mq2n7s": {
+   "flags": [],
+   "hash": "c3febb789a",
+   "hints": []
+  },
+  "lines/1msfiym": {
+   "flags": [],
+   "hash": "874dce1cb1",
+   "hints": []
+  },
+  "lines/1mukkcn": {
+   "flags": [],
+   "hash": "86c73dad5d",
+   "hints": []
+  },
+  "lines/1mukwov": {
+   "flags": [],
+   "hash": "e140828364",
+   "hints": []
+  },
+  "lines/1mxzcbq": {
+   "flags": [],
+   "hash": "4e824cbeae",
+   "hints": []
+  },
+  "lines/1my3rvv": {
+   "flags": [],
+   "hash": "bb92084aa5",
+   "hints": []
+  },
+  "lines/1nhfa19": {
+   "flags": [],
+   "hash": "01f1285fc0",
+   "hints": []
+  },
+  "lines/1nhz3y1": {
+   "flags": [],
+   "hash": "914a63d5c8",
+   "hints": []
+  },
+  "lines/1ov17dm": {
+   "flags": [],
+   "hash": "fe3b55d0a7",
+   "hints": []
+  },
+  "lines/1p30gsx": {
+   "flags": [],
+   "hash": "b4b6d58051",
+   "hints": []
+  },
+  "lines/1pc25lz": {
+   "flags": [],
+   "hash": "4a5e811e29",
+   "hints": []
+  },
+  "lines/1poldt2": {
+   "flags": [],
+   "hash": "8c1026eafd",
+   "hints": []
+  },
+  "lines/1qamnv1": {
+   "flags": [],
+   "hash": "dd04cf24a1",
+   "hints": []
+  },
+  "lines/1qhyaqz": {
+   "flags": [],
+   "hash": "39fd668092",
+   "hints": []
+  },
+  "lines/1rc09p6": {
+   "flags": [],
+   "hash": "2f67053a30",
+   "hints": []
+  },
+  "lines/1rp7tw8": {
+   "flags": [],
+   "hash": "db787652f8",
+   "hints": []
+  },
+  "lines/1rxbubx": {
+   "flags": [],
+   "hash": "9e2b4a6867",
+   "hints": [
+    "Whisper heard “The Great Whole Feast.”"
+   ]
+  },
+  "lines/1sezzb4": {
+   "flags": [],
+   "hash": "a9695152d9",
+   "hints": []
+  },
+  "lines/1su58vr": {
+   "flags": [],
+   "hash": "4dd403e65e",
+   "hints": []
+  },
+  "lines/1ts9m0a": {
+   "flags": [],
+   "hash": "4677d4f6b6",
+   "hints": [
+    "Whisper heard “Creature.”"
+   ]
+  },
+  "lines/1u81vmp": {
+   "flags": [],
+   "hash": "fcc498d138",
+   "hints": []
+  },
+  "lines/1ulfpge": {
+   "flags": [],
+   "hash": "73443cb8bb",
+   "hints": []
+  },
+  "lines/1usld7o": {
+   "flags": [],
+   "hash": "c9ce58f6f6",
+   "hints": []
+  },
+  "lines/1vl8xm0": {
+   "flags": [],
+   "hash": "aa327fdab7",
+   "hints": []
+  },
+  "lines/1wcc7bm": {
+   "flags": [],
+   "hash": "d3737e19d4",
+   "hints": []
+  },
+  "lines/1x3wnzg": {
+   "flags": [],
+   "hash": "daabc468b7",
+   "hints": []
+  },
+  "lines/1x5t2vp": {
+   "flags": [],
+   "hash": "947186c447",
+   "hints": []
+  },
+  "lines/1xglioz": {
+   "flags": [],
+   "hash": "32dd1355e2",
+   "hints": []
+  },
+  "lines/1yfdnbs": {
+   "flags": [],
+   "hash": "e485b6bddc",
+   "hints": []
+  },
+  "lines/1yrow8r": {
+   "flags": [],
+   "hash": "6695c9852a",
+   "hints": []
+  },
+  "lines/2177rb": {
+   "flags": [],
+   "hash": "c5364cdf8f",
+   "hints": []
+  },
+  "lines/2namlj": {
+   "flags": [],
+   "hash": "652dfe6d35",
+   "hints": [
+    "Whisper heard “The Golden Cop”"
+   ]
+  },
+  "lines/2qyrar": {
+   "flags": [],
+   "hash": "50265f0afa",
+   "hints": []
+  },
+  "lines/3mbnn9": {
+   "flags": [],
+   "hash": "6d954fe3f9",
+   "hints": [
+    "Whisper heard “Dolby.”"
+   ]
+  },
+  "lines/3nas7j": {
+   "flags": [],
+   "hash": "98834d7825",
+   "hints": [
+    "Whisper heard “Slug Horns Potions”"
+   ]
+  },
+  "lines/3w6n45": {
+   "flags": [],
+   "hash": "4648c01790",
+   "hints": []
+  },
+  "lines/40p4m6": {
+   "flags": [],
+   "hash": "f62a3531ca",
+   "hints": []
+  },
+  "lines/42zc6w": {
+   "flags": [],
+   "hash": "1635882763",
+   "hints": []
+  },
+  "lines/4u4etf": {
+   "flags": [],
+   "hash": "9abb996d5c",
+   "hints": []
+  },
+  "lines/5v5rf2": {
+   "flags": [],
+   "hash": "7752a57d3e",
+   "hints": []
+  },
+  "lines/6jese2": {
+   "flags": [],
+   "hash": "572b29ceb4",
+   "hints": []
+  },
+  "lines/6ptbcb": {
+   "flags": [],
+   "hash": "a4d52a0600",
+   "hints": []
+  },
+  "lines/6rz7u3": {
+   "flags": [],
+   "hash": "5caa58c60d",
+   "hints": []
+  },
+  "lines/7fw2ya": {
+   "flags": [],
+   "hash": "ed42dec1f8",
+   "hints": []
+  },
+  "lines/8czfkz": {
+   "flags": [],
+   "hash": "1231c4016a",
+   "hints": []
+  },
+  "lines/9ri8a3": {
+   "flags": [],
+   "hash": "8e93cb76d0",
+   "hints": []
+  },
+  "lines/9xqo2f": {
+   "flags": [],
+   "hash": "f5e2ea5096",
+   "hints": []
+  },
+  "lines/b4k2ga": {
+   "flags": [],
+   "hash": "9edefd06ec",
+   "hints": []
+  },
+  "lines/bd280t": {
+   "flags": [],
+   "hash": "fed0a963b8",
+   "hints": []
+  },
+  "lines/c3tc4b": {
+   "flags": [],
+   "hash": "846614b534",
+   "hints": []
+  },
+  "lines/ccvp7u": {
+   "flags": [],
+   "hash": "413c1835d4",
+   "hints": []
+  },
+  "lines/cdz4u8": {
+   "flags": [],
+   "hash": "d94507c5fd",
+   "hints": []
+  },
+  "lines/cgjbrw": {
+   "flags": [],
+   "hash": "9bb621a6e2",
+   "hints": [
+    "Whisper heard “Creatures' Kitchen”"
+   ]
+  },
+  "lines/dos1g8": {
+   "flags": [],
+   "hash": "12eb118722",
+   "hints": []
+  },
+  "lines/dw9d92": {
+   "flags": [],
+   "hash": "5f81edb468",
+   "hints": []
+  },
+  "lines/epffp2": {
+   "flags": [],
+   "hash": "0e95b892fb",
+   "hints": []
+  },
+  "lines/fh63xf": {
+   "flags": [],
+   "hash": "cb153c5237",
+   "hints": []
+  },
+  "lines/fnxaok": {
+   "flags": [],
+   "hash": "f889ae8c28",
+   "hints": []
+  },
+  "lines/ghokm": {
+   "flags": [],
+   "hash": "a7ac4ab28b",
+   "hints": []
+  },
+  "lines/gn8ww": {
+   "flags": [],
+   "hash": "232b46265e",
+   "hints": []
+  },
+  "lines/gpoi5b": {
+   "flags": [],
+   "hash": "4f615c2a02",
+   "hints": []
+  },
+  "lines/gqjivi": {
+   "flags": [],
+   "hash": "a7581db25d",
+   "hints": []
+  },
+  "lines/gv0l8l": {
+   "flags": [],
+   "hash": "a54a9c0cd1",
+   "hints": [
+    "Whisper heard “the flying cars.”"
+   ]
+  },
+  "lines/hed4dh": {
+   "flags": [],
+   "hash": "00f858bf26",
+   "hints": []
+  },
+  "lines/i4k5wk": {
+   "flags": [],
+   "hash": "1977e32c17",
+   "hints": []
+  },
+  "lines/ikv74b": {
+   "flags": [],
+   "hash": "c7f09ba93d",
+   "hints": []
+  },
+  "lines/inbi9e": {
+   "flags": [],
+   "hash": "5a920b8765",
+   "hints": []
+  },
+  "lines/javk6k": {
+   "flags": [],
+   "hash": "ab62c67fe1",
+   "hints": []
+  },
+  "lines/jefoy6": {
+   "flags": [],
+   "hash": "f99fd8d376",
+   "hints": []
+  },
+  "lines/jjvprc": {
+   "flags": [],
+   "hash": "c022f7e8c3",
+   "hints": []
+  },
+  "lines/jrglie": {
+   "flags": [],
+   "hash": "a2b64bf91a",
+   "hints": []
+  },
+  "lines/k48sa7": {
+   "flags": [],
+   "hash": "1d56d03d8a",
+   "hints": []
+  },
+  "lines/ksa1q5": {
+   "flags": [],
+   "hash": "9648274361",
+   "hints": []
+  },
+  "lines/le3t5h": {
+   "flags": [],
+   "hash": "9edc5ed350",
+   "hints": []
+  },
+  "lines/lnc48n": {
+   "flags": [],
+   "hash": "2740fd01ac",
+   "hints": []
+  },
+  "lines/lv3ro0": {
+   "flags": [],
+   "hash": "79705592ad",
+   "hints": []
+  },
+  "lines/m59myr": {
+   "flags": [],
+   "hash": "1808ec5f69",
+   "hints": []
+  },
+  "lines/m95twi": {
+   "flags": [],
+   "hash": "479c60706c",
+   "hints": []
+  },
+  "lines/mk0c9u": {
+   "flags": [],
+   "hash": "1d93fdebf7",
+   "hints": []
+  },
+  "lines/n5czbb": {
+   "flags": [],
+   "hash": "8673f0749a",
+   "hints": []
+  },
+  "lines/nds4n3": {
+   "flags": [],
+   "hash": "33a59dd4a9",
+   "hints": []
+  },
+  "lines/ngwaeg": {
+   "flags": [],
+   "hash": "78291e3fe4",
+   "hints": []
+  },
+  "lines/nnt46a": {
+   "flags": [],
+   "hash": "bb389cd5ee",
+   "hints": []
+  },
+  "lines/o7459m": {
+   "flags": [],
+   "hash": "2e3be3bc88",
+   "hints": []
+  },
+  "lines/opg03a": {
+   "flags": [],
+   "hash": "3cff2f3cd8",
+   "hints": []
+  },
+  "lines/p8r1n0": {
+   "flags": [],
+   "hash": "5017994cb6",
+   "hints": []
+  },
+  "lines/pmisf5": {
+   "flags": [],
+   "hash": "8817a2d4cd",
+   "hints": []
+  },
+  "lines/ppaqwj": {
+   "flags": [],
+   "hash": "bb0e3bac2d",
+   "hints": [
+    "Whisper heard “Darby has come to help Jasper. Darby likes socks very much.”"
+   ]
+  },
+  "lines/ptjmgl": {
+   "flags": [],
+   "hash": "1aac887060",
+   "hints": []
+  },
+  "lines/px2c4b": {
+   "flags": [],
+   "hash": "74ac0d4a0d",
+   "hints": []
+  },
+  "lines/q7c949": {
+   "flags": [],
+   "hash": "696f8e76eb",
+   "hints": []
+  },
+  "lines/qrq02c": {
+   "flags": [],
+   "hash": "9eb1707590",
+   "hints": []
+  },
+  "lines/qtls4m": {
+   "flags": [],
+   "hash": "c88e41f12e",
+   "hints": []
+  },
+  "lines/qyvcus": {
+   "flags": [],
+   "hash": "dee7bc49a8",
+   "hints": []
+  },
+  "lines/rxxvid": {
+   "flags": [],
+   "hash": "8378bf36a9",
+   "hints": []
+  },
+  "lines/s1kbfs": {
+   "flags": [],
+   "hash": "0521cd0533",
+   "hints": []
+  },
+  "lines/sgigq7": {
+   "flags": [],
+   "hash": "fb5e6b81ab",
+   "hints": []
+  },
+  "lines/sjacw4": {
+   "flags": [],
+   "hash": "e2cc0c5122",
+   "hints": []
+  },
+  "lines/tcw4pj": {
+   "flags": [],
+   "hash": "cbdd4dfd8f",
+   "hints": []
+  },
+  "lines/tenu63": {
+   "flags": [],
+   "hash": "6d0523cd48",
+   "hints": []
+  },
+  "lines/thsthk": {
+   "flags": [],
+   "hash": "bd1724f4c0",
+   "hints": []
+  },
+  "lines/u0ez04": {
+   "flags": [],
+   "hash": "7b399d00fb",
+   "hints": []
+  },
+  "lines/ubh4bv": {
+   "flags": [],
+   "hash": "7456d50e85",
+   "hints": []
+  },
+  "lines/ujnztm": {
+   "flags": [],
+   "hash": "26388c0262",
+   "hints": []
+  },
+  "lines/vp2a8t": {
+   "flags": [],
+   "hash": "77d1f06160",
+   "hints": []
+  },
+  "lines/vq1h1g": {
+   "flags": [],
+   "hash": "6cb24cf95e",
+   "hints": [
+    "Whisper heard “Creature will help Master Jasper, Creature has packed a picnic.”"
+   ]
+  },
+  "lines/w964xr": {
+   "flags": [],
+   "hash": "39968cf514",
+   "hints": [
+    "Whisper heard “Creature will help master. Creature has packed a picnic.”"
+   ]
+  },
+  "lines/wnj9ar": {
+   "flags": [],
+   "hash": "2fc0bbcabd",
+   "hints": []
+  },
+  "lines/wyfbec": {
+   "flags": [],
+   "hash": "0be386f506",
+   "hints": []
+  },
+  "lines/xd2k53": {
+   "flags": [],
+   "hash": "a3da50edf6",
+   "hints": []
+  },
+  "lines/xpupj": {
+   "flags": [],
+   "hash": "c7fc4cf6cc",
+   "hints": []
+  },
+  "lines/y16pab": {
+   "flags": [],
+   "hash": "06fc430996",
+   "hints": []
+  },
+  "lines/yfm08k": {
+   "flags": [],
+   "hash": "0acb320016",
+   "hints": []
+  },
+  "lines/zm6i2k": {
+   "flags": [],
+   "hash": "cc16fa2d47",
+   "hints": []
+  },
+  "lines/zohmaw": {
+   "flags": [],
+   "hash": "0e0ab9e61e",
+   "hints": []
+  },
+  "lines/zt1eok": {
+   "flags": [],
+   "hash": "4fb5788c5b",
+   "hints": []
+  },
+  "lines/zu1pt3": {
+   "flags": [],
+   "hash": "56d5066666",
+   "hints": []
+  },
+  "ph/a": {
+   "flags": [],
+   "hash": "b8c758b28b",
+   "hints": []
+  },
+  "ph/a#kokoro": {
+   "flags": [],
+   "hash": "7934d3b9ad",
+   "hints": []
+  },
+  "ph/ai": {
+   "flags": [],
+   "hash": "dca4dc867d",
+   "hints": []
+  },
+  "ph/ai#kokoro": {
+   "flags": [],
+   "hash": "8563e765ca",
+   "hints": []
+  },
+  "ph/air": {
+   "flags": [],
+   "hash": "904666eedb",
+   "hints": []
+  },
+  "ph/air#kokoro": {
+   "flags": [],
+   "hash": "3649b7a115",
+   "hints": []
+  },
+  "ph/ar": {
+   "flags": [],
+   "hash": "29acfb3591",
+   "hints": []
+  },
+  "ph/ar#kokoro": {
+   "flags": [],
+   "hash": "2b07eec954",
+   "hints": []
+  },
+  "ph/b": {
+   "flags": [],
+   "hash": "8743c4cf1c",
+   "hints": []
+  },
+  "ph/b#kokoro": {
+   "flags": [],
+   "hash": "dc3e1d026f",
+   "hints": []
+  },
+  "ph/ch": {
+   "flags": [],
+   "hash": "fdf50400ed",
+   "hints": []
+  },
+  "ph/ch#kokoro": {
+   "flags": [
+    "Has a vowel on the end (“chuh”, not a pure ch): 185 ms voiced"
+   ],
+   "hash": "218da69641",
+   "hints": []
+  },
+  "ph/d": {
+   "flags": [],
+   "hash": "ec5045a248",
+   "hints": []
+  },
+  "ph/d#kokoro": {
+   "flags": [],
+   "hash": "5193a2cc3b",
+   "hints": []
+  },
+  "ph/e": {
+   "flags": [],
+   "hash": "be32c68e62",
+   "hints": []
+  },
+  "ph/e#kokoro": {
+   "flags": [],
+   "hash": "2aea06ecf8",
+   "hints": []
+  },
+  "ph/ear": {
+   "flags": [],
+   "hash": "e53414bd63",
+   "hints": []
+  },
+  "ph/ear#kokoro": {
+   "flags": [],
+   "hash": "d9bbd62f5b",
+   "hints": []
+  },
+  "ph/ee": {
+   "flags": [],
+   "hash": "a4213c9a2c",
+   "hints": []
+  },
+  "ph/ee#kokoro": {
+   "flags": [],
+   "hash": "93bafcd97b",
+   "hints": []
+  },
+  "ph/er": {
+   "flags": [],
+   "hash": "f54bf5df25",
+   "hints": []
+  },
+  "ph/er#kokoro": {
+   "flags": [],
+   "hash": "155a28a24d",
+   "hints": []
+  },
+  "ph/f": {
+   "flags": [],
+   "hash": "af77183d6f",
+   "hints": []
+  },
+  "ph/f#elevenlabs": {
+   "flags": [
+    "Has a vowel on the end (“fuh”, not a pure f): 195 ms voiced"
+   ],
+   "hash": "3c2363127a",
+   "hints": []
+  },
+  "ph/f#kokoro": {
+   "flags": [
+    "Has a vowel on the end (“fuh”, not a pure f): 245 ms voiced"
+   ],
+   "hash": "e7b4ffea7f",
+   "hints": []
+  },
+  "ph/f#trimmed": {
+   "flags": [],
+   "hash": "af77183d6f",
+   "hints": []
+  },
+  "ph/g": {
+   "flags": [],
+   "hash": "7d5d777bc4",
+   "hints": []
+  },
+  "ph/g#kokoro": {
+   "flags": [],
+   "hash": "a9d476a8c9",
+   "hints": []
+  },
+  "ph/h": {
+   "flags": [],
+   "hash": "86b27c61e5",
+   "hints": []
+  },
+  "ph/h#kokoro": {
+   "flags": [],
+   "hash": "252f01323d",
+   "hints": []
+  },
+  "ph/i": {
+   "flags": [],
+   "hash": "28966d3327",
+   "hints": []
+  },
+  "ph/i#kokoro": {
+   "flags": [],
+   "hash": "04cf6b60e1",
+   "hints": []
+  },
+  "ph/igh": {
+   "flags": [],
+   "hash": "a284b1c28b",
+   "hints": []
+  },
+  "ph/igh#kokoro": {
+   "flags": [],
+   "hash": "0d7afa6355",
+   "hints": []
+  },
+  "ph/j": {
+   "flags": [],
+   "hash": "50ce9afd2f",
+   "hints": []
+  },
+  "ph/j#kokoro": {
+   "flags": [],
+   "hash": "41abdf49d6",
+   "hints": []
+  },
+  "ph/k": {
+   "flags": [],
+   "hash": "d904137d3a",
+   "hints": []
+  },
+  "ph/k#kokoro": {
+   "flags": [],
+   "hash": "1c69246f6d",
+   "hints": []
+  },
+  "ph/l": {
+   "flags": [],
+   "hash": "ff9b0e7a9a",
+   "hints": []
+  },
+  "ph/l#elevenlabs": {
+   "flags": [
+    "Opens into a vowel (“luh”) for 290 ms"
+   ],
+   "hash": "9fe0c45b21",
+   "hints": []
+  },
+  "ph/l#kokoro": {
+   "flags": [
+    "Opens into a vowel (“luh”) for 229 ms"
+   ],
+   "hash": "89fdf1fead",
+   "hints": []
+  },
+  "ph/l#trimmed": {
+   "flags": [],
+   "hash": "ff9b0e7a9a",
+   "hints": []
+  },
+  "ph/m": {
+   "flags": [],
+   "hash": "7379341e6b",
+   "hints": []
+  },
+  "ph/m#kokoro": {
+   "flags": [],
+   "hash": "c4a28f47c3",
+   "hints": []
+  },
+  "ph/n": {
+   "flags": [],
+   "hash": "adba120416",
+   "hints": []
+  },
+  "ph/n#kokoro": {
+   "flags": [],
+   "hash": "e00721bfb6",
+   "hints": []
+  },
+  "ph/ng": {
+   "flags": [],
+   "hash": "b234de124c",
+   "hints": []
+  },
+  "ph/ng#kokoro": {
+   "flags": [
+    "Opens into a vowel (“nguh”) for 129 ms"
+   ],
+   "hash": "35910591ab",
+   "hints": []
+  },
+  "ph/nk": {
+   "flags": [],
+   "hash": "ec722385b7",
+   "hints": []
+  },
+  "ph/nk#kokoro": {
+   "flags": [],
+   "hash": "96b2c1be2d",
+   "hints": []
+  },
+  "ph/o": {
+   "flags": [],
+   "hash": "65ba4f131e",
+   "hints": []
+  },
+  "ph/o#elevenlabs": {
+   "flags": [
+    "Vowel sounds nearer “ar” (car) than “o” (rock)"
+   ],
+   "hash": "c1ad611cd1",
+   "hints": []
+  },
+  "ph/o#from-rock": {
+   "flags": [],
+   "hash": "65ba4f131e",
+   "hints": []
+  },
+  "ph/o#kokoro": {
+   "flags": [],
+   "hash": "084781806c",
+   "hints": []
+  },
+  "ph/oa": {
+   "flags": [],
+   "hash": "15088b41a5",
+   "hints": []
+  },
+  "ph/oa#kokoro": {
+   "flags": [],
+   "hash": "38c610d16c",
+   "hints": []
+  },
+  "ph/oi": {
+   "flags": [],
+   "hash": "d33ac8718f",
+   "hints": []
+  },
+  "ph/oi#kokoro": {
+   "flags": [],
+   "hash": "a6fdfad1c4",
+   "hints": []
+  },
+  "ph/oo-long": {
+   "flags": [],
+   "hash": "17f17ac48c",
+   "hints": []
+  },
+  "ph/oo-long#kokoro": {
+   "flags": [],
+   "hash": "e90ff99d06",
+   "hints": []
+  },
+  "ph/oo-short": {
+   "flags": [],
+   "hash": "877c629e4e",
+   "hints": []
+  },
+  "ph/oo-short#kokoro": {
+   "flags": [],
+   "hash": "f06de1845f",
+   "hints": []
+  },
+  "ph/or": {
+   "flags": [],
+   "hash": "f6a9ecf5f0",
+   "hints": []
+  },
+  "ph/or#kokoro": {
+   "flags": [],
+   "hash": "183cd3b8db",
+   "hints": []
+  },
+  "ph/ow": {
+   "flags": [],
+   "hash": "544ef20dae",
+   "hints": []
+  },
+  "ph/ow#kokoro": {
+   "flags": [],
+   "hash": "c45131ce48",
+   "hints": []
+  },
+  "ph/p": {
+   "flags": [],
+   "hash": "2aaae409d4",
+   "hints": []
+  },
+  "ph/p#kokoro": {
+   "flags": [],
+   "hash": "c76a45dbbc",
+   "hints": []
+  },
+  "ph/qu": {
+   "flags": [],
+   "hash": "f57c7553b2",
+   "hints": []
+  },
+  "ph/qu#kokoro": {
+   "flags": [],
+   "hash": "2b39613b58",
+   "hints": []
+  },
+  "ph/r": {
+   "flags": [],
+   "hash": "2624c852ac",
+   "hints": []
+  },
+  "ph/r#elevenlabs": {
+   "flags": [
+    "Opens into a vowel (“ruh”) for 370 ms"
+   ],
+   "hash": "2040acaab7",
+   "hints": []
+  },
+  "ph/r#kokoro": {
+   "flags": [
+    "Opens into a vowel (“ruh”) for 244 ms"
+   ],
+   "hash": "3db9314e49",
+   "hints": []
+  },
+  "ph/r#trimmed": {
+   "flags": [],
+   "hash": "2624c852ac",
+   "hints": []
+  },
+  "ph/s": {
+   "flags": [],
+   "hash": "5ca63e205b",
+   "hints": []
+  },
+  "ph/s#elevenlabs": {
+   "flags": [
+    "Has a vowel on the end (“suh”, not a pure s): 160 ms voiced"
+   ],
+   "hash": "40bc27f1c4",
+   "hints": []
+  },
+  "ph/s#kokoro": {
+   "flags": [
+    "Has a vowel on the end (“suh”, not a pure s): 260 ms voiced"
+   ],
+   "hash": "33b763cfd1",
+   "hints": []
+  },
+  "ph/s#trimmed": {
+   "flags": [],
+   "hash": "5ca63e205b",
+   "hints": []
+  },
+  "ph/schwa": {
+   "flags": [],
+   "hash": "44061bba8b",
+   "hints": []
+  },
+  "ph/schwa#kokoro": {
+   "flags": [],
+   "hash": "155a28a24d",
+   "hints": []
+  },
+  "ph/sh": {
+   "flags": [],
+   "hash": "7e40d8a5fc",
+   "hints": []
+  },
+  "ph/sh#elevenlabs": {
+   "flags": [
+    "Has a vowel on the end (“shuh”, not a pure sh): 295 ms voiced"
+   ],
+   "hash": "463eabb2c4",
+   "hints": []
+  },
+  "ph/sh#kokoro": {
+   "flags": [
+    "Has a vowel on the end (“shuh”, not a pure sh): 300 ms voiced"
+   ],
+   "hash": "3b7d2bac02",
+   "hints": []
+  },
+  "ph/sh#trimmed": {
+   "flags": [],
+   "hash": "7e40d8a5fc",
+   "hints": []
+  },
+  "ph/t": {
+   "flags": [],
+   "hash": "123a2d8ab8",
+   "hints": []
+  },
+  "ph/t#kokoro": {
+   "flags": [],
+   "hash": "abd8305e0c",
+   "hints": []
+  },
+  "ph/th": {
+   "flags": [],
+   "hash": "e039a8bf1e",
+   "hints": []
+  },
+  "ph/th#elevenlabs": {
+   "flags": [
+    "Has a vowel on the end (“thuh”, not a pure th): 320 ms voiced"
+   ],
+   "hash": "82cbde111e",
+   "hints": []
+  },
+  "ph/th#kokoro": {
+   "flags": [
+    "Has a vowel on the end (“thuh”, not a pure th): 260 ms voiced"
+   ],
+   "hash": "c14aa7aa54",
+   "hints": []
+  },
+  "ph/th#trimmed": {
+   "flags": [],
+   "hash": "e039a8bf1e",
+   "hints": []
+  },
+  "ph/u": {
+   "flags": [],
+   "hash": "c2c1369952",
+   "hints": []
+  },
+  "ph/u#kokoro": {
+   "flags": [],
+   "hash": "ca3c3bf030",
+   "hints": []
+  },
+  "ph/ur": {
+   "flags": [],
+   "hash": "e737b2e249",
+   "hints": []
+  },
+  "ph/ur#kokoro": {
+   "flags": [],
+   "hash": "12b4baeaf8",
+   "hints": []
+  },
+  "ph/v": {
+   "flags": [],
+   "hash": "6edf685c88",
+   "hints": []
+  },
+  "ph/v#elevenlabs": {
+   "flags": [
+    "Opens into a vowel (“vuh”) for 309 ms"
+   ],
+   "hash": "979c2711ac",
+   "hints": []
+  },
+  "ph/v#kokoro": {
+   "flags": [
+    "Opens into a vowel (“vuh”) for 229 ms"
+   ],
+   "hash": "9f8a0d5373",
+   "hints": []
+  },
+  "ph/v#trimmed": {
+   "flags": [],
+   "hash": "6edf685c88",
+   "hints": []
+  },
+  "ph/w": {
+   "flags": [],
+   "hash": "1fae70ab2e",
+   "hints": []
+  },
+  "ph/w#kokoro": {
+   "flags": [],
+   "hash": "ae12fd1b3b",
+   "hints": []
+  },
+  "ph/x": {
+   "flags": [],
+   "hash": "f81b1d1ced",
+   "hints": []
+  },
+  "ph/x#kokoro": {
+   "flags": [
+    "Has a vowel on the end (“xuh”, not a pure x): 200 ms voiced"
+   ],
+   "hash": "e3733227c5",
+   "hints": []
+  },
+  "ph/y": {
+   "flags": [],
+   "hash": "1ad83d1b3e",
+   "hints": []
+  },
+  "ph/y#kokoro": {
+   "flags": [],
+   "hash": "c3e1c591fd",
+   "hints": []
+  },
+  "ph/z": {
+   "flags": [],
+   "hash": "8500f95e1a",
+   "hints": []
+  },
+  "ph/z#elevenlabs": {
+   "flags": [
+    "Opens into a vowel (“zuh”) for 329 ms"
+   ],
+   "hash": "5574d53dcc",
+   "hints": []
+  },
+  "ph/z#kokoro": {
+   "flags": [
+    "Opens into a vowel (“zuh”) for 210 ms"
+   ],
+   "hash": "a3e2cccbe5",
+   "hints": []
+  },
+  "ph/z#trimmed": {
+   "flags": [],
+   "hash": "8500f95e1a",
+   "hints": []
+  },
+  "words/bag": {
+   "flags": [],
+   "hash": "1db8a8e410",
+   "hints": []
+  },
+  "words/bag#kokoro": {
+   "flags": [],
+   "hash": "cc7a70a4c3",
+   "hints": [
+    "Whisper heard “Goodbye.”"
+   ]
+  },
+  "words/bang": {
+   "flags": [],
+   "hash": "56bceb2b78",
+   "hints": []
+  },
+  "words/bang#kokoro": {
+   "flags": [],
+   "hash": "f7cf9a1027",
+   "hints": [
+    "Whisper heard “the bangs.”"
+   ]
+  },
+  "words/basket": {
+   "flags": [],
+   "hash": "e094d141a0",
+   "hints": []
+  },
+  "words/basket#kokoro": {
+   "flags": [],
+   "hash": "85f5fba471",
+   "hints": []
+  },
+  "words/bat": {
+   "flags": [
+    "Whispered or breathy: only 40 ms of it is voiced",
+    "Whisper heard “That.” (unsure)"
+   ],
+   "hash": "27e8175167",
+   "hints": []
+  },
+  "words/bat#kokoro": {
+   "flags": [
+    "Whisper heard “You bet.” (unsure)"
+   ],
+   "hash": "275f02860c",
+   "hints": []
+  },
+  "words/beard": {
+   "flags": [],
+   "hash": "5379b7b301",
+   "hints": []
+  },
+  "words/beard#kokoro": {
+   "flags": [],
+   "hash": "77e239eb1c",
+   "hints": []
+  },
+  "words/bee": {
+   "flags": [],
+   "hash": "edd9502a91",
+   "hints": [
+    "Whisper heard “be.”"
+   ]
+  },
+  "words/bee#kokoro": {
+   "flags": [
+    "Whisper heard “the bee.” (unsure)"
+   ],
+   "hash": "3d87a8d6b3",
+   "hints": []
+  },
+  "words/bell": {
+   "flags": [
+    "Vowel sounds nearer “a” (cat) than “e” (net)"
+   ],
+   "hash": "8b7dd6243f",
+   "hints": []
+  },
+  "words/bell#kokoro": {
+   "flags": [],
+   "hash": "a6145a748f",
+   "hints": []
+  },
+  "words/belt": {
+   "flags": [],
+   "hash": "42693ca570",
+   "hints": []
+  },
+  "words/belt#kokoro": {
+   "flags": [
+    "Whisper heard “the belt.” (unsure)"
+   ],
+   "hash": "0fc0253527",
+   "hints": []
+  },
+  "words/bin": {
+   "flags": [
+    "Vowel sounds nearer “ee” (bee) than “i” (pin)"
+   ],
+   "hash": "688e94b8e6",
+   "hints": []
+  },
+  "words/bin#kokoro": {
+   "flags": [
+    "Whisper heard “the bin.” (unsure)"
+   ],
+   "hash": "8ae27729e0",
+   "hints": []
+  },
+  "words/boat": {
+   "flags": [],
+   "hash": "4372ff9f64",
+   "hints": []
+  },
+  "words/boat#kokoro": {
+   "flags": [],
+   "hash": "5537388864",
+   "hints": [
+    "Whisper heard “Vote!”"
+   ]
+  },
+  "words/boil": {
+   "flags": [],
+   "hash": "0bb0cbb429",
+   "hints": []
+  },
+  "words/boil#kokoro": {
+   "flags": [],
+   "hash": "1a953ef4a9",
+   "hints": []
+  },
+  "words/bone": {
+   "flags": [],
+   "hash": "b7653cab80",
+   "hints": []
+  },
+  "words/bone#kokoro": {
+   "flags": [],
+   "hash": "7424d17865",
+   "hints": [
+    "Whisper heard “The bones.”"
+   ]
+  },
+  "words/book": {
+   "flags": [],
+   "hash": "8049b9a5d8",
+   "hints": []
+  },
+  "words/book#kokoro": {
+   "flags": [],
+   "hash": "9562f4855b",
+   "hints": []
+  },
+  "words/boot": {
+   "flags": [],
+   "hash": "52796ed499",
+   "hints": []
+  },
+  "words/boot#kokoro": {
+   "flags": [],
+   "hash": "960fb9c4ee",
+   "hints": []
+  },
+  "words/box": {
+   "flags": [
+    "Whispered or breathy: only 60 ms of it is voiced"
+   ],
+   "hash": "53206674b4",
+   "hints": []
+  },
+  "words/box#kokoro": {
+   "flags": [
+    "Whisper heard “the box.” (unsure)"
+   ],
+   "hash": "862f17c24f",
+   "hints": []
+  },
+  "words/broom": {
+   "flags": [],
+   "hash": "5dd85cc4c8",
+   "hints": [
+    "Whisper heard “room.”"
+   ]
+  },
+  "words/broom#kokoro": {
+   "flags": [],
+   "hash": "0db64a88d1",
+   "hints": [
+    "Whisper heard “the brooms”"
+   ]
+  },
+  "words/bug": {
+   "flags": [],
+   "hash": "e86944ec9d",
+   "hints": []
+  },
+  "words/bug#kokoro": {
+   "flags": [],
+   "hash": "74c92250d3",
+   "hints": []
+  },
+  "words/bun": {
+   "flags": [
+    "Squeaky: about 13 semitones above the narrator's usual pitch",
+    "Vowel sounds nearer “o” (rock) than “u” (mug)",
+    "Whisper heard “Good one.” (unsure)"
+   ],
+   "hash": "80423ff0a9",
+   "hints": []
+  },
+  "words/bun#kokoro": {
+   "flags": [
+    "Whisper heard “The BUN.” (unsure)"
+   ],
+   "hash": "4651b552ce",
+   "hints": []
+  },
+  "words/cake": {
+   "flags": [],
+   "hash": "0bb7d7534a",
+   "hints": []
+  },
+  "words/cake#kokoro": {
+   "flags": [],
+   "hash": "b46f7979d6",
+   "hints": [
+    "Whisper heard “and cake.”"
+   ]
+  },
+  "words/cap": {
+   "flags": [
+    "Whispered or breathy: only 25 ms of it is voiced",
+    "Vowel sounds nearer “u” (mug) than “a” (cat)"
+   ],
+   "hash": "2bad4c1219",
+   "hints": [
+    "Whisper heard “cup.”"
+   ]
+  },
+  "words/cap#kokoro": {
+   "flags": [
+    "Whisper heard “The cap.” (unsure)"
+   ],
+   "hash": "d1703705b8",
+   "hints": []
+  },
+  "words/car": {
+   "flags": [
+    "Whisper heard “Call.” (unsure)"
+   ],
+   "hash": "813ddda790",
+   "hints": []
+  },
+  "words/car#kokoro": {
+   "flags": [],
+   "hash": "2292b7d9cb",
+   "hints": [
+    "Whisper heard “Gekko!”"
+   ]
+  },
+  "words/carpet": {
+   "flags": [],
+   "hash": "5f1f86630a",
+   "hints": [
+    "Whisper heard “Coppet”"
+   ]
+  },
+  "words/carpet#kokoro": {
+   "flags": [],
+   "hash": "65d490f229",
+   "hints": [
+    "Whisper heard “and carpet.”"
+   ]
+  },
+  "words/cat": {
+   "flags": [
+    "Whispered or breathy: only 70 ms of it is voiced"
+   ],
+   "hash": "81940b6a80",
+   "hints": []
+  },
+  "words/cat#kokoro": {
+   "flags": [
+    "Whisper heard “a cat” (unsure)"
+   ],
+   "hash": "91d571f3ae",
+   "hints": []
+  },
+  "words/cave": {
+   "flags": [],
+   "hash": "e10f68a3c8",
+   "hints": []
+  },
+  "words/cave#kokoro": {
+   "flags": [
+    "Whisper heard “A cave.” (unsure)"
+   ],
+   "hash": "f0614550cd",
+   "hints": []
+  },
+  "words/chain": {
+   "flags": [],
+   "hash": "2603344098",
+   "hints": []
+  },
+  "words/chain#kokoro": {
+   "flags": [],
+   "hash": "b885fc161b",
+   "hints": [
+    "Whisper heard “the chain.”"
+   ]
+  },
+  "words/chair": {
+   "flags": [],
+   "hash": "8106248aed",
+   "hints": []
+  },
+  "words/chair#kokoro": {
+   "flags": [],
+   "hash": "ff17574604",
+   "hints": [
+    "Whisper heard “the chair.”"
+   ]
+  },
+  "words/chess": {
+   "flags": [
+    "Whispered or breathy: only 35 ms of it is voiced"
+   ],
+   "hash": "145b98cfc4",
+   "hints": []
+  },
+  "words/chess#kokoro": {
+   "flags": [],
+   "hash": "f42ffad8c9",
+   "hints": [
+    "Whisper heard “Good chess.”"
+   ]
+  },
+  "words/chick": {
+   "flags": [
+    "Whispered or breathy: only 50 ms of it is voiced",
+    "Squeaky: about 19 semitones above the narrator's usual pitch"
+   ],
+   "hash": "6f97027f3e",
+   "hints": []
+  },
+  "words/chick#kokoro": {
+   "flags": [
+    "Whisper heard “A chick.” (unsure)"
+   ],
+   "hash": "911e9a6132",
+   "hints": []
+  },
+  "words/chip": {
+   "flags": [],
+   "hash": "8ba347fc56",
+   "hints": [
+    "Whisper heard “SHIP”"
+   ]
+  },
+  "words/chip#kokoro": {
+   "flags": [],
+   "hash": "bc24e145fd",
+   "hints": [
+    "Whisper heard “A chip.”"
+   ]
+  },
+  "words/cliff": {
+   "flags": [],
+   "hash": "cf091ea37f",
+   "hints": []
+  },
+  "words/cliff#kokoro": {
+   "flags": [],
+   "hash": "d338b3951b",
+   "hints": [
+    "Whisper heard “Eclèce.”"
+   ]
+  },
+  "words/clock": {
+   "flags": [],
+   "hash": "e2f3b28954",
+   "hints": []
+  },
+  "words/clock#kokoro": {
+   "flags": [],
+   "hash": "fcc7ac55bd",
+   "hints": [
+    "Whisper heard “The clock.”"
+   ]
+  },
+  "words/cloud": {
+   "flags": [],
+   "hash": "9812e24997",
+   "hints": []
+  },
+  "words/cloud#kokoro": {
+   "flags": [
+    "Whisper heard “The Cloud” (unsure)"
+   ],
+   "hash": "a9e739d469",
+   "hints": []
+  },
+  "words/coat": {
+   "flags": [],
+   "hash": "856de13fea",
+   "hints": []
+  },
+  "words/coat#kokoro": {
+   "flags": [
+    "Whisper heard “a coat.” (unsure)"
+   ],
+   "hash": "6188bf5100",
+   "hints": []
+  },
+  "words/cobweb": {
+   "flags": [],
+   "hash": "eff6688781",
+   "hints": [
+    "Whisper heard “Culp Web.”"
+   ]
+  },
+  "words/cobweb#kokoro": {
+   "flags": [
+    "Whisper heard “The cobweb.” (unsure)"
+   ],
+   "hash": "858de98958",
+   "hints": []
+  },
+  "words/coin": {
+   "flags": [],
+   "hash": "393be2152e",
+   "hints": []
+  },
+  "words/coin#kokoro": {
+   "flags": [
+    "Whisper heard “the coins.” (unsure)"
+   ],
+   "hash": "8f4b4723eb",
+   "hints": []
+  },
+  "words/corn": {
+   "flags": [],
+   "hash": "b0181eb72c",
+   "hints": [
+    "Whisper heard “Korn.”"
+   ]
+  },
+  "words/corn#kokoro": {
+   "flags": [
+    "Whisper heard “the corn.” (unsure)"
+   ],
+   "hash": "a581d9895c",
+   "hints": []
+  },
+  "words/cow": {
+   "flags": [],
+   "hash": "da4d030dbb",
+   "hints": []
+  },
+  "words/cow#kokoro": {
+   "flags": [],
+   "hash": "34890614cc",
+   "hints": [
+    "Whisper heard “Decoe.”"
+   ]
+  },
+  "words/crab": {
+   "flags": [],
+   "hash": "9f59517b89",
+   "hints": []
+  },
+  "words/crab#kokoro": {
+   "flags": [
+    "Whisper heard “a crab.” (unsure)"
+   ],
+   "hash": "e10a63ff75",
+   "hints": []
+  },
+  "words/crow": {
+   "flags": [],
+   "hash": "b3540a27e3",
+   "hints": []
+  },
+  "words/crow#kokoro": {
+   "flags": [
+    "Whisper heard “The Crow.” (unsure)"
+   ],
+   "hash": "3ab2c65e9c",
+   "hints": []
+  },
+  "words/crown": {
+   "flags": [],
+   "hash": "4657b82c6e",
+   "hints": []
+  },
+  "words/crown#kokoro": {
+   "flags": [],
+   "hash": "5ad0ae3bbe",
+   "hints": [
+    "Whisper heard “The Crowns”"
+   ]
+  },
+  "words/cube": {
+   "flags": [],
+   "hash": "ad5d413d22",
+   "hints": []
+  },
+  "words/cube#kokoro": {
+   "flags": [],
+   "hash": "207ee28843",
+   "hints": [
+    "Whisper heard “A cube.”"
+   ]
+  },
+  "words/cup": {
+   "flags": [
+    "Squeaky: about 12 semitones above the narrator's usual pitch"
+   ],
+   "hash": "75627f7760",
+   "hints": []
+  },
+  "words/cup#kokoro": {
+   "flags": [],
+   "hash": "0f1c542acb",
+   "hints": [
+    "Whisper heard “A cup.”"
+   ]
+  },
+  "words/desk": {
+   "flags": [],
+   "hash": "ec2ff4c331",
+   "hints": []
+  },
+  "words/desk#kokoro": {
+   "flags": [
+    "Whisper heard “the desk.” (unsure)"
+   ],
+   "hash": "7367664349",
+   "hints": []
+  },
+  "words/dish": {
+   "flags": [],
+   "hash": "ebad20a27e",
+   "hints": []
+  },
+  "words/dish#kokoro": {
+   "flags": [],
+   "hash": "c24de5d89b",
+   "hints": [
+    "Whisper heard “the dish.”"
+   ]
+  },
+  "words/dragon": {
+   "flags": [],
+   "hash": "323d15c400",
+   "hints": []
+  },
+  "words/dragon#kokoro": {
+   "flags": [],
+   "hash": "5702014dfe",
+   "hints": [
+    "Whisper heard “The Dragon”"
+   ]
+  },
+  "words/drum": {
+   "flags": [],
+   "hash": "c267feb798",
+   "hints": []
+  },
+  "words/drum#kokoro": {
+   "flags": [],
+   "hash": "a0e1197bfa",
+   "hints": [
+    "Whisper heard “The Drums.”"
+   ]
+  },
+  "words/duck": {
+   "flags": [
+    "Squeaky: about 15 semitones above the narrator's usual pitch"
+   ],
+   "hash": "e7976935ec",
+   "hints": [
+    "Whisper heard “doc.”"
+   ]
+  },
+  "words/duck#kokoro": {
+   "flags": [],
+   "hash": "8bd2c075a2",
+   "hints": [
+    "Whisper heard “The Duck.”"
+   ]
+  },
+  "words/fan": {
+   "flags": [],
+   "hash": "ea245c3fc9",
+   "hints": []
+  },
+  "words/fan#kokoro": {
+   "flags": [
+    "Whisper heard “Be Fan!” (unsure)"
+   ],
+   "hash": "98247a9c06",
+   "hints": []
+  },
+  "words/feet": {
+   "flags": [],
+   "hash": "6a2a8c4664",
+   "hints": []
+  },
+  "words/feet#kokoro": {
+   "flags": [],
+   "hash": "493868ca61",
+   "hints": [
+    "Whisper heard “of fate.”"
+   ]
+  },
+  "words/fish": {
+   "flags": [],
+   "hash": "6d0f18b81b",
+   "hints": []
+  },
+  "words/fish#kokoro": {
+   "flags": [],
+   "hash": "4319f0e7d0",
+   "hints": [
+    "Whisper heard “of this.”"
+   ]
+  },
+  "words/five": {
+   "flags": [
+    "Whispered or breathy: only 65 ms of it is voiced"
+   ],
+   "hash": "948a60e997",
+   "hints": [
+    "Whisper heard “5.”"
+   ]
+  },
+  "words/five#kokoro": {
+   "flags": [
+    "Whisper heard “The five.” (unsure)"
+   ],
+   "hash": "2f1d10dba8",
+   "hints": []
+  },
+  "words/flag": {
+   "flags": [],
+   "hash": "e1044c30e9",
+   "hints": []
+  },
+  "words/flag#kokoro": {
+   "flags": [],
+   "hash": "a452ab9e3d",
+   "hints": [
+    "Whisper heard “A flag.”"
+   ]
+  },
+  "words/flame": {
+   "flags": [],
+   "hash": "07e5a24a69",
+   "hints": []
+  },
+  "words/flame#kokoro": {
+   "flags": [],
+   "hash": "3ad2441963",
+   "hints": [
+    "Whisper heard “The Flame”"
+   ]
+  },
+  "words/fork": {
+   "flags": [],
+   "hash": "b3c55ec0ce",
+   "hints": []
+  },
+  "words/fork#kokoro": {
+   "flags": [
+    "Whisper heard “I fuck.” (unsure)"
+   ],
+   "hash": "4a47c10310",
+   "hints": []
+  },
+  "words/fox": {
+   "flags": [
+    "Squeaky: about 11 semitones above the narrator's usual pitch"
+   ],
+   "hash": "685ee91ab8",
+   "hints": []
+  },
+  "words/fox#kokoro": {
+   "flags": [],
+   "hash": "afe2cd5279",
+   "hints": [
+    "Whisper heard “Hey folks!”"
+   ]
+  },
+  "words/frog": {
+   "flags": [],
+   "hash": "f3db2d66d0",
+   "hints": []
+  },
+  "words/frog#kokoro": {
+   "flags": [],
+   "hash": "a216724e83",
+   "hints": [
+    "Whisper heard “A frog.”"
+   ]
+  },
+  "words/gift": {
+   "flags": [],
+   "hash": "32207478f0",
+   "hints": []
+  },
+  "words/gift#kokoro": {
+   "flags": [
+    "Whisper heard “a gift.” (unsure)"
+   ],
+   "hash": "622da50f3a",
+   "hints": []
+  },
+  "words/goat": {
+   "flags": [],
+   "hash": "2df4762765",
+   "hints": []
+  },
+  "words/goat#kokoro": {
+   "flags": [],
+   "hash": "243a380897",
+   "hints": []
+  },
+  "words/goblin": {
+   "flags": [],
+   "hash": "504edf7220",
+   "hints": []
+  },
+  "words/goblin#kokoro": {
+   "flags": [
+    "Whisper heard “The Goblins” (unsure)"
+   ],
+   "hash": "db8d2edb19",
+   "hints": []
+  },
+  "words/hair": {
+   "flags": [],
+   "hash": "0172324397",
+   "hints": []
+  },
+  "words/hair#kokoro": {
+   "flags": [
+    "Whisper heard “Be here.” (unsure)"
+   ],
+   "hash": "0c8e443812",
+   "hints": []
+  },
+  "words/hammer": {
+   "flags": [],
+   "hash": "63583e8876",
+   "hints": []
+  },
+  "words/hammer#kokoro": {
+   "flags": [
+    "Whisper heard “A hammock.” (unsure)"
+   ],
+   "hash": "43c0ad6a72",
+   "hints": []
+  },
+  "words/hat": {
+   "flags": [
+    "Whispered or breathy: only 0 ms of it is voiced",
+    "Whisper heard “Hot.” (unsure)"
+   ],
+   "hash": "5bbb1eab84",
+   "hints": []
+  },
+  "words/hat#kokoro": {
+   "flags": [],
+   "hash": "f20cb77e0c",
+   "hints": [
+    "Whisper heard “I hurt.”"
+   ]
+  },
+  "words/helmet": {
+   "flags": [
+    "Vowel sounds nearer “a” (cat) than “e” (net)"
+   ],
+   "hash": "1da85fb0ea",
+   "hints": []
+  },
+  "words/helmet#kokoro": {
+   "flags": [],
+   "hash": "c814e51339",
+   "hints": [
+    "Whisper heard “A helmet.”"
+   ]
+  },
+  "words/hook": {
+   "flags": [
+    "Squeaky: about 11 semitones above the narrator's usual pitch"
+   ],
+   "hash": "b6a104acf5",
+   "hints": []
+  },
+  "words/hook#kokoro": {
+   "flags": [],
+   "hash": "c3bc2fdcd7",
+   "hints": [
+    "Whisper heard “A hook.”"
+   ]
+  },
+  "words/horn": {
+   "flags": [],
+   "hash": "c947119f52",
+   "hints": []
+  },
+  "words/horn#kokoro": {
+   "flags": [
+    "Whisper heard “Eh, hold on.” (unsure)"
+   ],
+   "hash": "416fc8f168",
+   "hints": []
+  },
+  "words/jam": {
+   "flags": [],
+   "hash": "e9dfc40159",
+   "hints": []
+  },
+  "words/jam#kokoro": {
+   "flags": [],
+   "hash": "1868713bbc",
+   "hints": [
+    "Whisper heard “The Gem.”"
+   ]
+  },
+  "words/jar": {
+   "flags": [],
+   "hash": "25c8e32499",
+   "hints": [
+    "Whisper heard “Hyah!”"
+   ]
+  },
+  "words/jar#kokoro": {
+   "flags": [],
+   "hash": "3adb57f85c",
+   "hints": [
+    "Whisper heard “Deja!”"
+   ]
+  },
+  "words/jug": {
+   "flags": [
+    "Whispered or breathy: only 0 ms of it is voiced"
+   ],
+   "hash": "9a106f20f0",
+   "hints": [
+    "Whisper heard “Chuck.”"
+   ]
+  },
+  "words/jug#kokoro": {
+   "flags": [],
+   "hash": "5f8d4b09d1",
+   "hints": [
+    "Whisper heard “The Jug.”"
+   ]
+  },
+  "words/king": {
+   "flags": [
+    "Squeaky: about 11 semitones above the narrator's usual pitch"
+   ],
+   "hash": "858f95655a",
+   "hints": []
+  },
+  "words/king#kokoro": {
+   "flags": [],
+   "hash": "7251e5c323",
+   "hints": [
+    "Whisper heard “The King.”"
+   ]
+  },
+  "words/kite": {
+   "flags": [],
+   "hash": "a8b37ef789",
+   "hints": []
+  },
+  "words/kite#kokoro": {
+   "flags": [
+    "Whisper heard “a kite” (unsure)"
+   ],
+   "hash": "e76291d830",
+   "hints": []
+  },
+  "words/kitten": {
+   "flags": [],
+   "hash": "8e04b16c96",
+   "hints": []
+  },
+  "words/kitten#kokoro": {
+   "flags": [
+    "Whisper heard “A kitten.” (unsure)"
+   ],
+   "hash": "e8c68b8b67",
+   "hints": []
+  },
+  "words/lamp": {
+   "flags": [],
+   "hash": "695323d73f",
+   "hints": []
+  },
+  "words/lamp#kokoro": {
+   "flags": [
+    "Whisper heard “the lamp.” (unsure)"
+   ],
+   "hash": "82d11b675f",
+   "hints": []
+  },
+  "words/lantern": {
+   "flags": [],
+   "hash": "7a01982c86",
+   "hints": []
+  },
+  "words/lantern#kokoro": {
+   "flags": [
+    "Whisper heard “The Lantern” (unsure)"
+   ],
+   "hash": "1c8de2dba3",
+   "hints": []
+  },
+  "words/leaf": {
+   "flags": [],
+   "hash": "a1dcb4bba3",
+   "hints": []
+  },
+  "words/leaf#kokoro": {
+   "flags": [],
+   "hash": "cb220f0ada",
+   "hints": [
+    "Whisper heard “The Leaf”"
+   ]
+  },
+  "words/letter": {
+   "flags": [],
+   "hash": "698e10879b",
+   "hints": []
+  },
+  "words/letter#kokoro": {
+   "flags": [
+    "Whisper heard “The letter.” (unsure)"
+   ],
+   "hash": "da54bef890",
+   "hints": []
+  },
+  "words/lid": {
+   "flags": [],
+   "hash": "eb6121d265",
+   "hints": [
+    "Whisper heard “LIT”"
+   ]
+  },
+  "words/lid#kokoro": {
+   "flags": [
+    "Whisper heard “the lid.” (unsure)"
+   ],
+   "hash": "cbbf8a980b",
+   "hints": []
+  },
+  "words/light": {
+   "flags": [],
+   "hash": "bfdd8d2837",
+   "hints": []
+  },
+  "words/light#kokoro": {
+   "flags": [],
+   "hash": "4f0ab78096",
+   "hints": []
+  },
+  "words/lock": {
+   "flags": [
+    "Vowel sounds nearer “or” (fork) than “o” (rock)"
+   ],
+   "hash": "32c924b4b9",
+   "hints": []
+  },
+  "words/lock#kokoro": {
+   "flags": [
+    "Whisper heard “the lock.” (unsure)"
+   ],
+   "hash": "ba09e39a60",
+   "hints": []
+  },
+  "words/magic": {
+   "flags": [],
+   "hash": "1fc5ccfb58",
+   "hints": []
+  },
+  "words/magic#kokoro": {
+   "flags": [],
+   "hash": "b0c548d20c",
+   "hints": [
+    "Whisper heard “The Magic”"
+   ]
+  },
+  "words/map": {
+   "flags": [],
+   "hash": "6f85f73179",
+   "hints": []
+  },
+  "words/map#kokoro": {
+   "flags": [],
+   "hash": "2b355fa018",
+   "hints": [
+    "Whisper heard “Zumap.”"
+   ]
+  },
+  "words/mask": {
+   "flags": [],
+   "hash": "c59ea54be4",
+   "hints": [
+    "Whisper heard “Masque.”"
+   ]
+  },
+  "words/mask#kokoro": {
+   "flags": [],
+   "hash": "2003d54d21",
+   "hints": [
+    "Whisper heard “New mask.”"
+   ]
+  },
+  "words/mat": {
+   "flags": [],
+   "hash": "70a8992ee3",
+   "hints": [
+    "Whisper heard “Matt.”"
+   ]
+  },
+  "words/mat#kokoro": {
+   "flags": [],
+   "hash": "dc4bd1e636",
+   "hints": [
+    "Whisper heard “Lumet.”"
+   ]
+  },
+  "words/milk": {
+   "flags": [
+    "Vowel sounds nearer “or” (fork) than “i” (pin)"
+   ],
+   "hash": "7973b6b384",
+   "hints": []
+  },
+  "words/milk#kokoro": {
+   "flags": [],
+   "hash": "29a33b9532",
+   "hints": [
+    "Whisper heard “the milk.”"
+   ]
+  },
+  "words/moon": {
+   "flags": [],
+   "hash": "ade94210d4",
+   "hints": []
+  },
+  "words/moon#kokoro": {
+   "flags": [
+    "Whisper heard “...the moon.” (unsure)"
+   ],
+   "hash": "569e98cbc6",
+   "hints": []
+  },
+  "words/moth": {
+   "flags": [],
+   "hash": "deae1df4e1",
+   "hints": []
+  },
+  "words/moth#kokoro": {
+   "flags": [
+    "Whisper heard “Le Marce.” (unsure)"
+   ],
+   "hash": "dd485d1dd1",
+   "hints": []
+  },
+  "words/mouth": {
+   "flags": [],
+   "hash": "0d0ed968f9",
+   "hints": []
+  },
+  "words/mouth#kokoro": {
+   "flags": [
+    "Whisper heard “your mouth.” (unsure)"
+   ],
+   "hash": "28202eddec",
+   "hints": []
+  },
+  "words/mug": {
+   "flags": [],
+   "hash": "f9c989e84f",
+   "hints": []
+  },
+  "words/mug#kokoro": {
+   "flags": [
+    "Whisper heard “THE MUG” (unsure)"
+   ],
+   "hash": "71ae9038c4",
+   "hints": []
+  },
+  "words/nest": {
+   "flags": [],
+   "hash": "405ec4591a",
+   "hints": []
+  },
+  "words/nest#kokoro": {
+   "flags": [
+    "Whisper heard “You nest.” (unsure)"
+   ],
+   "hash": "fb2f57d3d9",
+   "hints": []
+  },
+  "words/net": {
+   "flags": [],
+   "hash": "8494e07849",
+   "hints": []
+  },
+  "words/net#kokoro": {
+   "flags": [],
+   "hash": "c3e015cc14",
+   "hints": [
+    "Whisper heard “Lunette.”"
+   ]
+  },
+  "words/night": {
+   "flags": [],
+   "hash": "f4836866d4",
+   "hints": []
+  },
+  "words/night#kokoro": {
+   "flags": [],
+   "hash": "51e8b59baf",
+   "hints": [
+    "Whisper heard “the night.”"
+   ]
+  },
+  "words/nut": {
+   "flags": [
+    "Whisper heard “Not.” (unsure)"
+   ],
+   "hash": "857496398d",
+   "hints": []
+  },
+  "words/nut#kokoro": {
+   "flags": [
+    "Whisper heard “They not.” (unsure)"
+   ],
+   "hash": "a71dd2a02e",
+   "hints": []
+  },
+  "words/oil": {
+   "flags": [],
+   "hash": "f27ae8b817",
+   "hints": []
+  },
+  "words/oil#kokoro": {
+   "flags": [],
+   "hash": "534e939f2b",
+   "hints": [
+    "Whisper heard “of oil.”"
+   ]
+  },
+  "words/owl": {
+   "flags": [],
+   "hash": "5dcaa85189",
+   "hints": []
+  },
+  "words/owl#kokoro": {
+   "flags": [
+    "Whisper heard “as owls” (unsure)"
+   ],
+   "hash": "a39f4f56c5",
+   "hints": []
+  },
+  "words/pan": {
+   "flags": [
+    "Vowel sounds nearer “u” (mug) than “a” (cat)"
+   ],
+   "hash": "dc6e6d8b02",
+   "hints": [
+    "Whisper heard “PON”"
+   ]
+  },
+  "words/pan#kokoro": {
+   "flags": [
+    "Whisper heard “Japan.” (unsure)"
+   ],
+   "hash": "b898d788b7",
+   "hints": []
+  },
+  "words/picnic": {
+   "flags": [
+    "Squeaky: about 11 semitones above the narrator's usual pitch"
+   ],
+   "hash": "f321cb31d8",
+   "hints": []
+  },
+  "words/picnic#kokoro": {
+   "flags": [],
+   "hash": "2d5e1085c0",
+   "hints": [
+    "Whisper heard “A picnic.”"
+   ]
+  },
+  "words/pie": {
+   "flags": [],
+   "hash": "4eefb4af61",
+   "hints": []
+  },
+  "words/pie#kokoro": {
+   "flags": [],
+   "hash": "9550a3012a",
+   "hints": [
+    "Whisper heard “Bye-bye.”"
+   ]
+  },
+  "words/pig": {
+   "flags": [],
+   "hash": "e036a33115",
+   "hints": []
+  },
+  "words/pig#kokoro": {
+   "flags": [],
+   "hash": "9fc04a58e3",
+   "hints": [
+    "Whisper heard “I'm Peg.”"
+   ]
+  },
+  "words/pin": {
+   "flags": [],
+   "hash": "8807a81134",
+   "hints": []
+  },
+  "words/pin#kokoro": {
+   "flags": [],
+   "hash": "1e83c6a094",
+   "hints": [
+    "Whisper heard “A pin.”"
+   ]
+  },
+  "words/plum": {
+   "flags": [
+    "Vowel sounds nearer “a” (cat) than “u” (mug)"
+   ],
+   "hash": "fe868edc22",
+   "hints": [
+    "Whisper heard “plumb.”"
+   ]
+  },
+  "words/plum#kokoro": {
+   "flags": [
+    "Whisper heard “the plums” (unsure)"
+   ],
+   "hash": "fbb669f90e",
+   "hints": []
+  },
+  "words/pocket": {
+   "flags": [],
+   "hash": "cb78ca1228",
+   "hints": []
+  },
+  "words/pocket#kokoro": {
+   "flags": [],
+   "hash": "5c73d51202",
+   "hints": [
+    "Whisper heard “and pocket.”"
+   ]
+  },
+  "words/pond": {
+   "flags": [
+    "Vowel sounds nearer “e” (net) than “o” (rock)"
+   ],
+   "hash": "8e19c92748",
+   "hints": []
+  },
+  "words/pond#kokoro": {
+   "flags": [
+    "Whisper heard “The pond.” (unsure)"
+   ],
+   "hash": "83cbd3ca0f",
+   "hints": []
+  },
+  "words/pot": {
+   "flags": [
+    "Whispered or breathy: only 0 ms of it is voiced"
+   ],
+   "hash": "bae2faba77",
+   "hints": []
+  },
+  "words/pot#kokoro": {
+   "flags": [],
+   "hash": "f795178976",
+   "hints": [
+    "Whisper heard “and poet.”"
+   ]
+  },
+  "words/pumpkin": {
+   "flags": [],
+   "hash": "b988a4c735",
+   "hints": []
+  },
+  "words/pumpkin#kokoro": {
+   "flags": [
+    "Whisper heard “The Pumped Kin” (unsure)"
+   ],
+   "hash": "2baaf89804",
+   "hints": []
+  },
+  "words/quill": {
+   "flags": [],
+   "hash": "3251a2f5da",
+   "hints": []
+  },
+  "words/quill#kokoro": {
+   "flags": [],
+   "hash": "3ec0cffc8e",
+   "hints": [
+    "Whisper heard “Dequille.”"
+   ]
+  },
+  "words/rabbit": {
+   "flags": [],
+   "hash": "e91e179613",
+   "hints": []
+  },
+  "words/rabbit#kokoro": {
+   "flags": [],
+   "hash": "6322010930",
+   "hints": []
+  },
+  "words/rain": {
+   "flags": [],
+   "hash": "1ce3094462",
+   "hints": []
+  },
+  "words/rain#kokoro": {
+   "flags": [],
+   "hash": "67ac26e147",
+   "hints": [
+    "Whisper heard “reigns.”"
+   ]
+  },
+  "words/rat": {
+   "flags": [],
+   "hash": "17fac3a125",
+   "hints": []
+  },
+  "words/rat#kokoro": {
+   "flags": [],
+   "hash": "1a05fa2ca4",
+   "hints": [
+    "Whisper heard “The Rat.”"
+   ]
+  },
+  "words/ring": {
+   "flags": [],
+   "hash": "cab7b0140c",
+   "hints": []
+  },
+  "words/ring#kokoro": {
+   "flags": [],
+   "hash": "e1b14ee70c",
+   "hints": [
+    "Whisper heard “RINGS”"
+   ]
+  },
+  "words/rock": {
+   "flags": [],
+   "hash": "60e570df55",
+   "hints": []
+  },
+  "words/rock#kokoro": {
+   "flags": [],
+   "hash": "a0d46c4248",
+   "hints": [
+    "Whisper heard “The Rock.”"
+   ]
+  },
+  "words/rope": {
+   "flags": [],
+   "hash": "dff6eb7bb2",
+   "hints": []
+  },
+  "words/rope#kokoro": {
+   "flags": [
+    "Whisper heard “D.R.A.P.” (unsure)"
+   ],
+   "hash": "7a9ac4d2fc",
+   "hints": []
+  },
+  "words/sail": {
+   "flags": [],
+   "hash": "12c291fd93",
+   "hints": []
+  },
+  "words/sail#kokoro": {
+   "flags": [],
+   "hash": "d04c61f182",
+   "hints": [
+    "Whisper heard “to sail.”"
+   ]
+  },
+  "words/shark": {
+   "flags": [
+    "Whispered or breathy: only 0 ms of it is voiced"
+   ],
+   "hash": "7a14083f2e",
+   "hints": [
+    "Whisper heard “shock.”"
+   ]
+  },
+  "words/shark#kokoro": {
+   "flags": [
+    "Whisper heard “A shark.” (unsure)"
+   ],
+   "hash": "50f326f155",
+   "hints": []
+  },
+  "words/shed": {
+   "flags": [],
+   "hash": "a947bd5015",
+   "hints": []
+  },
+  "words/shed#kokoro": {
+   "flags": [],
+   "hash": "c7cf64bba7",
+   "hints": [
+    "Whisper heard “I shared.”"
+   ]
+  },
+  "words/sheep": {
+   "flags": [],
+   "hash": "187c8fe96b",
+   "hints": []
+  },
+  "words/sheep#kokoro": {
+   "flags": [],
+   "hash": "4b98277775",
+   "hints": [
+    "Whisper heard “A sheep.”"
+   ]
+  },
+  "words/shell": {
+   "flags": [],
+   "hash": "a388ff1ab2",
+   "hints": []
+  },
+  "words/shell#kokoro": {
+   "flags": [],
+   "hash": "86c21fc40b",
+   "hints": [
+    "Whisper heard “Ishel.”"
+   ]
+  },
+  "words/ship": {
+   "flags": [
+    "Whispered or breathy: only 70 ms of it is voiced",
+    "Squeaky: about 19 semitones above the narrator's usual pitch"
+   ],
+   "hash": "11161ec8eb",
+   "hints": []
+  },
+  "words/ship#kokoro": {
+   "flags": [],
+   "hash": "e504b1f16b",
+   "hints": [
+    "Whisper heard “A ship.”"
+   ]
+  },
+  "words/sink": {
+   "flags": [],
+   "hash": "66f01e897a",
+   "hints": []
+  },
+  "words/sink#kokoro": {
+   "flags": [
+    "Whisper heard “I think.” (unsure)"
+   ],
+   "hash": "3b4e908578",
+   "hints": []
+  },
+  "words/skull": {
+   "flags": [],
+   "hash": "a0dba205ee",
+   "hints": []
+  },
+  "words/skull#kokoro": {
+   "flags": [
+    "Whisper heard “A skull.” (unsure)"
+   ],
+   "hash": "b5cd495655",
+   "hints": []
+  },
+  "words/slug": {
+   "flags": [],
+   "hash": "17dd52549f",
+   "hints": [
+    "Whisper heard “Slog.”"
+   ]
+  },
+  "words/slug#kokoro": {
+   "flags": [],
+   "hash": "dce096a0a3",
+   "hints": [
+    "Whisper heard “A slug.”"
+   ]
+  },
+  "words/smoke": {
+   "flags": [],
+   "hash": "cb9b39a6dd",
+   "hints": []
+  },
+  "words/smoke#kokoro": {
+   "flags": [],
+   "hash": "15fbea9899",
+   "hints": [
+    "Whisper heard “a smoke.”"
+   ]
+  },
+  "words/snake": {
+   "flags": [],
+   "hash": "1d84d1a746",
+   "hints": []
+  },
+  "words/snake#kokoro": {
+   "flags": [],
+   "hash": "990dc74073",
+   "hints": [
+    "Whisper heard “A snake.”"
+   ]
+  },
+  "words/soap": {
+   "flags": [
+    "Whisper heard “So” (unsure)"
+   ],
+   "hash": "bc2ac59aff",
+   "hints": []
+  },
+  "words/soap#kokoro": {
+   "flags": [
+    "Whisper heard “A soap.” (unsure)"
+   ],
+   "hash": "7fc0d22d12",
+   "hints": []
+  },
+  "words/sock": {
+   "flags": [],
+   "hash": "e04149c1a9",
+   "hints": []
+  },
+  "words/sock#kokoro": {
+   "flags": [],
+   "hash": "25437e6c38",
+   "hints": [
+    "Whisper heard “I suck.”"
+   ]
+  },
+  "words/spike": {
+   "flags": [],
+   "hash": "9dde910104",
+   "hints": []
+  },
+  "words/spike#kokoro": {
+   "flags": [],
+   "hash": "98929bf3b4",
+   "hints": [
+    "Whisper heard “the spike.”"
+   ]
+  },
+  "words/stairs": {
+   "flags": [],
+   "hash": "c22e1cf24a",
+   "hints": []
+  },
+  "words/stairs#kokoro": {
+   "flags": [
+    "Whisper heard “Who Stares?” (unsure)"
+   ],
+   "hash": "ded8c58078",
+   "hints": []
+  },
+  "words/star": {
+   "flags": [],
+   "hash": "ee41d903bd",
+   "hints": []
+  },
+  "words/star#kokoro": {
+   "flags": [
+    "Whisper heard “is da.” (unsure)"
+   ],
+   "hash": "444359351b",
+   "hints": []
+  },
+  "words/stick": {
+   "flags": [
+    "Whispered or breathy: only 60 ms of it is voiced",
+    "Squeaky: about 20 semitones above the narrator's usual pitch"
+   ],
+   "hash": "04b31c5666",
+   "hints": []
+  },
+  "words/stick#kokoro": {
+   "flags": [],
+   "hash": "4bfd19c163",
+   "hints": [
+    "Whisper heard “A stick.”"
+   ]
+  },
+  "words/stone": {
+   "flags": [],
+   "hash": "5937d09ddc",
+   "hints": []
+  },
+  "words/stone#kokoro": {
+   "flags": [],
+   "hash": "dc6aab51ae",
+   "hints": [
+    "Whisper heard “the stone.”"
+   ]
+  },
+  "words/storm": {
+   "flags": [],
+   "hash": "da24d2f720",
+   "hints": []
+  },
+  "words/storm#kokoro": {
+   "flags": [
+    "Whisper heard “a storm.” (unsure)"
+   ],
+   "hash": "e9c3cb1434",
+   "hints": []
+  },
+  "words/sunset": {
+   "flags": [],
+   "hash": "81ac6565e2",
+   "hints": []
+  },
+  "words/sunset#kokoro": {
+   "flags": [],
+   "hash": "dd7fda3887",
+   "hints": [
+    "Whisper heard “A sunset.”"
+   ]
+  },
+  "words/tail": {
+   "flags": [],
+   "hash": "cb8b10593b",
+   "hints": []
+  },
+  "words/tail#kokoro": {
+   "flags": [],
+   "hash": "25cb06c431",
+   "hints": [
+    "Whisper heard “Detailed”"
+   ]
+  },
+  "words/tent": {
+   "flags": [],
+   "hash": "7f4aa6a335",
+   "hints": []
+  },
+  "words/tent#kokoro": {
+   "flags": [],
+   "hash": "ecf19a22d8",
+   "hints": [
+    "Whisper heard “The tent.”"
+   ]
+  },
+  "words/throne": {
+   "flags": [],
+   "hash": "bb7d0854c6",
+   "hints": []
+  },
+  "words/throne#kokoro": {
+   "flags": [],
+   "hash": "2d8c791d86",
+   "hints": [
+    "Whisper heard “The Throne.”"
+   ]
+  },
+  "words/thunder": {
+   "flags": [],
+   "hash": "203660510e",
+   "hints": []
+  },
+  "words/thunder#kokoro": {
+   "flags": [],
+   "hash": "bf0a6b66e8",
+   "hints": [
+    "Whisper heard “The Thunder”"
+   ]
+  },
+  "words/tin": {
+   "flags": [
+    "Squeaky: about 12 semitones above the narrator's usual pitch"
+   ],
+   "hash": "dae6766e69",
+   "hints": []
+  },
+  "words/tin#kokoro": {
+   "flags": [],
+   "hash": "54d3c320c8",
+   "hints": [
+    "Whisper heard “The Tin.”"
+   ]
+  },
+  "words/toad": {
+   "flags": [],
+   "hash": "f55206dec1",
+   "hints": []
+  },
+  "words/toad#kokoro": {
+   "flags": [],
+   "hash": "9a27f42954",
+   "hints": [
+    "Whisper heard “Detailed.”"
+   ]
+  },
+  "words/tray": {
+   "flags": [],
+   "hash": "252c7fb682",
+   "hints": [
+    "Whisper heard “Trey”"
+   ]
+  },
+  "words/tray#kokoro": {
+   "flags": [],
+   "hash": "d94e28e558",
+   "hints": [
+    "Whisper heard “The tray.”"
+   ]
+  },
+  "words/tree": {
+   "flags": [],
+   "hash": "06499b880e",
+   "hints": []
+  },
+  "words/tree#kokoro": {
+   "flags": [],
+   "hash": "bab1a92574",
+   "hints": [
+    "Whisper heard “The tree.”"
+   ]
+  },
+  "words/twig": {
+   "flags": [],
+   "hash": "4ccd1219db",
+   "hints": []
+  },
+  "words/twig#kokoro": {
+   "flags": [],
+   "hash": "88fa6dcfee",
+   "hints": [
+    "Whisper heard “The twig.”"
+   ]
+  },
+  "words/van": {
+   "flags": [
+    "Vowel sounds nearer “ar” (car) than “a” (cat)",
+    "Whisper heard “Have fun!” (unsure)"
+   ],
+   "hash": "19c4918f20",
+   "hints": []
+  },
+  "words/van#kokoro": {
+   "flags": [],
+   "hash": "d7fdf850d5",
+   "hints": [
+    "Whisper heard “Yvonne.”"
+   ]
+  },
+  "words/wand": {
+   "flags": [
+    "Vowel sounds nearer “u” (mug) than “o” (rock)"
+   ],
+   "hash": "a22f4e1b88",
+   "hints": []
+  },
+  "words/wand#kokoro": {
+   "flags": [],
+   "hash": "7990428900",
+   "hints": [
+    "Whisper heard “WONDER”"
+   ]
+  },
+  "words/web": {
+   "flags": [],
+   "hash": "f7a55fc30e",
+   "hints": []
+  },
+  "words/web#kokoro": {
+   "flags": [],
+   "hash": "d99aee362c",
+   "hints": [
+    "Whisper heard “The web.”"
+   ]
+  },
+  "words/wig": {
+   "flags": [],
+   "hash": "602311e230",
+   "hints": []
+  },
+  "words/wig#kokoro": {
+   "flags": [],
+   "hash": "15dd34873a",
+   "hints": [
+    "Whisper heard “Mwig.”"
+   ]
+  },
+  "words/wing": {
+   "flags": [],
+   "hash": "d2ba956003",
+   "hints": []
+  },
+  "words/wing#kokoro": {
+   "flags": [],
+   "hash": "7079e08cfd",
+   "hints": [
+    "Whisper heard “The wings.”"
+   ]
+  },
+  "words/zip": {
+   "flags": [],
+   "hash": "cf0e797a62",
+   "hints": []
+  },
+  "words/zip#kokoro": {
+   "flags": [],
+   "hash": "9171a031a4",
+   "hints": [
+    "Whisper heard “the zip.”"
+   ]
+  }
+ }
+}

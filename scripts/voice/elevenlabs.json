@@ -2,6 +2,7 @@
   "_comment": "Voice per speaker for `generate.py --provider elevenlabs`. Swap any voice_id for one from your ElevenLabs Voice Library or Voice Design (run `generate.py --provider elevenlabs --list-voices` to see the IDs on your account). speed is 0.7-1.2; stability is 0-1 (lower = more expressive). Speakers not listed use narrator.",
   "model_id": "eleven_multilingual_v2",
   "word_speed": 0.85,
+  "word_stability": 0.75,
   "speakers": {
     "narrator":    { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "speed": 0.92, "stability": 0.55 },
 

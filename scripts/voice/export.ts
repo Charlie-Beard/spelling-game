@@ -34,8 +34,10 @@ ALL_CHAPTERS.forEach((c) => {
 });
 
 const phonemes = [...new Set(Object.values(GRAPHEME_PHONEME)), 'oo-short', 'schwa'];
+// Each word's sounds, so check.py knows which vowel to listen for.
+const units = Object.fromEntries(ALL_CHAPTERS.flatMap((c) => c.words.map((w) => [w.text, w.units.map((u) => u.ph)])));
 writeFileSync(
   new URL('./lines.json', import.meta.url),
-  JSON.stringify({ words: ALL_WORDS, phonemes, lines }, null, 2),
+  JSON.stringify({ words: ALL_WORDS, phonemes, units, lines }, null, 2),
 );
 console.log(`${ALL_WORDS.length} words, ${phonemes.length} phonemes, ${lines.length} lines`);

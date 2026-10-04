@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
+import { voiceReview } from './scripts/voice/review-server.ts';
 
 /**
  * Writes sw.js after the build with every output file pre-cached, so the
@@ -81,5 +82,5 @@ export default defineConfig({
     rollupOptions: { input: { main: 'index.html' } },
   },
   server: { host: true },
-  plugins: [serviceWorker()],
+  plugins: [serviceWorker(), voiceReview()],
 });
