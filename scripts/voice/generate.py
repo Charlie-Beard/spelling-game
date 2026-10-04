@@ -1,19 +1,22 @@
 """
-Records the narrator with Kokoro (an offline neural TTS) in British voices.
+Records the narrator, either offline with Kokoro or with ElevenLabs.
 
-    python3 scripts/voice/generate.py --model DIR
+    python3 scripts/voice/generate.py --model DIR                  # Kokoro
+    ELEVENLABS_API_KEY=... python3 scripts/voice/generate.py --provider elevenlabs
 
 Reads scripts/voice/lines.json (from export.ts) and writes trimmed,
 loudness-matched mono MP3s to public/audio/{words,ph,lines}/ plus
 public/audio/manifest.json. Existing files are kept unless --force.
+
+ElevenLabs voices live in scripts/voice/elevenlabs.json. It can't be told
+exact pronunciations, so it skips the pure phonics sounds (ph/) and those
+keep their Kokoro (or hand-recorded) clips.
 """
-import argparse, json, os, subprocess, tempfile
-import numpy as np
-import soundfile as sf
-from kokoro_onnx import Kokoro
+import argparse, json, os, subprocess, sys, tempfile, time, urllib.error, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(ROOT, "public", "audio")
+HERE = os.path.join(ROOT, "scripts", "voice")
 NARRATOR = "bf_emma"
 
 # Character voices for chapter intros: (voice, speed)
@@ -44,55 +47,153 @@ PHONEME_IPA = {
 }
 
 
-def encode(samples, sr, path, tail_ms=60):
+def encode(src, path, tail_ms=60):
     """Trims silence, matches loudness and writes a mono MP3."""
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
-        sf.write(f.name, samples, sr)
-        tmp = f.name
     filt = (
         "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.02,"
         "areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.02,areverse,"
         f"apad=pad_dur={tail_ms / 1000},loudnorm=I=-18:TP=-2:LRA=7"
     )
     subprocess.run(
-        ["ffmpeg", "-y", "-loglevel", "error", "-i", tmp, "-af", filt, "-ac", "1", "-ar", "44100",
+        ["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-af", filt, "-ac", "1", "-ar", "44100",
          "-codec:a", "libmp3lame", "-b:a", "64k", path],
         check=True,
     )
-    os.unlink(tmp)
+
+
+class KokoroVoice:
+    can_phonemes = True
+
+    def __init__(self, model_dir):
+        global np, sf
+        import numpy as np
+        import soundfile as sf
+        from kokoro_onnx import Kokoro
+        self.k = Kokoro(os.path.join(model_dir, "kokoro-v1.0.onnx"), os.path.join(model_dir, "voices-v1.0.bin"))
+
+    def _render(self, tmp, **kw):
+        s, sr = self.k.create(lang="en-gb", **kw)
+        sf.write(tmp, np.asarray(s, dtype=np.float32), sr)
+
+    def word(self, w, tmp):
+        self._render(tmp, text=f"{w}.", voice=NARRATOR, speed=0.82)
+
+    def phoneme(self, ph, tmp):
+        self._render(tmp, text=PHONEME_IPA[ph], voice=NARRATOR, speed=0.9, is_phonemes=True)
+
+    def line(self, text, speaker, tmp):
+        voice, speed = SPEAKERS.get(speaker, SPEAKERS["narrator"])
+        self._render(tmp, text=text, voice=voice, speed=speed)
+
+
+class ElevenLabsVoice:
+    can_phonemes = False
+    API = "https://api.elevenlabs.io/v1"
+
+    def __init__(self):
+        self.key = os.environ.get("ELEVENLABS_API_KEY")
+        if not self.key:
+            sys.exit("Set ELEVENLABS_API_KEY (from elevenlabs.io → Profile → API keys).")
+        cfg = json.load(open(os.path.join(HERE, "elevenlabs.json")))
+        self.model = cfg["model_id"]
+        self.word_speed = cfg.get("word_speed", 0.85)
+        self.speakers = cfg["speakers"]
+
+    def _request(self, method, path, body=None):
+        req = urllib.request.Request(
+            self.API + path, method=method,
+            data=json.dumps(body).encode() if body is not None else None,
+            headers={"xi-api-key": self.key, "Content-Type": "application/json"},
+        )
+        for attempt in range(5):
+            try:
+                with urllib.request.urlopen(req, timeout=120) as r:
+                    return r.read()
+            except urllib.error.HTTPError as e:
+                if e.code in (429, 500, 502, 503) and attempt < 4:
+                    time.sleep(2 ** (attempt + 1))
+                    continue
+                sys.exit(f"ElevenLabs {e.code}: {e.read().decode(errors='replace')}")
+
+    def list_voices(self):
+        for v in json.loads(self._request("GET", "/voices"))["voices"]:
+            labels = ", ".join(f"{k}={x}" for k, x in (v.get("labels") or {}).items())
+            print(f"{v['voice_id']}  {v['name']:<24} {labels}")
+
+    def _render(self, text, spec, tmp, speed=None):
+        audio = self._request("POST", f"/text-to-speech/{spec['voice_id']}?output_format=mp3_44100_128", {
+            "text": text,
+            "model_id": self.model,
+            "language_code": "en",
+            "voice_settings": {
+                "stability": spec.get("stability", 0.5),
+                "similarity_boost": spec.get("similarity_boost", 0.75),
+                "style": spec.get("style", 0),
+                "speed": speed or spec.get("speed", 1.0),
+            },
+        })
+        with open(tmp, "wb") as f:
+            f.write(audio)
+
+    def word(self, w, tmp):
+        self._render(f"{w}.", self.speakers["narrator"], tmp, speed=self.word_speed)
+
+    def line(self, text, speaker, tmp):
+        self._render(text, self.speakers.get(speaker, self.speakers["narrator"]), tmp)
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", required=True, help="dir with kokoro-v1.0.onnx and voices-v1.0.bin")
-    ap.add_argument("--force", action="store_true")
+    ap.add_argument("--provider", choices=("kokoro", "elevenlabs"), default="kokoro")
+    ap.add_argument("--model", help="Kokoro only: dir with kokoro-v1.0.onnx and voices-v1.0.bin")
+    ap.add_argument("--only", default="words,ph,lines", help="comma list of words,ph,lines")
+    ap.add_argument("--speaker", help="only lines spoken by this speaker (e.g. hagrid)")
+    ap.add_argument("--limit", type=int, help="at most N clips of each kind, for auditioning voices")
+    ap.add_argument("--force", action="store_true", help="redo clips that already exist")
+    ap.add_argument("--list-voices", action="store_true", help="ElevenLabs only: print your voice IDs")
     args = ap.parse_args()
 
-    k = Kokoro(os.path.join(args.model, "kokoro-v1.0.onnx"), os.path.join(args.model, "voices-v1.0.bin"))
-    data = json.load(open(os.path.join(ROOT, "scripts", "voice", "lines.json")))
+    if args.provider == "elevenlabs":
+        v = ElevenLabsVoice()
+        if args.list_voices:
+            return v.list_voices()
+    else:
+        if not args.model:
+            ap.error("--model is required for kokoro")
+        v = KokoroVoice(args.model)
+
+    only = set(args.only.split(","))
+    data = json.load(open(os.path.join(HERE, "lines.json")))
     for d in ("words", "ph", "lines"):
         os.makedirs(os.path.join(OUT, d), exist_ok=True)
 
     def make(path, fn):
         if os.path.exists(path) and not args.force:
             return
-        s, sr = fn()
-        encode(np.asarray(s, dtype=np.float32), sr, path)
+        with tempfile.TemporaryDirectory() as td:
+            tmp = os.path.join(td, "raw.mp3" if args.provider == "elevenlabs" else "raw.wav")
+            fn(tmp)
+            encode(tmp, path)
         print("wrote", os.path.relpath(path, ROOT), flush=True)
 
-    for w in data["words"]:
-        make(os.path.join(OUT, "words", f"{w}.mp3"),
-             lambda w=w: k.create(f"{w}.", voice=NARRATOR, speed=0.82, lang="en-gb"))
+    take = lambda xs: xs[: args.limit] if args.limit else xs
 
-    for ph in data["phonemes"]:
-        ipa = PHONEME_IPA[ph]
-        make(os.path.join(OUT, "ph", f"{ph}.mp3"),
-             lambda ipa=ipa: k.create(ipa, voice=NARRATOR, speed=0.9, lang="en-gb", is_phonemes=True))
+    if "words" in only and not args.speaker:
+        for w in take(data["words"]):
+            make(os.path.join(OUT, "words", f"{w}.mp3"), lambda tmp, w=w: v.word(w, tmp))
 
-    for line in data["lines"]:
-        voice, speed = SPEAKERS.get(line["speaker"], SPEAKERS["narrator"])
-        make(os.path.join(OUT, "lines", f"{line['id']}.mp3"),
-             lambda t=line["text"], v=voice, s=speed: k.create(t.replace("’", "'"), voice=v, speed=s, lang="en-gb"))
+    if "ph" in only and not args.speaker:
+        if v.can_phonemes:
+            for ph in take(data["phonemes"]):
+                make(os.path.join(OUT, "ph", f"{ph}.mp3"), lambda tmp, ph=ph: v.phoneme(ph, tmp))
+        else:
+            print("skipping ph/: this provider can't say pure sounds; keeping existing clips")
+
+    if "lines" in only:
+        lines = [l for l in data["lines"] if not args.speaker or l["speaker"] == args.speaker]
+        for line in take(lines):
+            make(os.path.join(OUT, "lines", f"{line['id']}.mp3"),
+                 lambda tmp, l=line: v.line(l["text"].replace("’", "'"), l["speaker"], tmp))
 
     manifest = {
         "words": sorted(f[:-4] for f in os.listdir(os.path.join(OUT, "words")) if f.endswith(".mp3")),
@@ -100,7 +201,7 @@ def main():
         "lines": sorted(f[:-4] for f in os.listdir(os.path.join(OUT, "lines")) if f.endswith(".mp3")),
     }
     json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w"))
-    print("manifest:", {k2: len(v) for k2, v in manifest.items()})
+    print("manifest:", {k2: len(v2) for k2, v2 in manifest.items()})
 
 
 if __name__ == "__main__":

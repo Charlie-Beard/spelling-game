@@ -1,0 +1,41 @@
+{
+  "_comment": "Voice per speaker for `generate.py --provider elevenlabs`. Swap any voice_id for one from your ElevenLabs Voice Library or Voice Design (run `generate.py --provider elevenlabs --list-voices` to see the IDs on your account). speed is 0.7-1.2; stability is 0-1 (lower = more expressive). Speakers not listed use narrator.",
+  "model_id": "eleven_multilingual_v2",
+  "word_speed": 0.85,
+  "speakers": {
+    "narrator":    { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "speed": 0.92, "stability": 0.55 },
+
+    "hagrid":      { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "speed": 0.88, "stability": 0.4 },
+    "dumbledore":  { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "speed": 0.86, "stability": 0.6 },
+    "ollivander":  { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "speed": 0.88, "stability": 0.5 },
+    "slughorn":    { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "speed": 0.92, "stability": 0.4 },
+    "willow":      { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "speed": 0.85, "stability": 0.5 },
+    "moody":       { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "speed": 0.92, "stability": 0.35 },
+    "lupin":       { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "speed": 0.92, "stability": 0.6 },
+    "sirius":      { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "speed": 0.95, "stability": 0.45 },
+
+    "voldemort":   { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 0.82, "stability": 0.5 },
+    "basilisk":    { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 0.8,  "stability": 0.5 },
+    "horntail":    { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 0.85, "stability": 0.4 },
+    "deatheater":  { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 0.85, "stability": 0.45 },
+    "nick":        { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 0.95, "stability": 0.4 },
+    "neville":     { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 0.95, "stability": 0.4 },
+    "wormtail":    { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 1.05, "stability": 0.3 },
+    "dobby":       { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 1.05, "stability": 0.3 },
+    "kreacher":    { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 0.9,  "stability": 0.35 },
+    "griphook":    { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 0.9,  "stability": 0.45 },
+    "gnome":       { "voice_id": "onwK4e9ZLuTAKqWW03F9", "speed": 1.05, "stability": 0.3 },
+
+    "mcgonagall":  { "voice_id": "Xb7hH8MSUJpSbSDYk0k2", "speed": 0.92, "stability": 0.6 },
+    "bellatrix":   { "voice_id": "Xb7hH8MSUJpSbSDYk0k2", "speed": 0.95, "stability": 0.3 },
+    "nagini":      { "voice_id": "Xb7hH8MSUJpSbSDYk0k2", "speed": 0.82, "stability": 0.45 },
+    "crookshanks": { "voice_id": "Xb7hH8MSUJpSbSDYk0k2", "speed": 0.9,  "stability": 0.5 },
+    "luna":        { "voice_id": "Xb7hH8MSUJpSbSDYk0k2", "speed": 0.85, "stability": 0.45 },
+
+    "trevor":      { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "speed": 1.0,  "stability": 0.4 },
+    "myrtle":      { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "speed": 0.95, "stability": 0.3 },
+    "ginny":       { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "speed": 0.98, "stability": 0.45 },
+    "fawkes":      { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "speed": 0.9,  "stability": 0.55 },
+    "buckbeak":    { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "speed": 0.9,  "stability": 0.55 }
+  }
+}

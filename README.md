@@ -86,7 +86,7 @@ npm run build        # production build to dist/ (with offline service worker)
 | `src/art/characters/` | 33 character portraits |
 | `src/scenes/` | Title, choose, map, intro, spell, battle, complete, album, break, grown-ups |
 | `src/audio/` | Web Audio engine, synthesised sound effects, narrator, recordings |
-| `scripts/voice/` | Regenerates narration with Kokoro (offline neural TTS, British voices) |
+| `scripts/voice/` | Regenerates narration with Kokoro (offline neural TTS) or ElevenLabs |
 | `scripts/icons.ts` | Renders the app icons from the game's own art |
 
 ### Regenerating the voice
@@ -97,5 +97,22 @@ pip install kokoro-onnx soundfile
 npx tsx scripts/voice/export.ts
 python3 scripts/voice/generate.py --model DIR   # add --force to redo existing clips
 ```
+
+For more natural, characterful voices, render words and lines with
+[ElevenLabs](https://elevenlabs.io) instead (pure phonics sounds stay on Kokoro or
+your own recordings, since no cloud voice says them cleanly). The API key stays on
+your machine; the game only ships the resulting MP3s.
+
+```bash
+export ELEVENLABS_API_KEY=...                   # elevenlabs.io → Profile → API keys
+python3 scripts/voice/generate.py --provider elevenlabs --list-voices          # your voice IDs
+python3 scripts/voice/generate.py --provider elevenlabs --speaker hagrid --force   # audition one character
+python3 scripts/voice/generate.py --provider elevenlabs --limit 3 --force         # a few of everything
+python3 scripts/voice/generate.py --provider elevenlabs --force                   # the lot (~4,300 characters)
+```
+
+Pick voices per character in `scripts/voice/elevenlabs.json`. Its defaults are
+ElevenLabs' stock British voices; for distinct characters, add voices from the
+Voice Library or create them with Voice Design and paste their IDs in.
 
 See [`docs/PLAN.md`](docs/PLAN.md) for the full design.
