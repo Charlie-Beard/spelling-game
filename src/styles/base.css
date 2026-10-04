@@ -1,0 +1,171 @@
+/*
+ * Base styles: design tokens, the fixed 1180×820 landscape stage,
+ * and the iPad touch hardening (no zoom, selection, callouts or bounce).
+ */
+
+:root {
+  /* Night sky & castle */
+  --night-900: #141830;
+  --night-800: #1b2038;
+  --night-700: #252c4b;
+  --night-600: #323b61;
+  --night-500: #46507c;
+
+  /* Parchment & paper */
+  --paper-fibre: #fbf6ea;
+  --parchment-100: #f6ecd4;
+  --parchment-200: #efe0bd;
+  --parchment-300: #e3cc9c;
+  --parchment-400: #cfb17a;
+  --parchment-500: #a98a55;
+
+  /* Ink */
+  --ink-900: #2b1f16;
+  --ink-700: #4a3626;
+  --ink-500: #6d5440;
+
+  /* Accents (muted, never neon) */
+  --gold-500: #d8a43f;
+  --gold-300: #f0cd7c;
+  --candle: #f7d283;
+  --scarlet-600: #8f2d29;
+  --scarlet-500: #a9413a;
+  --emerald-600: #2f5d47;
+  --emerald-500: #4b7d5d;
+  --sky-400: #8fb4d8;
+  --hint-glow: #ffe7a3;
+
+  /* House accent (set at runtime from the chosen character) */
+  --accent: var(--scarlet-500);
+  --accent-dark: var(--scarlet-600);
+
+  --font-body: 'Andika', 'Andika New Basic', system-ui, sans-serif;
+
+  --stage-w: 1180px;
+  --stage-h: 820px;
+  --scale: 1;
+
+  /* Safe areas inside the stage (status bar + home indicator) */
+  --safe-top: 28px;
+  --safe-bottom: 24px;
+  --safe-side: 28px;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--night-900);
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+svg {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 4px solid var(--gold-300);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+/* ---------- The stage ---------- */
+
+#viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 40%, var(--night-700), var(--night-900) 70%);
+}
+
+#stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--stage-w);
+  height: var(--stage-h);
+  margin-left: calc(var(--stage-w) / -2);
+  margin-top: calc(var(--stage-h) / -2);
+  transform: scale(var(--scale));
+  transform-origin: 50% 50%;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--night-800);
+  contain: layout paint;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Rotate-to-landscape screen ---------- */
+
+#rotate {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: var(--night-800);
+  color: var(--parchment-100);
+  text-align: center;
+}
+
+#rotate[hidden] {
+  display: none;
+}
