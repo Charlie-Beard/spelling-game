@@ -142,3 +142,30 @@ export const CONFUSABLE: Record<string, string[]> = {
   u: ['n'], w: ['m'], i: ['l', 'j'], l: ['i'], c: ['k'], k: ['c', 'ck'], ck: ['k', 'c'],
   e: ['a'], a: ['e', 'o'], o: ['a'],
 };
+
+const GREEDY = Object.keys(GRAPHEME_PHONEME)
+  .filter((g) => !g.includes('-'))
+  .sort((a, b) => b.length - a.length);
+
+/**
+ * Splits any word into phonics units, for a grown-up's custom words.
+ * Hyphens force a split ("s-h-e" keeps s and h apart); otherwise the
+ * longest known grapheme wins (so "ship" → sh·i·p, "night" → n·igh·t).
+ */
+export function segmentWord(raw: string): Word | null {
+  const text = raw.toLowerCase().replace(/[^a-z-]/g, '');
+  const parts = text.split('-').filter(Boolean);
+  if (!parts.length) return null;
+  const units: Unit[] = [];
+  for (const part of parts) {
+    let i = 0;
+    while (i < part.length) {
+      const g = GREEDY.find((x) => part.startsWith(x, i));
+      if (!g) return null;
+      units.push({ g, ph: GRAPHEME_PHONEME[g] });
+      i += g.length;
+    }
+  }
+  if (units.length > 7) return null;
+  return { text: units.map((u) => u.g).join(''), units };
+}

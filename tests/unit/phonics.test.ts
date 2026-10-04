@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { makeWord, parseSpec } from '../../src/core/phonics';
+import { makeWord, parseSpec, segmentWord } from '../../src/core/phonics';
 
 describe('parseSpec', () => {
   it('splits a CVC word into single-letter sounds', () => {
@@ -43,5 +43,20 @@ describe('makeWord', () => {
   it('checks the spec spells the word', () => {
     expect(() => makeWord('cat', 'c a p')).toThrow();
     expect(makeWord('snake', 's n a-e k').units).toHaveLength(5);
+  });
+});
+
+describe('segmentWord', () => {
+  it('finds digraphs greedily', () => {
+    expect(segmentWord('ship')!.units.map((u) => u.g)).toEqual(['sh', 'i', 'p']);
+    expect(segmentWord('Night')!.units.map((u) => u.g)).toEqual(['n', 'igh', 't']);
+    expect(segmentWord('dog')!.units.map((u) => u.g)).toEqual(['d', 'o', 'g']);
+  });
+  it('lets hyphens force splits', () => {
+    expect(segmentWord('mis-hap')!.units.map((u) => u.g)).toEqual(['m', 'i', 's', 'h', 'a', 'p']);
+  });
+  it('rejects empty or too-long words', () => {
+    expect(segmentWord('  ')).toBeNull();
+    expect(segmentWord('extraordinary')).toBeNull();
   });
 });

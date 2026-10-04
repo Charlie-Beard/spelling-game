@@ -55,7 +55,7 @@ interface TileView {
 const capped = (p: Promise<void>, ms: number) => Promise.race([p, wait(ms)]);
 
 export class SpellScene extends Scene {
-  private o: SpellOptions;
+  protected o: SpellOptions;
   private layer!: HTMLElement;
   private card!: HTMLButtonElement;
   private cardArt!: HTMLElement;
@@ -65,7 +65,9 @@ export class SpellScene extends Scene {
   private gemsEl!: HTMLElement;
   private gemCount!: HTMLElement;
 
-  private index = 0;
+  /** The desk layer (parchment + word); battle mode slides it away. */
+  protected panel!: HTMLElement;
+  protected index = 0;
   private round!: Round;
   private tiles: TileView[] = [];
   private slotEls: HTMLElement[] = [];
@@ -86,8 +88,10 @@ export class SpellScene extends Scene {
 
   build(): void {
     const r = this.root;
-    r.append(h('div', { class: 'bg', html: nightSky('spell-sky') }));
-    r.append(place(h('div', { html: parchment(PANEL.w, PANEL.h, 'spell-desk', C.cream) }), PANEL.x, PANEL.y, PANEL.w, PANEL.h));
+    r.append(h('div', { class: 'bg', html: this.backdrop() }));
+    this.panel = place(h('div', { class: 'desk' }), 0, 0, 1180, 820);
+    this.panel.append(place(h('div', { html: parchment(PANEL.w, PANEL.h, 'spell-desk', C.cream) }), PANEL.x, PANEL.y, PANEL.w, PANEL.h));
+    r.append(this.panel);
 
     // Top bar
     const mapBtn = place(h('button', { class: 'seal-btn', 'aria-label': 'Back to the map', html: waxSeal('map', C.slate, 64) }), 30, 20, 64, 64);
@@ -120,7 +124,7 @@ export class SpellScene extends Scene {
       h('div', { class: 'ear', html: waxSeal('speaker', C.red, 70, 'card-ear') }),
     );
     this.tap(this.card, () => this.hear());
-    r.append(this.card);
+    this.panel.append(this.card);
 
     // Hear button (left thumb)
     this.hearBtn = place(
@@ -131,17 +135,28 @@ export class SpellScene extends Scene {
       120,
     ) as HTMLButtonElement;
     this.tap(this.hearBtn, () => this.hear());
-    r.append(this.hearBtn);
+    this.panel.append(this.hearBtn);
 
     // Hedwig (right thumb)
     this.owl = place(h('button', { class: 'hedwig-btn', 'aria-label': 'Ask Hedwig for help', html: hedwig() }), 984, 548, 180, 180) as HTMLButtonElement;
     this.tap(this.owl, () => this.askHedwig());
-    r.append(this.owl);
+    this.panel.append(this.owl);
 
     this.layer = h('div', { class: 'word-layer' });
-    r.append(this.layer);
+    this.panel.append(this.layer);
     this.startBlinking();
   }
+
+  /** Backdrop behind the desk. */
+  protected backdrop(): string {
+    return nightSky('spell-sky');
+  }
+
+  /** Called after each word is finished, before the next one. */
+  protected async afterWord(_index: number): Promise<void> {}
+
+  /** Called when every word is done; resolves when it's time to leave. */
+  protected async afterAll(): Promise<void> {}
 
   async enter(): Promise<void> {
     void voice.preload({
@@ -472,8 +487,13 @@ export class SpellScene extends Scene {
     ]);
     if (!this.alive) return;
 
+    await this.afterWord(this.index);
+    if (!this.alive) return;
     if (this.index + 1 < this.o.words.length) await this.startWord(this.index + 1);
-    else this.o.onDone(this.results);
+    else {
+      await this.afterAll();
+      if (this.alive) this.o.onDone(this.results);
+    }
   }
 
   private nextPraise(): string {

@@ -3,23 +3,22 @@ import '@fontsource/andika/700.css';
 import './styles/base.css';
 import './styles/paper.css';
 import './styles/ui.css';
+import './styles/parent.css';
 import { installGrain } from './art/grain';
 import { parchmentDefs, uiDefs } from './art/ui';
-import { unlock } from './audio/engine';
-import { BOOKS } from './core/curriculum';
+import { setVolumes, unlock } from './audio/engine';
+import { loadManifest } from './audio/voice';
 import { load, save, type Progress } from './core/progress';
-import { SpellScene } from './scenes/spell';
+import { Game } from './game';
 import { Stage } from './stage';
 import { setCalm } from './ui/anim';
 import { Director } from './ui/director';
 import { h } from './ui/dom';
 import type { App } from './ui/scene';
+import { installRotateScreen } from './ui/rotate';
 
 const stage = new Stage(document.getElementById('stage')!);
-const rotate = document.getElementById('rotate')!;
-stage.onOrientation((portrait) => (rotate.hidden = !portrait));
-rotate.hidden = !stage.isPortrait;
-rotate.textContent = 'Please turn the iPad sideways';
+installRotateScreen(stage, document.getElementById('rotate')!);
 
 installGrain();
 document.body.insertAdjacentHTML('beforeend', uiDefs() + parchmentDefs());
@@ -28,24 +27,33 @@ stage.el.append(h('div', { class: 'vignette' }), h('div', { class: 'grain' }));
 const director = new Director(stage.el);
 const progress: Progress = load();
 setCalm(progress.settings.calm);
+const game = new Game();
 
 const app: App = {
   stage,
   progress,
+  nav: game,
   save: () => save(progress),
   go: (scene, t) => director.go(scene, t),
 };
+game.attach(app);
 
-window.addEventListener('pointerdown', () => void unlock(), { once: true });
-
-const book = BOOKS[0];
-const chapter = book.chapters[0];
-void app.go(
-  new SpellScene(app, {
-    book,
-    chapter,
-    words: chapter.words,
-    onDone: () => {},
-    onQuit: () => {},
-  }),
+// Audio can only start inside a tap on iPad.
+window.addEventListener(
+  'pointerdown',
+  () => {
+    void unlock().then(() => setVolumes({ master: progress.settings.volume }));
+  },
+  { once: true },
 );
+void loadManifest();
+
+// Dev shortcuts: ?scene=map|choose|album|parent|chapter&id=b1c1
+const q = new URLSearchParams(location.search);
+const scene = q.get('scene');
+if (scene === 'map') game.map(Number(q.get('book')) || undefined);
+else if (scene === 'choose') game.choose();
+else if (scene === 'album') game.album();
+else if (scene === 'parent') game.parent();
+else if (scene === 'chapter') game.chapter(q.get('id') ?? 'b1c1');
+else game.title();

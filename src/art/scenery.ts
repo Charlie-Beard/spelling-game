@@ -48,8 +48,8 @@ export function castleNight(name = 'castle'): string {
   return svg({ w: 1180, h: 820, name, boil: false, className: 'backdrop' }, [
     piece(rect(-20, -20, 1220, 860), C.night, { edge: 'clean', shadow: false }),
     ...stars(70, 3, 1180, 520),
-    piece(ellipse(960, 130, 58), C.cream, { rough: 0.8 }),
-    piece(ellipse(982, 116, 50), C.night, { edge: 'cut', fibre: false, shadow: false }),
+    piece(ellipse(1040, 290, 50), C.cream, { rough: 0.8 }),
+    piece(ellipse(1060, 278, 43), C.night, { edge: 'cut', fibre: false, shadow: false }),
     hills(560, 50, '#2a3157', 21),
     group({}, [
       ...tower(470, 330, 60, C.slate),

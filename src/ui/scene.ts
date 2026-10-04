@@ -3,9 +3,21 @@ import type { Progress } from '../core/progress';
 import type { Stage } from '../stage';
 import { h, onTap } from './dom';
 
+/** Where scenes can go next. */
+export interface Nav {
+  title(): void;
+  choose(): void;
+  map(book?: number): void;
+  chapter(id: string): void;
+  practice(): void;
+  album(): void;
+  parent(): void;
+}
+
 export interface App {
   stage: Stage;
   progress: Progress;
+  nav: Nav;
   save(): void;
   go(scene: Scene, transition?: 'page' | 'fade' | 'none'): Promise<void>;
 }
