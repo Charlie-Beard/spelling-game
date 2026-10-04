@@ -7,7 +7,7 @@ import './styles/parent.css';
 import { installGrain } from './art/grain';
 import { parchmentDefs, uiDefs } from './art/ui';
 import { setVolumes, unlock } from './audio/engine';
-import { loadManifest } from './audio/voice';
+import { loadManifest, setPlayerName } from './audio/voice';
 import { load, save, type Progress } from './core/progress';
 import { Game } from './game';
 import { Stage } from './stage';
@@ -27,6 +27,7 @@ stage.el.append(h('div', { class: 'vignette' }), h('div', { class: 'grain' }));
 const director = new Director(stage.el);
 const progress: Progress = load();
 setCalm(progress.settings.calm);
+setPlayerName(progress.name);
 const game = new Game();
 
 const app: App = {

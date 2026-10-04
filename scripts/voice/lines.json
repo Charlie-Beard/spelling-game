@@ -195,8 +195,18 @@
   ],
   "lines": [
     {
+      "id": "ghokm",
+      "text": "Welcome to Wizard Words, Jasper!",
+      "speaker": "narrator"
+    },
+    {
       "id": "1x5t2vp",
       "text": "Welcome to Wizard Words!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "tcw4pj",
+      "text": "Who do you want to be, Jasper?",
       "speaker": "narrator"
     },
     {
@@ -217,6 +227,11 @@
     {
       "id": "y16pab",
       "text": "Hermione Granger!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "15fh1zy",
+      "text": "Let’s go, Jasper!",
       "speaker": "narrator"
     },
     {
@@ -255,6 +270,11 @@
       "speaker": "narrator"
     },
     {
+      "id": "1mxzcbq",
+      "text": "You finished the chapter, Jasper!",
+      "speaker": "narrator"
+    },
+    {
       "id": "le3t5h",
       "text": "You finished the chapter!",
       "speaker": "narrator"
@@ -275,8 +295,18 @@
       "speaker": "narrator"
     },
     {
+      "id": "inbi9e",
+      "text": "You saved Hogwarts, Jasper! Expelliarmus!",
+      "speaker": "narrator"
+    },
+    {
       "id": "1h586n5",
       "text": "You saved Hogwarts! Expelliarmus!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "rxxvid",
+      "text": "Great work, Jasper! Time for a little break.",
       "speaker": "narrator"
     },
     {
@@ -300,8 +330,18 @@
       "speaker": "narrator"
     },
     {
+      "id": "1yfdnbs",
+      "text": "Brilliant, Jasper!",
+      "speaker": "narrator"
+    },
+    {
       "id": "10m1apz",
       "text": "Brilliant!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1026o4x",
+      "text": "Well done, Jasper!",
       "speaker": "narrator"
     },
     {
@@ -312,6 +352,16 @@
     {
       "id": "bd280t",
       "text": "Wicked!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1vl8xm0",
+      "text": "Great spelling, Jasper!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "9xqo2f",
+      "text": "Great spelling!",
       "speaker": "narrator"
     },
     {
@@ -545,6 +595,16 @@
       "speaker": "narrator"
     },
     {
+      "id": "1asxsp5",
+      "text": "Jasper, Hero of Hogwarts!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "42zc6w",
+      "text": "Hero of Hogwarts!",
+      "speaker": "narrator"
+    },
+    {
       "id": "1b85i8d",
       "text": "Book 1: The Philosopher's Stone!",
       "speaker": "narrator"
@@ -580,6 +640,11 @@
       "speaker": "narrator"
     },
     {
+      "id": "17ifmvi",
+      "text": "Hello there, Jasper! I’m Hagrid. Can you help me tidy up my hut?",
+      "speaker": "hagrid"
+    },
+    {
       "id": "ksa1q5",
       "text": "Hello there! I’m Hagrid. Can you help me tidy up my hut?",
       "speaker": "hagrid"
@@ -588,6 +653,11 @@
       "id": "1g6k4x",
       "text": "Hagrid’s Hut",
       "speaker": "narrator"
+    },
+    {
+      "id": "1eo08po",
+      "text": "Welcome to Diagon Alley, Jasper! Let’s find everything you need for school.",
+      "speaker": "ollivander"
     },
     {
       "id": "1my3rvv",
@@ -600,6 +670,11 @@
       "speaker": "narrator"
     },
     {
+      "id": "zm6i2k",
+      "text": "Ribbit! I’m Trevor the toad. I hopped all over the train. Help me find these, Jasper!",
+      "speaker": "trevor"
+    },
+    {
       "id": "ubh4bv",
       "text": "Ribbit! I’m Trevor the toad. I hopped all over the train. Help me find these!",
       "speaker": "trevor"
@@ -608,6 +683,11 @@
       "id": "gpoi5b",
       "text": "The Hogwarts Express",
       "speaker": "narrator"
+    },
+    {
+      "id": "ngwaeg",
+      "text": "Good evening, Jasper! I’m Nearly Headless Nick. Let’s spell the feast!",
+      "speaker": "nick"
     },
     {
       "id": "xpupj",
@@ -620,6 +700,11 @@
       "speaker": "narrator"
     },
     {
+      "id": "14uhgy9",
+      "text": "I have hidden a ring, Jasper. You will never find it… unless you can spell!",
+      "speaker": "voldemort"
+    },
+    {
       "id": "1sezzb4",
       "text": "I have hidden a ring. You will never find it… unless you can spell!",
       "speaker": "voldemort"
@@ -628,6 +713,11 @@
       "id": "14tf5u",
       "text": "The Hidden Ring",
       "speaker": "narrator"
+    },
+    {
+      "id": "ppaqwj",
+      "text": "Dobby has come to help Jasper! Dobby likes socks very much.",
+      "speaker": "dobby"
     },
     {
       "id": "128vgum",
@@ -640,6 +730,11 @@
       "speaker": "narrator"
     },
     {
+      "id": "fh63xf",
+      "text": "Oi, Jasper! A garden gnome, that’s me. Let’s spell things at the Burrow.",
+      "speaker": "gnome"
+    },
+    {
       "id": "7fw2ya",
       "text": "Oi! A garden gnome, that’s me. Let’s spell things at the Burrow.",
       "speaker": "gnome"
@@ -650,8 +745,13 @@
       "speaker": "narrator"
     },
     {
-      "id": "1ydkjpj",
-      "text": "Who crashed a car into ME? Spell these words and I’ll calm down.",
+      "id": "1usld7o",
+      "text": "Who crashed a car into ME? Spell these words, Jasper, and I’ll calm down.",
+      "speaker": "willow"
+    },
+    {
+      "id": "1kpm1n7",
+      "text": "Who crashed a car into ME? Spell these words, and I’ll calm down.",
       "speaker": "willow"
     },
     {
@@ -660,14 +760,24 @@
       "speaker": "narrator"
     },
     {
-      "id": "invcst",
-      "text": "Fawkes the phoenix sings a song. Spell these words to make him glow!",
+      "id": "1ew38yc",
+      "text": "Look, Jasper! Fawkes the phoenix sings a song. Spell these words to make him glow!",
+      "speaker": "fawkes"
+    },
+    {
+      "id": "8czfkz",
+      "text": "Look! Fawkes the phoenix sings a song. Spell these words to make him glow!",
       "speaker": "fawkes"
     },
     {
       "id": "1jfeojm",
       "text": "Fawkes the Phoenix",
       "speaker": "narrator"
+    },
+    {
+      "id": "1xglioz",
+      "text": "Hissss… The diary is down in the Chamber. Spell bravely to find it, Jasper.",
+      "speaker": "basilisk"
     },
     {
       "id": "1wcc7bm",
@@ -680,9 +790,19 @@
       "speaker": "narrator"
     },
     {
+      "id": "12mkg1a",
+      "text": "Mrrow. I am Crookshanks. I like chasing things. Spell what I chase, Jasper!",
+      "speaker": "crookshanks"
+    },
+    {
       "id": "11q8hul",
       "text": "Mrrow. I am Crookshanks. I like chasing things. Spell what I chase!",
       "speaker": "crookshanks"
+    },
+    {
+      "id": "ptjmgl",
+      "text": "Hello, Jasper, I’m Professor Lupin. Have some chocolate, then let’s spell!",
+      "speaker": "lupin"
     },
     {
       "id": "10s3mzo",
@@ -690,9 +810,19 @@
       "speaker": "lupin"
     },
     {
+      "id": "1jys883",
+      "text": "Bow to Buckbeak the hippogriff… he bows back! Now spell these, Jasper.",
+      "speaker": "buckbeak"
+    },
+    {
       "id": "15m03pu",
       "text": "Bow to Buckbeak the hippogriff… he bows back! Now spell these.",
       "speaker": "buckbeak"
+    },
+    {
+      "id": "dw9d92",
+      "text": "Squeak! I know where the locket is, Jasper. But you’ll have to spell for it!",
+      "speaker": "wormtail"
     },
     {
       "id": "hed4dh",
@@ -705,6 +835,11 @@
       "speaker": "narrator"
     },
     {
+      "id": "1su58vr",
+      "text": "Constant vigilance, Jasper! I’m Mad-Eye Moody. Keep your eyes on these words.",
+      "speaker": "moody"
+    },
+    {
       "id": "1poldt2",
       "text": "Constant vigilance! I’m Mad-Eye Moody. Keep your eyes on these words.",
       "speaker": "moody"
@@ -715,14 +850,24 @@
       "speaker": "narrator"
     },
     {
-      "id": "10lg9sf",
-      "text": "ROAR! I’m the Hungarian Horntail. Spell these and I’ll guard my golden egg.",
+      "id": "1amy3vw",
+      "text": "ROAR! I’m the Hungarian Horntail. Spell these, Jasper, and I’ll guard my golden egg.",
+      "speaker": "horntail"
+    },
+    {
+      "id": "c3tc4b",
+      "text": "ROAR! I’m the Hungarian Horntail. Spell these, and I’ll guard my golden egg.",
       "speaker": "horntail"
     },
     {
       "id": "yfm08k",
       "text": "The Dragon Task",
       "speaker": "narrator"
+    },
+    {
+      "id": "1dn2ok9",
+      "text": "Oooh, a visitor! I’m Moaning Myrtle. Help me with these words, Jasper.",
+      "speaker": "myrtle"
     },
     {
       "id": "1mq2n7s",
@@ -735,9 +880,19 @@
       "speaker": "narrator"
     },
     {
+      "id": "6rz7u3",
+      "text": "Ha ha! The golden cup is MINE, Jasper. Spell well if you want to take it.",
+      "speaker": "bellatrix"
+    },
+    {
       "id": "6jese2",
       "text": "Ha ha! The golden cup is MINE. Spell well if you want to take it.",
       "speaker": "bellatrix"
+    },
+    {
+      "id": "1f77emo",
+      "text": "Welcome to my house, Jasper! I’m Sirius, Harry’s godfather. Let’s spell!",
+      "speaker": "sirius"
     },
     {
       "id": "nds4n3",
@@ -750,19 +905,34 @@
       "speaker": "narrator"
     },
     {
+      "id": "lv3ro0",
+      "text": "Hello, Jasper. I’m Luna. I can see lovely creatures. Can you spell them?",
+      "speaker": "luna"
+    },
+    {
       "id": "15my7cv",
       "text": "Hello. I’m Luna. I can see lovely creatures. Can you spell them?",
       "speaker": "luna"
     },
     {
-      "id": "8hzz43",
-      "text": "I’m Neville. We practise spells in secret. Let’s practise spelling too!",
+      "id": "1jtzaw6",
+      "text": "Hi, Jasper! I’m Neville. We practise spells in secret. Let’s practise spelling too!",
+      "speaker": "neville"
+    },
+    {
+      "id": "1f6it5h",
+      "text": "Hi! I’m Neville. We practise spells in secret. Let’s practise spelling too!",
       "speaker": "neville"
     },
     {
       "id": "1nhfa19",
       "text": "Dumbledore’s Army",
       "speaker": "narrator"
+    },
+    {
+      "id": "tenu63",
+      "text": "The Death Eaters are hiding the diadem, Jasper. Spell to sneak past them!",
+      "speaker": "deatheater"
     },
     {
       "id": "b4k2ga",
@@ -775,6 +945,11 @@
       "speaker": "narrator"
     },
     {
+      "id": "sjacw4",
+      "text": "Ah, Jasper, a new student! I’m Professor Slughorn. Let’s brew some spelling!",
+      "speaker": "slughorn"
+    },
+    {
       "id": "wnj9ar",
       "text": "Ah, a new student! I’m Professor Slughorn. Let’s brew some spelling!",
       "speaker": "slughorn"
@@ -785,14 +960,24 @@
       "speaker": "narrator"
     },
     {
-      "id": "1ibhjg2",
-      "text": "Hello, I am Professor Dumbledore. Come with me to the cave, and spell.",
+      "id": "3w6n45",
+      "text": "Hello, Jasper. I am Professor Dumbledore. Come with me to the cave, and spell.",
+      "speaker": "dumbledore"
+    },
+    {
+      "id": "19pst6c",
+      "text": "Hello. I am Professor Dumbledore. Come with me to the cave, and spell.",
       "speaker": "dumbledore"
     },
     {
       "id": "2177rb",
       "text": "The Crystal Cave",
       "speaker": "narrator"
+    },
+    {
+      "id": "1msfiym",
+      "text": "Hi, Jasper! I’m Ginny, the best flyer in Gryffindor. Ready for practice?",
+      "speaker": "ginny"
     },
     {
       "id": "1qamnv1",
@@ -805,6 +990,11 @@
       "speaker": "narrator"
     },
     {
+      "id": "1pc25lz",
+      "text": "Sssss. I am Nagini. Spell very carefully, Jasper… if you dare.",
+      "speaker": "nagini"
+    },
+    {
       "id": "opg03a",
       "text": "Sssss. I am Nagini. Spell very carefully… if you dare.",
       "speaker": "nagini"
@@ -815,8 +1005,13 @@
       "speaker": "narrator"
     },
     {
-      "id": "1bjcwz7",
-      "text": "Kreacher will help Master. Kreacher has packed a picnic.",
+      "id": "vq1h1g",
+      "text": "Kreacher will help, Master Jasper. Kreacher has packed a picnic.",
+      "speaker": "kreacher"
+    },
+    {
+      "id": "w964xr",
+      "text": "Kreacher will help, Master. Kreacher has packed a picnic.",
       "speaker": "kreacher"
     },
     {
@@ -825,14 +1020,24 @@
       "speaker": "narrator"
     },
     {
-      "id": "1skt8hj",
-      "text": "I am Griphook the goblin. Spell well and I’ll open the vault.",
+      "id": "wyfbec",
+      "text": "I am Griphook the goblin. Spell well, Jasper, and I’ll open the vault.",
+      "speaker": "griphook"
+    },
+    {
+      "id": "m59myr",
+      "text": "I am Griphook the goblin. Spell well, and I’ll open the vault.",
       "speaker": "griphook"
     },
     {
       "id": "nnt46a",
       "text": "Gringotts Bank",
       "speaker": "narrator"
+    },
+    {
+      "id": "4u4etf",
+      "text": "I am Professor McGonagall. Hogwarts needs you, Jasper. Let’s get ready!",
+      "speaker": "mcgonagall"
     },
     {
       "id": "1ces7iq",
@@ -843,6 +1048,11 @@
       "id": "zohmaw",
       "text": "Back to Hogwarts",
       "speaker": "narrator"
+    },
+    {
+      "id": "2qyrar",
+      "text": "The Death Eaters are coming, Jasper! Spell each word to cast a shield over the castle.",
+      "speaker": "voldemort"
     },
     {
       "id": "m95twi",

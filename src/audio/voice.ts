@@ -8,7 +8,7 @@
  * Anything missing (e.g. custom words typed by a parent) falls back to the
  * iPad's own British speech voice. Only one voice clip plays at a time.
  */
-import { lineId } from '../core/phrases';
+import { generic, lineId, personalise } from '../core/phrases';
 import { PHONEME_HINTS } from '../core/phonics';
 import { audio, buses } from './engine';
 import { getRecording } from './recordings';
@@ -21,6 +21,12 @@ interface Manifest {
 
 let manifest: Manifest = { words: [], ph: [], lines: [] };
 let manifestLoaded: Promise<void> | null = null;
+
+let playerName = '';
+/** The child's name, used in lines containing {name}. */
+export function setPlayerName(name: string): void {
+  playerName = name.trim();
+}
 
 const buffers = new Map<string, Promise<AudioBuffer | null>>();
 let current: { stop: () => void } | null = null;
@@ -151,14 +157,21 @@ export const voice = {
     return speak(hint.split(' (')[0], 0.7);
   },
 
-  async say(text: string): Promise<void> {
+  /**
+   * Says a line. "{name}" is filled in with the child's name: the recording
+   * with his name is used if there is one, else the version without a name.
+   */
+  async say(template: string): Promise<void> {
     await loadManifest();
-    const id = lineId(text);
-    if (manifest.lines.includes(id)) {
-      const buf = await fetchBuffer(lineUrl(id));
-      if (buf) return playBuffer(buf);
+    const personal = personalise(template, playerName);
+    for (const text of [personal, generic(template)]) {
+      const id = lineId(text);
+      if (manifest.lines.includes(id)) {
+        const buf = await fetchBuffer(lineUrl(id));
+        if (buf) return playBuffer(buf);
+      }
     }
-    return speak(text, 0.9);
+    return speak(personal, 0.9);
   },
 
   /** Warms the cache so the first tap answers instantly. */
@@ -168,8 +181,8 @@ export const voice = {
     for (const w of o.words ?? []) if (manifest.words.includes(w)) jobs.push(fetchBuffer(wordUrl(w)));
     for (const p of o.ph ?? []) if (manifest.ph.includes(p)) jobs.push(fetchBuffer(phUrl(p)));
     for (const t of o.lines ?? []) {
-      const id = lineId(t);
-      if (manifest.lines.includes(id)) jobs.push(fetchBuffer(lineUrl(id)));
+      const id = [personalise(t, playerName), generic(t)].map(lineId).find((x) => manifest.lines.includes(x));
+      if (id) jobs.push(fetchBuffer(lineUrl(id)));
     }
     await Promise.all(jobs);
   },
