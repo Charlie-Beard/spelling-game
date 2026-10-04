@@ -52,13 +52,15 @@ LINE_WORDS = {
 }
 # Sounds taken from a word's last vowel rather than its stressed one.
 LAST_VOWEL = {"schwa"}
-# Sounds that are another sound's vowel said shorter (er and schwa are both ə).
-SAME_VOWEL = {"schwa": "er"}
+# Sounds that are another sound's vowel said shorter. Schwa is taught as "uh":
+# a short u was recognisable where a short er (also ə) wasn't.
+SAME_VOWEL = {"schwa": "u"}
 # Where a vowel should sit (F1, F2 Hz) when the narrator's words can't say:
 # typical values for a young woman's southern British English.
 TARGET = {"oo-short": (450, 1500), "ur": (600, 1650), "schwa": (650, 1550)}
-# How long to hold each vowel, in seconds (others 0.28).
-LENGTH = {"ur": 0.42, "oo-short": 0.24, "schwa": 0.18}
+# How long to hold each vowel, in seconds (others 0.28). The review found
+# oo-short at 0.17 s too short to hear.
+LENGTH = {"ur": 0.42, "oo-short": 0.36, "schwa": 0.18}
 
 
 def fade(x, sr, fade_in=0.02, fade_out=0.06):
@@ -99,9 +101,11 @@ def set_rms(x, db):
 
 
 def lengthen(snd, target):
-    if snd.duration >= target:
-        return snd
-    return call(snd, "Lengthen (overlap-add)", max(75, int(3.5 / snd.duration) + 1), 600, target / snd.duration)
+    # Praat stretches at most 3x a time (while reporting the full length), so go in steps.
+    while snd.n_samples / snd.sampling_frequency < target - 0.005:
+        dur = snd.n_samples / snd.sampling_frequency
+        snd = call(snd, "Lengthen (overlap-add)", max(75, int(3.5 / dur) + 1), 600, min(3.0, target / dur))
+    return snd
 
 
 def hiss(ph, src):
@@ -183,7 +187,8 @@ def vowel_part(src, window=None, last=False):
 def vowel(src, window=None, last=False, length=0.28):
     """A vowel cut out of a word and held (or cut down) to `length` seconds."""
     part = vowel_part(src, window, last)
-    if part is None:
+    # Stretched more than 4x, a vowel sounds robotic; a longer one will do better.
+    if part is None or part.duration * 4 < length:
         return None
     if part.duration > length:
         mid = part.duration / 2
@@ -324,14 +329,15 @@ def repair(check, ph, apply=False, was="previous", keep=3):
         dst = path_of("ph", ph, label)
         write(x, sr, dst, normalise)
         flags = check("ph", ph, dst, label)[0]
-        scored.append((len(flags), round(distance(check, ph, dst), 2), label, flags))
+        # Prefer one made from a sound a grown-up already passed (schwa from u).
+        scored.append((len(flags), not label.startswith("short-"), round(distance(check, ph, dst), 2), label, flags))
     scored.sort()
-    for i, (_, d, label, flags) in enumerate(scored):
+    for i, (_, _, d, label, flags) in enumerate(scored):
         if i >= keep:
             os.remove(path_of("ph", ph, label))
             continue
         print(f"{ph:9} {label:24} {'; '.join(flags) or 'passes'}" + (f"  (vowel off by {d})" if d else ""))
-    best = scored[0][2] if not scored[0][0] else None
+    best = scored[0][3] if not scored[0][0] else None
     if apply and best:
         stash("ph", ph, was)
         shutil.copyfile(path_of("ph", ph, best), path_of("ph", ph))
@@ -343,7 +349,18 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("sounds", nargs="*", help="only these sounds (default: flagged or marked wrong)")
     ap.add_argument("--apply", action="store_true", help="use the best candidate as the clip")
+    ap.add_argument("--longer", type=float, metavar="FACTOR",
+                    help="instead, stretch each named sound's current clip (a review said it's too short)")
     args = ap.parse_args()
+
+    if args.longer:
+        for ph in args.sounds:
+            snd = lengthen(parselmouth.Sound(path_of("ph", ph)), parselmouth.Sound(path_of("ph", ph)).duration * args.longer)
+            write(fade(snd.values[0], snd.sampling_frequency, 0.015, 0.05), snd.sampling_frequency, path_of("ph", ph, "longer"), True)
+            stash("ph", ph)
+            shutil.copyfile(path_of("ph", ph, "longer"), path_of("ph", ph))
+            print(f"{ph:9} now {args.longer}x longer")
+        return
 
     check = Checker(whisper=False)
     review_path = os.path.join(HERE, "review.json")

@@ -12,6 +12,8 @@ that count against it and "hints" that are only worth a listen:
 
   whispered  A word whose vowel is barely voiced. ElevenLabs whispers or
              breathes some one-word prompts (hat had no voicing at all).
+             A hint: most of them sounded fine to a grown-up. So is
+             "squeaky", a word pitched far above the narrator's usual.
   vowel      The vowel's formants (F1, F2) sit nearer another vowel in the
              narrator's own vowel space (cap measured nearer "cup"). The
              narrator's own words are the yardstick, so a British accent
@@ -182,10 +184,13 @@ def norm(text):
 def check_word(word, phs, path, voice, ears, own_voice=True):
     f = Frames(path)
     flags, hints = [], []
+    # Calibrated on the first review: of 13 words flagged whispered, a grown-up
+    # heard 2 as wrong; squeaky 1 of 11; wrong vowel 4 of 12; Whisper unsure
+    # 3 of 7. So whispered and squeaky are only hints.
     if f.voiced_ms < WHISPERED_MS:
-        flags.append(f"Whispered or breathy: only {f.voiced_ms} ms of it is voiced")
+        hints.append(f"Whispered or breathy: only {f.voiced_ms} ms of it is voiced")
     if own_voice and (msg := voice.squeak(f)):
-        flags.append(msg)
+        hints.append(msg)
     if own_voice and (v := vowel_of(word, phs)) and (msg := voice.judge(v, f.vowel())):
         flags.append(msg)
     if ears:

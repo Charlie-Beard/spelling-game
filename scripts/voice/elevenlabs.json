@@ -3,6 +3,16 @@
   "model_id": "eleven_multilingual_v2",
   "word_speed": 0.85,
   "word_stability": 0.75,
+  "_word_context": "Unspoken lead-ins for words that came out wrong, so the word ends a natural phrase. Others use generate.py's WORD_CONTEXT.",
+  "word_context": {
+    "hat": "Put on your woolly",
+    "cap": "He wore a baseball",
+    "pan": "Dad cooked the eggs in a frying",
+    "van": "The postman drove a little red",
+    "bun": "For tea we had a sticky iced",
+    "jar": "Grandma filled a jam",
+    "kite": "On windy days we fly a"
+  },
   "speakers": {
     "narrator":    { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "speed": 0.92, "stability": 0.55 },
 

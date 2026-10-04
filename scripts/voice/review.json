@@ -1047,8 +1047,9 @@
  },
  "ph/schwa": {
   "verdict": "bad",
-  "hash": "44061bba8b",
-  "at": "2026-10-04T18:47:30.769Z"
+  "note": "i have no idea what this sounds is",
+  "hash": "b845f90047",
+  "at": "2026-10-04T19:18:21.402Z"
  },
  "ph/sh": {
   "verdict": "ok",

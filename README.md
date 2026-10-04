@@ -202,7 +202,11 @@ python3 scripts/voice/generate.py --provider elevenlabs --redo             # re-
   clip to another take (older recordings, repairs, retakes) with one click.
   Verdicts are saved in `scripts/voice/review.json`.
 - **sounds.py** fixes pure sounds without ElevenLabs: it trims the "uh" off
-  sss/fff/shh/zzz and cuts vowels out of the narrator's own clean words.
+  sss/fff/shh/zzz and cuts vowels out of the narrator's own clean words, in
+  the word list or inside her recorded lines ("book" for oo, "words" for ur).
+  `--longer 2 oo-short` stretches a sound a review said was too short.
+- Per-word lead-ins in `elevenlabs.json` (`word_context`) give a word that
+  came out wrong a phrase to end ("a frying" pan), without being said.
 - **generate.py --redo** re-records only the clips marked wrong. Each word gets
   three takes (a few characters each) said mid-sentence, and the checks keep the
   best; the replaced clip is kept as a take in case the new one is worse.

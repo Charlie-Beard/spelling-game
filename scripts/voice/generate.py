@@ -117,6 +117,7 @@ class ElevenLabsVoice:
         self.can_phonemes = phonemes
         self.word_speed = cfg.get("word_speed", 0.85)
         self.word_stability = cfg.get("word_stability", 0.75)
+        self.word_context = cfg.get("word_context", {})
         self.speakers = cfg["speakers"]
         self.billed = 0
 
@@ -168,8 +169,10 @@ class ElevenLabsVoice:
         return True
 
     def word(self, w, tmp, seed=None):
+        # A word that came out wrong gets a phrase it ends ("a frying" pan), set in elevenlabs.json.
+        context = (self.word_context.get(w, WORD_CONTEXT[0]), WORD_CONTEXT[1])
         return self._render(f"{w}.", self.speakers["narrator"], tmp, speed=self.word_speed,
-                            stability=self.word_stability, seed=seed, context=WORD_CONTEXT)
+                            stability=self.word_stability, seed=seed, context=context)
 
     def phoneme(self, ph, tmp):
         # Experimental: Eleven v4 reads IPA between slashes, but adds "uh" to
