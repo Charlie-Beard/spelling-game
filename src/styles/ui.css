@@ -783,28 +783,8 @@
   height: 100%;
 }
 
-/* ---------- Break & album ---------- */
+/* ---------- Album ---------- */
 
-.moon {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--parchment-100);
-  box-shadow: 0 0 60px rgba(246, 236, 212, 0.4);
-}
-.sleepy-owl {
-  position: absolute;
-  z-index: 5;
-}
-.sleepy-owl svg {
-  width: 100%;
-  height: 100%;
-}
-.zzz {
-  position: absolute;
-  font-weight: 700;
-  color: var(--parchment-200);
-  z-index: 6;
-}
 .album-card,
 .album-hx {
   position: absolute;

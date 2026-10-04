@@ -32,14 +32,14 @@ describe('mergeProgress', () => {
     const local = play(copy(base), 1); // Jasper plays chapter 2 offline
     const remote = copy(base);
     remote.custom = ['ship', 'shop']; // a grown-up sets his words on a phone
-    remote.settings.breakAfter = 5;
+    remote.settings.idleHintSeconds = 20;
 
     const m = mergeProgress(base, local, remote);
     expect(m.chapters[ALL_CHAPTERS[1].id]).toEqual({ plays: 1, done: true });
     expect(m.cards).toEqual(local.cards);
     expect(m.gems).toBe(local.gems);
     expect(m.custom).toEqual(['ship', 'shop']);
-    expect(m.settings.breakAfter).toBe(5);
+    expect(m.settings.idleHintSeconds).toBe(20);
     expect(m.settings.volume).toBe(base.settings.volume);
   });
 

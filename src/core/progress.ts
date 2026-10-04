@@ -13,8 +13,6 @@ export interface Settings {
   volume: number;
   /** Calm mode: no boil, minimal motion. Defaults to the iPad setting. */
   calm: boolean;
-  /** Suggest a break after this many chapters (0 = never). */
-  breakAfter: number;
   /** Seconds of no activity before Hedwig gently repeats the word. */
   idleHintSeconds: number;
 }
@@ -51,14 +49,12 @@ export interface Progress {
   unlockedTo: number;
   /** Parent's custom word list (e.g. weekly school spellings). */
   custom: string[];
-  chaptersSinceBreak: number;
   /** When a chapter was last finished (ms since epoch). */
   lastPlayed: number;
   settings: Settings;
 }
 
 export const MAX_DIFFICULTY = 3;
-const BREAK_RESET_MS = 20 * 60 * 1000;
 
 export function defaultProgress(prefersReducedMotion = false, name = DEFAULT_NAME): Progress {
   return {
@@ -75,12 +71,10 @@ export function defaultProgress(prefersReducedMotion = false, name = DEFAULT_NAM
     unlockAll: false,
     unlockedTo: -1,
     custom: [],
-    chaptersSinceBreak: 0,
     lastPlayed: 0,
     settings: {
       volume: 0.8,
       calm: prefersReducedMotion,
-      breakAfter: 3,
       idleHintSeconds: 12,
     },
   };
@@ -174,7 +168,6 @@ export function recordChapter(
   const gems = results.length;
   p.gems += gems;
   p.difficulty = adapt(p.difficulty, results);
-  p.chaptersSinceBreak++;
   p.lastPlayed = Date.now();
   return { newReward, gems };
 }
@@ -197,11 +190,6 @@ export function restore(data: unknown, fresh: Progress): Progress {
   if (!data || typeof data !== 'object' || (data as Partial<Progress>).v !== 1) return fresh;
   const d = data as Partial<Progress>;
   return { ...fresh, ...d, settings: { ...fresh.settings, ...d.settings } };
-}
-
-/** A new session (20+ minutes since the last chapter) starts the break count afresh. */
-export function startSession(p: Progress, now = Date.now()): void {
-  if (now - p.lastPlayed > BREAK_RESET_MS) p.chaptersSinceBreak = 0;
 }
 
 /** Asks Safari to keep our storage (home-screen apps are never evicted). */

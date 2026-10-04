@@ -30,10 +30,8 @@ export interface CompleteOptions {
   chapter: Chapter;
   gems: number;
   newReward: boolean;
-  breakDue: boolean;
   onNext: () => void;
   onMap: () => void;
-  onBreak: () => void;
 }
 
 export class CompleteScene extends Scene {
@@ -89,13 +87,10 @@ export class CompleteScene extends Scene {
     r.append(tally);
 
     // Next steps: one big, one small.
-    const next = this.o.breakDue
-      ? sealButton('tick', { x: 900, y: 600, size: 150, color: C.greenDark, aria: 'Done', name: 'done-btn' })
-      : sealButton('next', { x: 900, y: 600, size: 150, color: C.red, aria: 'Next chapter', name: 'next-btn' });
+    const next = sealButton('next', { x: 900, y: 600, size: 150, color: C.red, aria: 'Next chapter', name: 'next-btn' });
     this.tap(next, () => {
       sfx.tap();
-      if (this.o.breakDue) this.o.onBreak();
-      else this.o.onNext();
+      this.o.onNext();
     });
     const map = sealButton('map', { x: 760, y: 650, size: 96, color: C.slate, aria: 'Map', name: 'map-btn' });
     this.tap(map, () => {
@@ -144,11 +139,7 @@ export class CompleteScene extends Scene {
       b.style.pointerEvents = '';
       void sm(b, 0.35, { startAt: { scale: 0 }, opacity: 1, scale: 1, ease: 'back.out(2)' });
     }
-    if (!this.o.breakDue) this.onCleanup(breathe(this.buttons[0], 0.06, 1.6));
-    if (this.o.breakDue) {
-      await this.sleep(600);
-      void voice.say(PHRASES.breakTime);
-    }
+    this.onCleanup(breathe(this.buttons[0], 0.06, 1.6));
   }
 
   private confetti(): void {

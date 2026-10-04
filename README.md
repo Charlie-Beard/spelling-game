@@ -74,7 +74,6 @@ Everything below except Record sounds applies to the profile that's playing.
   - the player's name (Jasper's is Jasper): it is on the Hogwarts letter, and the narrator and characters say "Jasper" out loud
   - volume
   - calm mode (less movement)
-  - break reminders
   - Hedwig's idle hint
   - start again: clears what was played, but keeps the settings, word list and levels
 - **Record sounds:** record your own voice for each phonics sound. Computer
@@ -151,7 +150,7 @@ npm run build        # production build to dist/ (with offline service worker)
 | `src/art/paper.ts` | The torn-paper engine: tearing, fibre edges, shadows, stop-motion boil |
 | `src/art/pictures/` | 145 word illustrations, one file per book |
 | `src/art/characters/` | 33 character portraits |
-| `src/scenes/` | Title, choose, map, intro, spell, battle, complete, album, break, grown-ups |
+| `src/scenes/` | Title, choose, map, intro, spell, battle, complete, album, grown-ups |
 | `src/audio/` | Web Audio engine, synthesised sound effects, narrator, recordings |
 | `scripts/voice/` | Records narration with Kokoro (offline neural TTS) or ElevenLabs, and checks it |
 | `scripts/icons.ts` | Renders the app icons from the game's own art |

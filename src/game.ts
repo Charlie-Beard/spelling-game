@@ -4,7 +4,7 @@
  *   title → (choose character, first time) → map → intro → spell → reward
  *                                             ↑__________________________|
  *
- * plus the collection album, the break screen and the grown-ups' corner.
+ * plus the collection album and the grown-ups' corner.
  */
 import { BOOKS, findChapter, type Book, type Chapter } from './core/curriculum';
 import type { Word } from './core/phonics';
@@ -14,7 +14,6 @@ import { ALL_CHAPTERS } from './core/curriculum';
 import type { RoundResult } from './core/round';
 import { AlbumScene } from './scenes/album';
 import { BattleScene } from './scenes/battle';
-import { BreakScene } from './scenes/break';
 import { ChooseScene } from './scenes/choose';
 import { CompleteScene } from './scenes/complete';
 import { IntroScene } from './scenes/intro';
@@ -116,17 +115,14 @@ export class Game implements Nav {
     const p = this.app.progress;
     const { newReward, gems } = recordChapter(p, chapter, results);
     this.app.save();
-    const breakDue = p.settings.breakAfter > 0 && p.chaptersSinceBreak >= p.settings.breakAfter;
     void this.app.go(
       new CompleteScene(this.app, {
         book,
         chapter,
         gems,
         newReward,
-        breakDue,
         onNext: () => this.next(chapter),
         onMap: () => this.map(book.n, chapter.id),
-        onBreak: () => void this.app.go(new BreakScene(this.app)),
       }),
     );
   }

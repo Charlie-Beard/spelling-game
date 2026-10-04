@@ -106,7 +106,7 @@ describe('cloud sync', () => {
     expect(onPhone.progress.cards).toEqual(onIpad.progress.cards);
     await phone.on(() => {
       onPhone.progress.custom = ['ship', 'shop'];
-      onPhone.progress.settings.breakAfter = 5;
+      onPhone.progress.settings.idleHintSeconds = 20;
       onPhone.save();
       return onPhone.sync();
     });
@@ -127,7 +127,7 @@ describe('cloud sync', () => {
     expect(onIpad.state).toBe('synced');
     expect(changed).toHaveBeenCalled();
     expect(onIpad.progress.custom).toEqual(['ship', 'shop']);
-    expect(onIpad.progress.settings.breakAfter).toBe(5);
+    expect(onIpad.progress.settings.idleHintSeconds).toBe(20);
     expect(onIpad.progress.chapters[ALL_CHAPTERS[1].id]?.done).toBe(true);
     expect(onIpad.progress.cards).toHaveLength(2);
 

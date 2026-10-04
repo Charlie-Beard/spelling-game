@@ -158,7 +158,6 @@ the Battle of Hogwarts.
 - **Big targets,** soft sounds with a capped volume, and music off by default.
 - **No flashing.** The game follows the iPad's Reduce Motion setting and also
   has its own switch.
-- **An optional break screen** after a number of chapters chosen by a parent.
 
 ## 7. Rewards
 
@@ -174,7 +173,7 @@ Opened by holding a button for 3 seconds. It has:
 - **Progress:** tricky words and how many hints he has used.
 - **Unlocking:** unlock levels and choose where to start.
 - **Custom word lists** for weekly school spellings.
-- **Settings** for sound, motion and breaks.
+- **Settings** for sound and motion.
 - **A sound recorder.** A parent records the roughly 40 single phonics sounds.
   Until then a generated voice is used.
 

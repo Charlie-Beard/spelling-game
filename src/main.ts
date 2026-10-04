@@ -10,7 +10,6 @@ import { setVolumes, unlock } from './audio/engine';
 import { loadManifest, setPlayerName } from './audio/voice';
 import { activeProfile, getAuth, JASPER, setActiveProfile, setAuth } from './cloud/api';
 import { CloudProfile, keepInSync, onSignedOut } from './cloud/profile';
-import { startSession } from './core/progress';
 import { Game } from './game';
 import { LoginScene } from './scenes/login';
 import { Stage } from './stage';
@@ -90,7 +89,6 @@ async function start(): Promise<void> {
   if (!profile.cached && active.id !== JASPER) await Promise.race([profile.sync(), wait(5000)]);
   // Anyone but Jasper gets a name badge, so a demo is never mistaken for his game.
   if (active.id !== JASPER) stage.el.append(place(h('div', { class: 'profile-badge' }, active.label), 12, 80));
-  startSession(profile.progress);
   applySettings();
   profile.onChange(applySettings);
   keepInSync(profile);

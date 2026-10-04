@@ -36,7 +36,6 @@ export const PHRASES = {
   newHorcrux: 'You found a Horcrux!',
   battleStart: 'Spell each word to cast a shield!',
   battleWin: 'You saved Hogwarts, {name}! Expelliarmus!',
-  breakTime: 'Great work, {name}! Time for a little break.',
   turnSideways: 'Please turn the iPad sideways.',
   nextChapter: 'Ready for the next one?',
   allDone: 'Hooray! All done!',

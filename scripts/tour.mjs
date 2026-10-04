@@ -25,8 +25,8 @@ const shot = async (q, name, wait = 2500) => {
 const prog = {
   v: 1, name: 'Sam', avatar: 'harry', chapters: { b1c1: { plays: 1, done: true }, b1c2: { plays: 1, done: true } },
   cards: ['hagrid', 'ollivander', 'dobby'], horcruxes: ['ring'], gems: 12, difficulty: 1, review: [], words: { cat: { seen: 2, perfect: 1, mistakes: 3, helped: 1 } },
-  unlockAll: false, custom: ['dog', 'frog'], chaptersSinceBreak: 0,
-  lastPlayed: 0, settings: { volume: 0.8, calm: false, breakAfter: 3, idleHintSeconds: 12 },
+  unlockAll: false, custom: ['dog', 'frog'],
+  lastPlayed: 0, settings: { volume: 0.8, calm: false, idleHintSeconds: 12 },
 };
 await seed(prog);
 await shot('', 'title', 1800);

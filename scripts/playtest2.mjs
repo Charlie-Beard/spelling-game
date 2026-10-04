@@ -8,8 +8,8 @@ const t0 = Date.now();
 const log = (...a) => console.log(`[${((Date.now() - t0) / 1000).toFixed(1)}s]`, ...a);
 const base = (over = {}) => ({
   v: 1, name: 'Sam', avatar: 'ron', chapters: {}, cards: [], horcruxes: [], gems: 10, difficulty: 2, review: [], words: {},
-  unlockAll: false, custom: [], chaptersSinceBreak: 0, lastPlayed: Date.now(),
-  settings: { volume: 0.8, calm: false, breakAfter: 3, idleHintSeconds: 12 }, ...over,
+  unlockAll: false, custom: [], lastPlayed: Date.now(),
+  settings: { volume: 0.8, calm: false, idleHintSeconds: 12 }, ...over,
 });
 const done = (ids) => Object.fromEntries(ids.map((id) => [id, { plays: 1, done: true }]));
 
@@ -50,9 +50,9 @@ async function playChapter(page, n) {
   }
 }
 
-// 1. Hedwig help button + review word + break screen (third chapter in a row).
+// 1. Hedwig help button + review word.
 {
-  const { ctx, page } = await session(base({ chapters: done(['b1c1', 'b1c2']), cards: ['hagrid', 'ollivander'], review: ['cat'], chaptersSinceBreak: 2 }));
+  const { ctx, page } = await session(base({ chapters: done(['b1c1', 'b1c2']), cards: ['hagrid', 'ollivander'], review: ['cat'] }));
   await page.goto('http://localhost:5173/?scene=map');
   await page.waitForTimeout(1500);
   await page.locator('.stop.current').click({ force: true });
@@ -73,12 +73,7 @@ async function playChapter(page, n) {
   await playChapter(page, stars - 1);
   await page.locator('.scene.complete').waitFor({ timeout: 40000 });
   await page.waitForTimeout(6000);
-  await page.screenshot({ path: `${out}/p2-04-break-due.png` });
-  const doneBtn = page.getByRole('button', { name: 'Done' });
-  log('break due → Done button present:', await doneBtn.count());
-  await doneBtn.click({ force: true });
-  await page.waitForTimeout(2500);
-  await page.screenshot({ path: `${out}/p2-05-break.png` });
+  await page.screenshot({ path: `${out}/p2-04-complete.png` });
   await ctx.close();
 }
 
@@ -112,7 +107,7 @@ async function playChapter(page, n) {
 
 // 4. Calm mode on the spelling screen.
 {
-  const { ctx, page } = await session(base({ settings: { volume: 0.8, calm: true, breakAfter: 0, idleHintSeconds: 12 } }));
+  const { ctx, page } = await session(base({ settings: { volume: 0.8, calm: true, idleHintSeconds: 12 } }));
   await page.goto('http://localhost:5173/?scene=chapter&id=b1c1');
   await page.waitForTimeout(800);
   const t = Date.now();

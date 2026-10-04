@@ -222,15 +222,6 @@ export class ParentScene extends Scene {
       save();
     });
 
-    const brk = select(
-      [['0', 'Never'], ['2', 'After 2 chapters'], ['3', 'After 3 chapters'], ['4', 'After 4 chapters'], ['5', 'After 5 chapters']],
-      String(s.breakAfter),
-      (v) => {
-        s.breakAfter = Number(v);
-        save();
-      },
-    );
-
     const idle = select(
       [['0', 'Off'], ['8', 'After 8 seconds'], ['12', 'After 12 seconds'], ['20', 'After 20 seconds']],
       String(s.idleHintSeconds),
@@ -250,7 +241,6 @@ export class ParentScene extends Scene {
       row('Player’s name', name, 'Shown on the Hogwarts letter. The narrator and characters say “Jasper” out loud; other names are shown but not spoken.'),
       row('Volume', vol),
       row('Calm mode', calm, 'Less movement: no paper jitter, shorter animations, no confetti.'),
-      row('Break reminder', brk, 'A gentle “time for a break” screen.'),
       row('Hedwig repeats the word', idle, 'If nothing is tapped for a while.'),
       row('Start again', resetBtn, 'Clears chapters, cards, Horcruxes and the character choice. Keeps these settings, the word list and the levels.'),
     );
