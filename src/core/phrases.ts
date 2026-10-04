@@ -43,6 +43,9 @@ export const PHRASES = {
 
 export type PhraseKey = keyof typeof PHRASES;
 
+/** Announced when he arrives in a new book. */
+export const bookLine = (n: number, title: string): string => `Book ${n}: ${title}!`;
+
 /** Stable id for any spoken line, used as its audio file name. */
 export function lineId(text: string): string {
   let h = 5381;

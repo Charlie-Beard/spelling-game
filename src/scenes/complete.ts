@@ -132,7 +132,13 @@ export class CompleteScene extends Scene {
     void pop(this.reward, 1.06);
     this.onCleanup(breathe(this.glow, 0.06, 2.2));
     await this.sleep(400);
-    if (this.o.newReward) await voice.say(c.kind === 'horcrux' ? PHRASES.newHorcrux : PHRASES.newCard);
+    if (this.o.newReward && c.kind !== 'battle') await voice.say(c.kind === 'horcrux' ? PHRASES.newHorcrux : PHRASES.newCard);
+    // Say who (or what) it is, so the card means something.
+    const name = c.kind === 'horcrux' ? HORCRUX_NAMES[c.reward] : c.kind === 'battle' ? 'Hero of Hogwarts' : HOST_NAMES[c.host];
+    if (name) {
+      void pop(this.reward, 1.05);
+      await voice.say(name);
+    }
     sfx.gem();
     for (const b of this.buttons) {
       b.style.pointerEvents = '';

@@ -76,7 +76,28 @@ export class SpellScene extends Scene {
   private soundBtns: HTMLElement[][] = [];
   private arcs: HTMLElement[] = [];
   private u = MAX_U;
-  private busy = true;
+  private _busy = true;
+  /** True while animating; taps on tiles are ignored. Mirrored to data-busy. */
+  private get busy(): boolean {
+    return this._busy;
+  }
+  private set busy(v: boolean) {
+    this._busy = v;
+    this.root.toggleAttribute('data-busy', v);
+    if (!v) {
+      this.queueable = false;
+      // Play a tap made while the last letter was still flying.
+      const q = this.queued;
+      this.queued = null;
+      if (q) queueMicrotask(() => void this.onTile(q));
+    }
+  }
+  /**
+   * While a letter is flying into its slot, a tap on the next tile is
+   * remembered and played as soon as it lands (fast tappers aren't ignored).
+   */
+  private queueable = false;
+  private queued: TileView | null = null;
   private results: RoundResult[] = [];
   private idleTimer: ReturnType<typeof setTimeout> | null = null;
   private idleCount = 0;
@@ -193,6 +214,8 @@ export class SpellScene extends Scene {
     const distractors = pickDistractors(word, this.o.book.pool, count, rand, p.difficulty < 2);
     this.round = new Round(word, distractors, rand);
     this.busy = true;
+    // "Can you spell…" plays while the first word arrives.
+    const prompt = i === 0 ? capped(voice.say(PHRASES.canYouSpell), 2500) : Promise.resolve();
 
     // New picture: flip the card.
     if (i > 0) await sm(this.card, 0.2, { scaleX: 0, ease: 'power1.in' });
@@ -211,11 +234,10 @@ export class SpellScene extends Scene {
       this.tiles.map((t, k) => sm(t.el, 0.35, { startAt: { y: 120, opacity: 0, rotation: (k % 2 ? 6 : -6) }, y: 0, opacity: 1, rotation: 0, delay: 0.1 + k * 0.06, ease: 'back.out(1.6)' })),
     );
     if (!this.alive) return;
-
-    if (i === 0) await capped(voice.say(PHRASES.canYouSpell), 2500);
+    await prompt;
     if (!this.alive) return;
-    this.busy = false;
     this.updateTarget();
+    this.busy = false;
     await this.hear(false);
     this.resetIdle();
   }
@@ -325,7 +347,13 @@ export class SpellScene extends Scene {
   }
 
   private async onTile(view: TileView): Promise<void> {
-    if (this.busy || view.tile.state !== 'tray') return;
+    if (view.tile.state !== 'tray') return;
+    if (this.busy) {
+      // Never let a tap feel dead: remember it if we can, otherwise a little hop.
+      if (this.queueable && !this.queued) this.queued = view;
+      else void pop(view.el, 1.06);
+      return;
+    }
     this.resetIdle();
     const res = this.round.tap(view.tile.id);
     if (res.kind === 'ignored') return;
@@ -335,9 +363,10 @@ export class SpellScene extends Scene {
 
     if (res.kind === 'placed') {
       this.busy = true;
+      this.queueable = !res.complete;
       await this.flyToSlot(view, res.slot);
-      this.busy = false;
       if (res.complete) await this.celebrate();
+      else this.busy = false;
       return;
     }
 
@@ -447,7 +476,7 @@ export class SpellScene extends Scene {
     this.busy = true;
     this.stopIdle();
     this.updateTarget();
-    await this.sleep(250);
+    await this.sleep(150);
 
     // Blend: say each sound, lighting its sound button, then the word.
     const units = this.round.word.units;
@@ -462,38 +491,41 @@ export class SpellScene extends Scene {
       }
       const tileEl = this.tiles.find((t) => t.tile.id === this.round.slots[k])?.el;
       if (tileEl) void pop(tileEl, 1.12);
-      await capped(voice.phoneme(unit.ph), 900);
-      await this.sleep(140);
+      await capped(voice.phoneme(unit.ph), 800);
+      await this.sleep(70);
     }
 
-    // The whole word, with the picture coming alive.
+    // The whole word, with the picture coming alive while his character casts.
     this.root.classList.remove('still');
     this.soundBtns.forEach(([b]) => b.classList.add('lit'));
     void pop(this.card, 1.08);
-    await capped(voice.word(this.round.word.text), 2500);
+    const casting = this.cast();
+    await capped(voice.word(this.round.word.text), 2000);
     if (!this.alive) return;
 
-    await this.cast();
     sfx.success();
     this.sparkles();
     this.fillStar(this.index);
     this.results.push(this.round.result());
-    await this.sleep(500);
-    sfx.gem();
-    this.gemCount.textContent = String(this.app.progress.gems + this.results.length);
-    void pop(this.gemsEl, 1.2);
-    await capped(voice.say(this.nextPraise()), 2200);
-    await this.sleep(400);
+    this.later(200, () => {
+      sfx.gem();
+      this.gemCount.textContent = String(this.app.progress.gems + this.results.length);
+      void pop(this.gemsEl, 1.2);
+    });
+    const praise = capped(voice.say(this.nextPraise()), 1800);
+    await casting;
+    await this.sleep(350);
     if (!this.alive) return;
-    this.root.classList.add('still');
 
-    // Clear away and move on.
+    // Clear away while the praise finishes, then move on.
     await Promise.all([
+      praise,
       ...this.tiles.map((t, k) => sm(t.el, 0.3, { opacity: 0, y: '-=30', delay: k * 0.03 })),
       ...this.slotEls.map((el) => sm(el, 0.3, { opacity: 0 })),
       sm(this.layer.querySelectorAll('.sound-btn, .split-arc'), 0.3, { opacity: 0 }),
     ]);
     if (!this.alive) return;
+    this.root.classList.add('still');
 
     await this.afterWord(this.index);
     if (!this.alive) return;
@@ -508,7 +540,7 @@ export class SpellScene extends Scene {
   private async cast(): Promise<void> {
     if (isCalm()) return;
     const wand = this.caster.querySelector('[data-part="wand"]');
-    await sm(this.caster, 0.35, { y: -250, ease: 'back.out(1.4)' });
+    await sm(this.caster, 0.3, { y: -250, ease: 'back.out(1.4)' });
     sfx.sparkle();
     if (wand) void gsap.timeline().to(wand, { rotation: -35, duration: 0.12, ease: stepped(0.12) }).to(wand, { rotation: 0, duration: 0.25, ease: stepped(0.25) });
     for (let k = 0; k < 6; k++) {
@@ -525,8 +557,8 @@ export class SpellScene extends Scene {
         onComplete: () => p.remove(),
       });
     }
-    await this.sleep(450);
-    void sm(this.caster, 0.35, { y: 0, ease: 'power2.in', delay: 0.6 });
+    await this.sleep(300);
+    void sm(this.caster, 0.3, { y: 0, ease: 'power2.in', delay: 0.5 });
   }
 
   private nextPraise(): string {

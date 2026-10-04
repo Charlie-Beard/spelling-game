@@ -13,6 +13,7 @@ import { ellipse, hashString, ink, piece, rng, svg, type Pt } from '../art/paper
 import { parchment, waxSeal } from '../art/ui';
 import { BOOKS, type Book, type Chapter } from '../core/curriculum';
 import { currentIndex, isUnlocked } from '../core/progress';
+import { bookLine } from '../core/phrases';
 import { ALL_CHAPTERS } from '../core/curriculum';
 import { breathe, pop, sm, wobble } from '../ui/anim';
 import { banner, holdButton, sealButton } from '../ui/components';
@@ -33,13 +34,16 @@ export function crop(svgStr: string, vb = '40 30 220 220'): string {
 export class MapScene extends Scene {
   private book: Book;
   private justDone?: string;
+  private arrived: boolean;
   private token!: HTMLElement;
+  private bannerEl!: HTMLElement;
   private stopEls: HTMLElement[] = [];
 
-  constructor(app: App, bookN: number, justDone?: string) {
+  constructor(app: App, bookN: number, justDone?: string, arrived = false) {
     super(app, 'map');
     this.book = BOOKS[Math.max(0, Math.min(BOOKS.length - 1, bookN - 1))];
     this.justDone = justDone;
+    this.arrived = arrived;
   }
 
   build(): void {
@@ -49,7 +53,8 @@ export class MapScene extends Scene {
     r.append(place(h('div', { html: parchment(1220, 860, 'map-sheet-' + this.book.n, C.sand, 2.2) }), -20, -20, 1220, 860));
     r.append(h('div', { class: 'backdrop-wrap', html: mapDoodles(this.book) }));
 
-    r.append(banner(`Book ${this.book.n}: ${this.book.short}`, { x: 230, y: 20, w: 720, h: 96, size: 40 }));
+    this.bannerEl = banner(`Book ${this.book.n}: ${this.book.short}`, { x: 230, y: 20, w: 720, h: 96, size: 40 });
+    r.append(this.bannerEl);
 
     // Book arrows
     if (this.book.n > 1) {
@@ -119,6 +124,12 @@ export class MapScene extends Scene {
   }
 
   async enter(): Promise<void> {
+    if (this.arrived) {
+      // A new world: the banner unrolls and the narrator announces the book.
+      sfx.reveal();
+      void sm(this.bannerEl, 0.6, { startAt: { scaleX: 0.2, opacity: 0 }, scaleX: 1, opacity: 1, ease: 'back.out(1.6)' });
+      void voice.say(bookLine(this.book.n, this.book.title.replace('’', "'")));
+    }
     this.stopEls.forEach((el, i) => void sm(el, 0.4, { startAt: { scale: 0.4, opacity: 0 }, scale: 1, opacity: 1, delay: i * 0.08, ease: 'back.out(1.7)' }));
     if (this.justDone) {
       const doneIdx = this.book.chapters.findIndex((c) => c.id === this.justDone);

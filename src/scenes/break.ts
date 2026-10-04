@@ -26,7 +26,7 @@ export class BreakScene extends Scene {
     r.append(owl);
 
     for (let i = 0; i < 3; i++) {
-      const z = place(h('div', { class: 'zzz', style: `font-size:${30 + i * 10}px` }, 'z'), 690 + i * 30, 440 - i * 40);
+      const z = place(h('div', { class: 'zzz', style: `font-size:${30 + i * 10}px` }, 'z'), 680 + i * 34, 500 - i * 34);
       r.append(z);
       if (!isCalm()) gsap.fromTo(z, { opacity: 0, y: 20 }, { opacity: 1, y: -30, duration: 2.4, delay: i * 0.8, repeat: -1, ease: stepped(2.4, 'sine.out') });
     }

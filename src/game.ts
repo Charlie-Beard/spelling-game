@@ -54,9 +54,9 @@ export class Game implements Nav {
     void this.app.go(new ChooseScene(this.app));
   }
 
-  map(book?: number, justDone?: string): void {
+  map(book?: number, justDone?: string, arrived = false): void {
     const n = book ?? this.currentBook().n;
-    void this.app.go(new MapScene(this.app, n, justDone));
+    void this.app.go(new MapScene(this.app, n, justDone, arrived));
   }
 
   album(): void {
@@ -139,7 +139,7 @@ export class Game implements Nav {
     const nextBook = findChapter(next.id)!.book;
     const doneBook = findChapter(done.id)!.book;
     // Entering a new book: show its map page first so the new world is seen.
-    if (nextBook !== doneBook) return this.map(nextBook.n);
+    if (nextBook !== doneBook) return this.map(nextBook.n, undefined, true);
     this.map(nextBook.n, done.id);
   }
 

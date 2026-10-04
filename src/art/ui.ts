@@ -67,8 +67,8 @@ export function uiDefs(): string {
       <stop offset="1" stop-color="#000" stop-opacity="0.35"/>
     </radialGradient>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="#fff3c4" stop-opacity="0.95"/>
-      <stop offset="0.5" stop-color="#ffd977" stop-opacity="0.45"/>
+      <stop offset="0" stop-color="#fff3c4" stop-opacity="1"/>
+      <stop offset="0.5" stop-color="#ffcf5a" stop-opacity="0.75"/>
       <stop offset="1" stop-color="#ffd977" stop-opacity="0"/>
     </radialGradient>
   </defs></svg>`;

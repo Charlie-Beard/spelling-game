@@ -3,10 +3,10 @@
  * for generate.py to record with an offline neural voice.
  */
 import { writeFileSync } from 'node:fs';
-import { ALL_CHAPTERS, ALL_WORDS } from '../../src/core/curriculum';
+import { ALL_CHAPTERS, ALL_WORDS, BOOKS } from '../../src/core/curriculum';
 import { GRAPHEME_PHONEME } from '../../src/core/phonics';
 import { HOST_NAMES } from '../../src/core/names';
-import { lineId, PHRASES, PRAISE } from '../../src/core/phrases';
+import { bookLine, lineId, PHRASES, PRAISE } from '../../src/core/phrases';
 import { HORCRUX_NAMES } from '../../src/art/horcruxes';
 
 const lines: { id: string; text: string; speaker: string }[] = [];
@@ -19,6 +19,7 @@ PRAISE.forEach((t) => add(t));
 Object.values(HOST_NAMES).forEach((t) => add(t));
 Object.values(HORCRUX_NAMES).forEach((t) => add(t));
 add('Hero of Hogwarts');
+BOOKS.forEach((b) => add(bookLine(b.n, b.title.replace('’', "'"))));
 ALL_CHAPTERS.forEach((c) => {
   add(c.intro, c.host);
   add(c.title);

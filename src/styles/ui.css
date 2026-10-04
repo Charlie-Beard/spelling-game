@@ -108,15 +108,38 @@
 .tile.glowing .glow {
   animation: glow-pulse 1.6s steps(8, end) infinite;
 }
+/* The hint must be impossible to miss: gold edge, bright halo, a little bounce. */
+.tile.glowing .card-face {
+  stroke: var(--gold-500);
+  stroke-width: 7px;
+  paint-order: stroke;
+}
+.tile.glowing .glyph {
+  color: #7a4a10;
+  animation: hint-bounce 1.2s steps(6, end) infinite;
+}
+@keyframes hint-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-8px);
+  }
+}
+.calm .tile.glowing .glyph {
+  animation: none;
+}
 @keyframes glow-pulse {
   0%,
   100% {
-    opacity: 0.55;
-    transform: scale(0.9);
+    opacity: 0.8;
+    transform: scale(0.95);
   }
   50% {
     opacity: 1;
-    transform: scale(1.05);
+    transform: scale(1.12);
   }
 }
 .calm .tile.glowing .glow {

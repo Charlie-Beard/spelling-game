@@ -14,16 +14,16 @@ async function spellWord(page: Page) {
 test('plays the first chapter from the title screen to the reward', async ({ page }) => {
   test.setTimeout(180_000);
   await page.goto('/');
-  await page.locator('.letter').click();
+  await page.locator('.letter').click({ force: true });
   // First time: choose a character.
   await page.getByRole('button', { name: 'Harry' }).click();
   // Map: the first chapter is the current one.
   const stop = page.locator('.stop.current');
   await expect(stop).toBeVisible({ timeout: 10_000 });
   await expect(stop).toContainText('Hagrid');
-  await stop.click();
+  await stop.click({ force: true });
   // Intro → play
-  await page.getByRole('button', { name: 'Play' }).click();
+  await page.getByRole('button', { name: 'Play' }).click({ force: true });
   for (let w = 0; w < 5; w++) {
     await expect(page.locator('.slot.target')).toBeVisible({ timeout: 20_000 });
     await spellWord(page);
@@ -38,14 +38,14 @@ test('plays the first chapter from the title screen to the reward', async ({ pag
   // Next → back to the map with chapter 2 current.
   const next = page.getByRole('button', { name: 'Next chapter' });
   await expect(next).toHaveCSS('opacity', '1', { timeout: 15_000 });
-  await next.click();
+  await next.click({ force: true });
   await expect(page.locator('.stop.current')).toContainText('Diagon Alley', { timeout: 10_000 });
 });
 
 test('wrong tiles step up to Hedwig placing the letter', async ({ page }) => {
   test.setTimeout(60_000);
   await page.goto('/?scene=chapter&id=b1c1');
-  await page.getByRole('button', { name: 'Play' }).click();
+  await page.getByRole('button', { name: 'Play' }).click({ force: true });
   await expect(page.locator('.slot.target')).toBeVisible({ timeout: 20_000 });
   const want = await page.locator('.slot.target').getAttribute('data-want');
   const wrong = page.locator(`.tile:not(.placed):not([data-g="${want}"])`).first();
@@ -57,4 +57,19 @@ test('wrong tiles step up to Hedwig placing the letter', async ({ page }) => {
   await page.locator(`.tile:not(.placed):not([data-g="${want}"])`).first().click();
   // Hedwig places it: the first slot is no longer the target.
   await expect(page.locator('.slot').first()).toHaveClass(/done/, { timeout: 8000 });
+});
+
+test('a fast second tap while a letter is flying is not lost', async ({ page }) => {
+  test.setTimeout(60_000);
+  await page.goto('/?scene=chapter&id=b1c1');
+  await page.getByRole('button', { name: 'Play' }).click({ force: true });
+  await page.waitForFunction(() => {
+    const s = document.querySelector('.scene.spell');
+    return s && !s.hasAttribute('data-busy') && document.querySelector('.slot.target');
+  });
+  const wants = await page.locator('.slot').evaluateAll((s) => s.map((x) => (x as HTMLElement).dataset.want!));
+  await page.locator(`.tile[data-g="${wants[0]}"]`).first().click();
+  // Tap the second letter immediately, while the first is still in the air.
+  await page.locator(`.tile:not(.placed)[data-g="${wants[1]}"]`).first().click({ force: true });
+  await expect(page.locator('.tile.placed')).toHaveCount(2, { timeout: 3000 });
 });

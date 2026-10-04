@@ -73,6 +73,7 @@ export class AlbumScene extends Scene {
     const holder = place(h('div', { class: 'zoom' }), horcrux ? 440 : 430, horcrux ? 220 : 120, horcrux ? 300 : 320, horcrux ? 300 : 448);
     holder.append(big);
     veil.append(holder);
+    veil.append(sealButton('close', { x: 1050, y: 40, size: 90, color: C.slate, aria: 'Close', name: 'album-close' }));
     this.root.append(veil);
     this.zoom = veil;
     gsap.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.2 });
