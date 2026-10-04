@@ -5,6 +5,7 @@ import { book2Pictures } from './book2';
 import { book3Pictures } from './book3';
 import { book4Pictures } from './book4';
 import { book5Pictures } from './book5';
+import { book6Pictures } from './book6';
 
 const registry: Record<string, () => string> = {
   ...book1Pictures,
@@ -12,6 +13,7 @@ const registry: Record<string, () => string> = {
   ...book3Pictures,
   ...book4Pictures,
   ...book5Pictures,
+  ...book6Pictures,
 };
 
 const cache = new Map<string, string>();
