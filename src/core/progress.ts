@@ -10,8 +10,6 @@ import type { RoundResult } from './round';
 export interface Settings {
   /** Master volume 0..1. */
   volume: number;
-  /** Background music (off by default — less to filter out). */
-  music: boolean;
   /** Calm mode: no boil, minimal motion. Defaults to the iPad setting. */
   calm: boolean;
   /** Suggest a break after this many chapters (0 = never). */
@@ -51,11 +49,14 @@ export interface Progress {
   /** Parent's custom word list (e.g. weekly school spellings). */
   custom: string[];
   chaptersSinceBreak: number;
+  /** When a chapter was last finished (ms since epoch). */
+  lastPlayed: number;
   settings: Settings;
 }
 
 export const MAX_DIFFICULTY = 3;
 const KEY = 'wizard-words:v1';
+const BREAK_RESET_MS = 20 * 60 * 1000;
 
 export function defaultProgress(prefersReducedMotion = false): Progress {
   return {
@@ -72,9 +73,9 @@ export function defaultProgress(prefersReducedMotion = false): Progress {
     unlockAll: false,
     custom: [],
     chaptersSinceBreak: 0,
+    lastPlayed: 0,
     settings: {
       volume: 0.8,
-      music: false,
       calm: prefersReducedMotion,
       breakAfter: 3,
       idleHintSeconds: 12,
@@ -152,6 +153,7 @@ export function recordChapter(
   p.gems += gems;
   p.difficulty = adapt(p.difficulty, results);
   p.chaptersSinceBreak++;
+  p.lastPlayed = Date.now();
   return { newReward, gems };
 }
 
@@ -174,7 +176,10 @@ export function load(): Progress {
     if (!raw) return fresh;
     const data = JSON.parse(raw) as Partial<Progress>;
     if (data.v !== 1) return fresh;
-    return { ...fresh, ...data, settings: { ...fresh.settings, ...data.settings } };
+    const p: Progress = { ...fresh, ...data, settings: { ...fresh.settings, ...data.settings } };
+    // A new session (20+ minutes since the last chapter) starts the break count afresh.
+    if (Date.now() - p.lastPlayed > BREAK_RESET_MS) p.chaptersSinceBreak = 0;
+    return p;
   } catch {
     return fresh;
   }

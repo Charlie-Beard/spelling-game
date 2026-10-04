@@ -350,6 +350,201 @@
       "speaker": "narrator"
     },
     {
+      "id": "1er07h0",
+      "text": "Hagrid",
+      "speaker": "narrator"
+    },
+    {
+      "id": "zt1eok",
+      "text": "Mr Ollivander",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1mukkcn",
+      "text": "Trevor",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1dp09fi",
+      "text": "Nearly Headless Nick",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1u81vmp",
+      "text": "Voldemort",
+      "speaker": "narrator"
+    },
+    {
+      "id": "3mbnn9",
+      "text": "Dobby",
+      "speaker": "narrator"
+    },
+    {
+      "id": "p8r1n0",
+      "text": "Garden Gnome",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1x3wnzg",
+      "text": "Whomping Willow",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1dgqr1i",
+      "text": "Fawkes",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1rp7tw8",
+      "text": "The Basilisk",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1mcl8ff",
+      "text": "Crookshanks",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1ez3s7k",
+      "text": "Professor Lupin",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1001tlp",
+      "text": "Buckbeak",
+      "speaker": "narrator"
+    },
+    {
+      "id": "fnxaok",
+      "text": "Wormtail",
+      "speaker": "narrator"
+    },
+    {
+      "id": "sgigq7",
+      "text": "Mad-Eye Moody",
+      "speaker": "narrator"
+    },
+    {
+      "id": "qtls4m",
+      "text": "Horntail",
+      "speaker": "narrator"
+    },
+    {
+      "id": "ikv74b",
+      "text": "Moaning Myrtle",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1bxso98",
+      "text": "Bellatrix",
+      "speaker": "narrator"
+    },
+    {
+      "id": "pmisf5",
+      "text": "Sirius Black",
+      "speaker": "narrator"
+    },
+    {
+      "id": "qrq02c",
+      "text": "Luna Lovegood",
+      "speaker": "narrator"
+    },
+    {
+      "id": "u0ez04",
+      "text": "Neville",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1enssqk",
+      "text": "Death Eater",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1rc09p6",
+      "text": "Professor Slughorn",
+      "speaker": "narrator"
+    },
+    {
+      "id": "16azk88",
+      "text": "Dumbledore",
+      "speaker": "narrator"
+    },
+    {
+      "id": "i4k5wk",
+      "text": "Ginny Weasley",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1imsuez",
+      "text": "Nagini",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1ts9m0a",
+      "text": "Kreacher",
+      "speaker": "narrator"
+    },
+    {
+      "id": "jjvprc",
+      "text": "Griphook",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1l0xngd",
+      "text": "Professor McGonagall",
+      "speaker": "narrator"
+    },
+    {
+      "id": "q7c949",
+      "text": "Harry Potter",
+      "speaker": "narrator"
+    },
+    {
+      "id": "5v5rf2",
+      "text": "Ron Weasley",
+      "speaker": "narrator"
+    },
+    {
+      "id": "mk0c9u",
+      "text": "Hermione Granger",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1etroql",
+      "text": "Hedwig",
+      "speaker": "narrator"
+    },
+    {
+      "id": "epffp2",
+      "text": "The Ring",
+      "speaker": "narrator"
+    },
+    {
+      "id": "1mukwov",
+      "text": "The Diary",
+      "speaker": "narrator"
+    },
+    {
+      "id": "thsthk",
+      "text": "The Locket",
+      "speaker": "narrator"
+    },
+    {
+      "id": "2namlj",
+      "text": "The Golden Cup",
+      "speaker": "narrator"
+    },
+    {
+      "id": "o7459m",
+      "text": "The Diadem",
+      "speaker": "narrator"
+    },
+    {
+      "id": "lnc48n",
+      "text": "Hero of Hogwarts",
+      "speaker": "narrator"
+    },
+    {
       "id": "ksa1q5",
       "text": "Hello there! I’m Hagrid. Can you help me tidy up my hut?",
       "speaker": "hagrid"
@@ -455,29 +650,14 @@
       "speaker": "crookshanks"
     },
     {
-      "id": "1mcl8ff",
-      "text": "Crookshanks",
-      "speaker": "narrator"
-    },
-    {
       "id": "10s3mzo",
       "text": "Hello, I’m Professor Lupin. Have some chocolate, then let’s spell!",
       "speaker": "lupin"
     },
     {
-      "id": "1ez3s7k",
-      "text": "Professor Lupin",
-      "speaker": "narrator"
-    },
-    {
       "id": "15m03pu",
       "text": "Bow to Buckbeak the hippogriff… he bows back! Now spell these.",
       "speaker": "buckbeak"
-    },
-    {
-      "id": "1001tlp",
-      "text": "Buckbeak",
-      "speaker": "narrator"
     },
     {
       "id": "hed4dh",
@@ -525,11 +705,6 @@
       "speaker": "bellatrix"
     },
     {
-      "id": "2namlj",
-      "text": "The Golden Cup",
-      "speaker": "narrator"
-    },
-    {
       "id": "nds4n3",
       "text": "Welcome to my house! I’m Sirius, Harry’s godfather. Let’s spell!",
       "speaker": "sirius"
@@ -543,11 +718,6 @@
       "id": "15my7cv",
       "text": "Hello. I’m Luna. I can see lovely creatures. Can you spell them?",
       "speaker": "luna"
-    },
-    {
-      "id": "qrq02c",
-      "text": "Luna Lovegood",
-      "speaker": "narrator"
     },
     {
       "id": "8hzz43",

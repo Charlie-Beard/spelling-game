@@ -11,7 +11,7 @@ import { pop, sm } from '../ui/anim';
 import { banner, frogCard, sealButton } from '../ui/components';
 import { h, place } from '../ui/dom';
 import { Scene } from '../ui/scene';
-import { HOST_NAMES } from './complete';
+import { HOST_NAMES } from '../core/names';
 
 export class AlbumScene extends Scene {
   private zoom: HTMLElement | null = null;
