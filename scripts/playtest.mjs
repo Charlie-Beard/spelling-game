@@ -1,10 +1,12 @@
 // Child-like playtest of the first chapters with timings and screenshots.
 // Usage: node scripts/playtest.mjs <outdir>
 import { chromium } from 'playwright';
+import { asJasper } from './signed-in.mjs';
 
 const out = process.argv[2] ?? '.';
 const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] });
 const ctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true });
+await asJasper(ctx);
 const page = await ctx.newPage();
 const t0 = Date.now();
 const log = (...a) => console.log(`[${((Date.now() - t0) / 1000).toFixed(1)}s]`, ...a);

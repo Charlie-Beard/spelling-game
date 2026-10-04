@@ -1,8 +1,10 @@
 // Scripted play-through of the first word(s) with screenshots.
 import { chromium } from 'playwright';
+import { asJasper } from './signed-in.mjs';
 const out = process.argv[2] ?? '.';
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1180, height: 820 }, hasTouch: true });
+await asJasper(page);
 page.on('pageerror', (e) => console.log('pageerror:', e.message));
 page.on('console', (m) => m.type() === 'error' && console.log('console:', m.text()));
 await page.goto('http://localhost:5173/' + (process.argv[3] ?? ''));

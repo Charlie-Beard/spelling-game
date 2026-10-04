@@ -1,5 +1,6 @@
 // Playtest of the less-travelled paths. Usage: node scripts/playtest2.mjs <outdir>
 import { chromium } from 'playwright';
+import { asJasper } from './signed-in.mjs';
 
 const out = process.argv[2] ?? '.';
 const browser = await chromium.launch();
@@ -14,9 +15,10 @@ const done = (ids) => Object.fromEntries(ids.map((id) => [id, { plays: 1, done: 
 
 async function session(progress) {
   const ctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true });
+  await asJasper(ctx);
   await ctx.addInitScript((p) => {
     if (!sessionStorage.getItem('seeded')) {
-      localStorage.setItem('wizard-words:v1', JSON.stringify(p));
+      localStorage.setItem('wizard-words:v1:jasper', JSON.stringify(p));
       sessionStorage.setItem('seeded', '1');
     }
   }, progress);

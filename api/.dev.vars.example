@@ -1,0 +1,5 @@
+# Copy to .dev.vars for local development (`npm run dev` in api/).
+# In production these are secrets: `npx wrangler secret put <NAME>`.
+JASPER_PASSWORD=change-me
+PARENT_PASSWORD=change-me-too
+AUTH_SECRET=any-long-random-string

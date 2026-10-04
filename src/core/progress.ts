@@ -1,8 +1,8 @@
 /**
  * Saved progress, adaptive difficulty and spaced review.
  *
- * Everything lives in localStorage on the iPad. The child's name is only
- * ever stored here, never in the repository.
+ * Each player's progress is kept on the device and synced to the cloud
+ * (see cloud/profile.ts).
  */
 import { ALL_CHAPTERS, type Avatar, type Chapter } from './curriculum';
 import { DEFAULT_NAME } from './phrases';
@@ -56,13 +56,12 @@ export interface Progress {
 }
 
 export const MAX_DIFFICULTY = 3;
-const KEY = 'wizard-words:v1';
 const BREAK_RESET_MS = 20 * 60 * 1000;
 
-export function defaultProgress(prefersReducedMotion = false): Progress {
+export function defaultProgress(prefersReducedMotion = false, name = DEFAULT_NAME): Progress {
   return {
     v: 1,
-    name: DEFAULT_NAME,
+    name,
     avatar: null,
     chapters: {},
     cards: [],
@@ -165,42 +164,22 @@ export function pickReview(p: Progress, chapter: Chapter): string | undefined {
 }
 
 // ---------------------------------------------------------------------------
-// Storage
+// Saved copies
 // ---------------------------------------------------------------------------
 
-export function load(): Progress {
-  const reduce =
-    typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fresh = defaultProgress(reduce);
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return fresh;
-    const data = JSON.parse(raw) as Partial<Progress>;
-    if (data.v !== 1) return fresh;
-    const p: Progress = { ...fresh, ...data, settings: { ...fresh.settings, ...data.settings } };
-    // A new session (20+ minutes since the last chapter) starts the break count afresh.
-    if (Date.now() - p.lastPlayed > BREAK_RESET_MS) p.chaptersSinceBreak = 0;
-    return p;
-  } catch {
-    return fresh;
-  }
+/**
+ * Reads a saved copy (from this device or the cloud), filling in anything
+ * missing from `fresh`. Anything unreadable gives `fresh`.
+ */
+export function restore(data: unknown, fresh: Progress): Progress {
+  if (!data || typeof data !== 'object' || (data as Partial<Progress>).v !== 1) return fresh;
+  const d = data as Partial<Progress>;
+  return { ...fresh, ...d, settings: { ...fresh.settings, ...d.settings } };
 }
 
-export function save(p: Progress): void {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(p));
-  } catch {
-    /* storage full or blocked: progress just won't persist */
-  }
-}
-
-export function reset(): Progress {
-  try {
-    localStorage.removeItem(KEY);
-  } catch {
-    /* ignore */
-  }
-  return load();
+/** A new session (20+ minutes since the last chapter) starts the break count afresh. */
+export function startSession(p: Progress, now = Date.now()): void {
+  if (now - p.lastPlayed > BREAK_RESET_MS) p.chaptersSinceBreak = 0;
 }
 
 /** Asks Safari to keep our storage (home-screen apps are never evicted). */

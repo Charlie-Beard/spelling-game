@@ -1,4 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
+import { fakeCloud, signedInAs, type FakeCloud } from './cloud';
+import { settled } from './wait';
+
+let cloud: FakeCloud;
+test.beforeEach(async ({ page }) => {
+  cloud = await fakeCloud(page);
+  await signedInAs(page, 'jasper');
+});
 
 /** Waits until the spelling screen accepts taps. */
 const idle = (page: Page) =>
@@ -14,6 +22,7 @@ async function play(page: Page) {
     const box = await btn.boundingBox();
     expect(box && box.width > 100).toBeTruthy();
   }).toPass({ timeout: 10_000 });
+  await settled(btn);
   await btn.click({ force: true });
 }
 
@@ -31,6 +40,7 @@ async function spellWord(page: Page) {
 test('plays the first chapter from the title screen to the reward', async ({ page }) => {
   test.setTimeout(180_000);
   await page.goto('/');
+  await settled(page.locator('.letter'));
   await page.locator('.letter').click({ force: true });
   // First time: choose a character.
   await page.getByRole('button', { name: 'Harry' }).click();
@@ -48,10 +58,13 @@ test('plays the first chapter from the title screen to the reward', async ({ pag
   // Reward
   await expect(page.locator('.card-reward')).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('.card-reward')).toContainText('Hagrid');
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('wizard-words:v1')!));
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('wizard-words:v1:jasper')!));
   expect(saved.cards).toEqual(['hagrid']);
   expect(saved.chapters.b1c1.done).toBe(true);
   expect(saved.gems).toBe(5);
+  // …and in the cloud.
+  await expect.poll(() => cloud.profiles.jasper.data?.cards, { timeout: 10_000 }).toEqual(['hagrid']);
+  expect(cloud.profiles.jasper.data.avatar).toBe('harry');
   // Next → back to the map with chapter 2 current.
   const next = page.getByRole('button', { name: 'Next chapter' });
   await expect(next).toHaveCSS('opacity', '1', { timeout: 15_000 });

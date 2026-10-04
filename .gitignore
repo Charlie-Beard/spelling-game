@@ -6,3 +6,5 @@ screenshots
 *.log
 .DS_Store
 __pycache__
+.dev.vars
+.wrangler

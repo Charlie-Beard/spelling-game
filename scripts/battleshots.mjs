@@ -1,10 +1,12 @@
 // Plays the Battle of Hogwarts and screenshots key moments.
 import { chromium } from 'playwright';
+import { asJasper } from './signed-in.mjs';
 const out = process.argv[2] ?? '.';
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true });
+await asJasper(ctx);
 await ctx.addInitScript(() => {
-  localStorage.setItem('wizard-words:v1', JSON.stringify({ v: 1, name: '', avatar: 'hermione', chapters: {}, cards: [], horcruxes: [], gems: 0, difficulty: 1, review: [], words: {}, unlockAll: true, custom: [], chaptersSinceBreak: 0, lastPlayed: 0, settings: { volume: 0.8, calm: false, breakAfter: 0, idleHintSeconds: 0 } }));
+  localStorage.setItem('wizard-words:v1:jasper', JSON.stringify({ v: 1, name: '', avatar: 'hermione', chapters: {}, cards: [], horcruxes: [], gems: 0, difficulty: 1, review: [], words: {}, unlockAll: true, custom: [], chaptersSinceBreak: 0, lastPlayed: 0, settings: { volume: 0.8, calm: false, breakAfter: 0, idleHintSeconds: 0 } }));
 });
 const page = await ctx.newPage();
 page.on('pageerror', (e) => console.log('pageerror:', e.message));

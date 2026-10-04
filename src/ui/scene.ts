@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import type { CloudProfile } from '../cloud/profile';
 import type { Progress } from '../core/progress';
 import type { Stage } from '../stage';
 import { h, onTap } from './dom';
@@ -16,9 +17,14 @@ export interface Nav {
 
 export interface App {
   stage: Stage;
-  progress: Progress;
+  /** The signed-in player's save (set once signed in). */
+  readonly profile: CloudProfile;
+  /** Their progress: shorthand for `profile.progress`. */
+  readonly progress: Progress;
   nav: Nav;
   save(): void;
+  /** Sends any unsaved progress to the cloud, then back to the password screen. */
+  signOut(): Promise<void>;
   go(scene: Scene, transition?: 'page' | 'fade' | 'none'): Promise<void>;
 }
 

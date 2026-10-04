@@ -1,0 +1,26 @@
+{
+  "name": "wizard-words-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  "vars": {
+    // Where the game is served from (GitHub Pages), plus local dev and preview.
+    "ALLOWED_ORIGINS": "https://charlie-beard.github.io,http://localhost:5173,http://localhost:4173"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "wizard-words",
+      "database_id": "8f71329f-ccaa-4e7d-8b87-0bfec6562af2",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // At most 10 password guesses a minute from one address.
+  "ratelimits": [
+    {
+      "name": "LOGIN_LIMIT",
+      "namespace_id": "1001",
+      "simple": { "limit": 10, "period": 60 }
+    }
+  ]
+}

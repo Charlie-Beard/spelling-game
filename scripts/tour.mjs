@@ -1,16 +1,18 @@
 // Screenshot tour of every scene. Usage: node scripts/tour.mjs <outdir>
 import { chromium } from 'playwright';
+import { asJasper } from './signed-in.mjs';
 const out = process.argv[2] ?? '.';
 const base = 'http://localhost:5173/';
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true });
+await asJasper(ctx);
 const page = await ctx.newPage();
 page.on('pageerror', (e) => console.log('pageerror:', e.message));
 page.on('console', (m) => m.type() === 'error' && console.log('console:', m.text()));
 const seed = async (progress) => {
   await ctx.addInitScript((p) => {
     if (!sessionStorage.getItem('seeded')) {
-      localStorage.setItem('wizard-words:v1', JSON.stringify(p));
+      localStorage.setItem('wizard-words:v1:jasper', JSON.stringify(p));
       sessionStorage.setItem('seeded', '1');
     }
   }, progress);
