@@ -25,6 +25,7 @@ export class LoginScene extends Scene {
   private input!: HTMLInputElement;
   private message!: HTMLElement;
   private busy = false;
+  readonly hidesGear = true;
 
   constructor(
     app: App,

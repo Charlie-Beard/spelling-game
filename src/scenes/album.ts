@@ -23,7 +23,7 @@ export class AlbumScene extends Scene {
     r.append(place(h('div', { html: parchment(1220, 860, 'album-sheet', C.sand, 2) }), -20, -20, 1220, 860));
     r.append(banner('My Collection', { x: 340, y: 18, w: 500, h: 90, size: 42 }));
 
-    const back = sealButton('map', { x: 34, y: 22, size: 72, color: C.slate, aria: 'Back to the map' });
+    const back = sealButton('map', { x: 92, y: 16, size: 72, color: C.slate, aria: 'Back to the map' });
     this.tap(back, () => {
       sfx.tap();
       this.app.nav.map();

@@ -38,6 +38,8 @@ export abstract class Scene {
   private cleanups: (() => void)[] = [];
   private timers = new Set<ReturnType<typeof setTimeout>>();
   protected alive = true;
+  /** Hides the grown-ups' gear (on the password screen and in the corner itself). */
+  readonly hidesGear: boolean = false;
 
   constructor(app: App, className = '') {
     this.app = app;

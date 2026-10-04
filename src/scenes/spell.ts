@@ -117,7 +117,7 @@ export class SpellScene extends Scene {
     r.append(this.panel);
 
     // Top bar
-    const mapBtn = place(h('button', { class: 'seal-btn', 'aria-label': 'Back to the map', html: waxSeal('map', C.slate, 64) }), 30, 20, 64, 64);
+    const mapBtn = place(h('button', { class: 'seal-btn', 'aria-label': 'Back to the map', html: waxSeal('map', C.slate, 64) }), 90, 16, 64, 64);
     this.tap(mapBtn as HTMLElement, () => {
       sfx.tap();
       this.stopIdle();

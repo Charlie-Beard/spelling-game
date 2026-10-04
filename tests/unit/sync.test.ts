@@ -82,13 +82,9 @@ describe('cloud sync', () => {
     expect(saved).toMatchObject({ avatar: 'ron', cards: ['hagrid'], gems: 5 });
   });
 
-  it('never gives a grown-up’s device Jasper’s old save as their own', async () => {
-    const ipad = await device({ 'wizard-words:v1': { v: 1, cards: ['hagrid'], gems: 5 } });
-    await ipad.on(() => ipad.api.signIn('toad'));
-    const me = await ipad.on(() => ipad.profiles.CloudProfile.for('parent'));
-    expect(me.progress.cards).toEqual([]);
-    expect(me.progress.name).toBe('');
-    expect(ipad.store.has('wizard-words:v1')).toBe(true);
+  it('forgets a grown-up sign-in from before there was one login', async () => {
+    const ipad = await device({ 'wizard-words:auth': { token: 'old', who: 'parent' } });
+    expect(await ipad.on(() => ipad.api.getAuth())).toBeNull();
   });
 
   it('merges Jasper’s offline play with a grown-up’s changes from another device', async () => {
@@ -102,13 +98,11 @@ describe('cloud sync', () => {
     });
     expect(env.DB.rows.get('jasper')!.rev).toBe(1);
 
-    // A grown-up, on a phone, sees his progress and sets this week's words.
+    // A grown-up, on a phone signed in as Jasper, sees his progress and sets this week's words.
     const phone = await device();
-    await phone.on(() => phone.api.signIn('toad'));
+    await phone.on(() => phone.api.signIn('owl'));
     const onPhone = await phone.on(() => phone.profiles.CloudProfile.for('jasper'));
-    expect(onPhone.known).toBe(false);
     await phone.on(() => onPhone.sync());
-    expect(onPhone.known).toBe(true);
     expect(onPhone.progress.cards).toEqual(onIpad.progress.cards);
     await phone.on(() => {
       onPhone.progress.custom = ['ship', 'shop'];
@@ -192,7 +186,6 @@ describe('cloud sync', () => {
     const profiles: Profiles = await import('../../src/cloud/profile');
     const again = await ipad.on(() => profiles.CloudProfile.for('jasper'));
     expect(again.progress.cards).toEqual(first.progress.cards);
-    expect(again.known).toBe(true);
     await ipad.on(() => again.sync());
     expect(again.state).toBe('synced');
     expect(env.DB.rows.get('jasper')!.rev).toBe(1);

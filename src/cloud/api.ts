@@ -1,11 +1,12 @@
 /**
  * The cloud-save API (api/ in this repo: a Cloudflare Worker + D1).
  *
- * The password says who is playing: Jasper or a grown-up. Signing in gives
- * a token that is kept on this device, so it is only typed once.
+ * One password, Jasper's. Signing in gives a token that is kept on this
+ * device, so it is only typed once. (The cloud keeps one save per player,
+ * and Jasper is the only player.)
  */
 
-export type Who = 'jasper' | 'parent';
+export type Who = 'jasper';
 
 export const API_URL: string = import.meta.env.VITE_API_URL ?? 'https://wizard-words-api.charlesjohnbeard.workers.dev';
 
@@ -16,7 +17,7 @@ export interface Auth {
   who: Who;
 }
 
-const isWho = (w: unknown): w is Who => w === 'jasper' || w === 'parent';
+const isWho = (w: unknown): w is Who => w === 'jasper';
 
 export function getAuth(): Auth | null {
   try {

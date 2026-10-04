@@ -10,7 +10,6 @@ import { waxSeal } from '../art/ui';
 import { PHRASES } from '../core/phrases';
 import { requestPersistence } from '../core/progress';
 import { breathe, isCalm, sm, stepped } from '../ui/anim';
-import { holdButton } from '../ui/components';
 import { h, place } from '../ui/dom';
 import { Scene } from '../ui/scene';
 
@@ -53,10 +52,6 @@ export class TitleScene extends Scene {
     this.tap(this.letter, () => void this.open());
     r.append(this.letter);
     this.onCleanup(breathe(this.letter, 0.025, 2.6));
-
-    const hold = holdButton({ x: 1090, y: 26, onDone: () => this.app.nav.parent() });
-    r.append(hold.el);
-    this.onCleanup(hold.dispose);
   }
 
   enter(): void {

@@ -37,6 +37,7 @@ export class Director {
       return;
     }
     this.busy = true;
+    this.stage.classList.toggle('no-gear', next.hidesGear);
     try {
       next.build();
       const prev = this.current;

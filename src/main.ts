@@ -17,6 +17,7 @@ import { Stage } from './stage';
 import { setCalm } from './ui/anim';
 import { Director } from './ui/director';
 import { h, wait } from './ui/dom';
+import { installGear } from './ui/gear';
 import type { App } from './ui/scene';
 import { installRotateScreen } from './ui/rotate';
 
@@ -50,6 +51,7 @@ const app: App = {
   go: (scene, t) => director.go(scene, t),
 };
 game.attach(app);
+installGear(stage.el, () => game.parent());
 
 // Audio can only start inside a tap on iPad.
 let audioOn = false;

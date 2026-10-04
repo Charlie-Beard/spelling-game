@@ -16,7 +16,7 @@ import { currentIndex, isUnlocked } from '../core/progress';
 import { bookLine } from '../core/phrases';
 import { ALL_CHAPTERS } from '../core/curriculum';
 import { breathe, pop, sm, wobble } from '../ui/anim';
-import { banner, holdButton, sealButton } from '../ui/components';
+import { banner, sealButton } from '../ui/components';
 import { h, place } from '../ui/dom';
 import { Scene, type App } from '../ui/scene';
 
@@ -117,10 +117,6 @@ export class MapScene extends Scene {
       });
       r.append(prac);
     }
-
-    const hold = holdButton({ x: 1094, y: 30, onDone: () => this.app.nav.parent() });
-    r.append(hold.el);
-    this.onCleanup(hold.dispose);
   }
 
   async enter(): Promise<void> {

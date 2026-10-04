@@ -7,10 +7,9 @@ async function tokenFor(env: ReturnType<typeof testEnv>, password: string): Prom
 }
 
 describe('POST /login', () => {
-  it('knows who you are from the password', async () => {
+  it('lets Jasper in with his password', async () => {
     const env = testEnv();
     expect((await callApi(env, 'POST', '/login', { body: { password: 'Owl' } })).body.who).toBe('jasper');
-    expect((await callApi(env, 'POST', '/login', { body: { password: 'Toad' } })).body.who).toBe('parent');
   });
 
   it('forgives capitals and stray spaces', async () => {
@@ -42,21 +41,27 @@ describe('/profile', () => {
     expect((await callApi(env, 'GET', '/profile/jasper', { token: 'nonsense' })).status).toBe(401);
     const old = await signToken(env, 'jasper', Date.now() - 500 * 86_400_000);
     expect((await callApi(env, 'GET', '/profile/jasper', { token: old })).status).toBe(401);
-    const otherSecret = await signToken({ ...env, AUTH_SECRET: 'other' }, 'parent');
+    const otherSecret = await signToken({ ...env, AUTH_SECRET: 'other' }, 'jasper');
     expect((await callApi(env, 'GET', '/profile/jasper', { token: otherSecret })).status).toBe(401);
   });
 
-  it('lets Jasper reach only his own profile, and a grown-up both', async () => {
+  it('has only Jasper’s profile (the old grown-up one is gone)', async () => {
     const env = testEnv();
     const jasper = await tokenFor(env, 'owl');
-    const parent = await tokenFor(env, 'toad');
     expect((await callApi(env, 'GET', '/profile/jasper', { token: jasper })).status).toBe(200);
-    expect((await callApi(env, 'GET', '/profile/parent', { token: jasper })).status).toBe(403);
-    expect((await callApi(env, 'PUT', '/profile/parent', { token: jasper, body: { data: { v: 1 }, rev: 0 } })).status).toBe(403);
-    expect((await callApi(env, 'GET', '/profile/jasper', { token: parent })).status).toBe(200);
-    expect((await callApi(env, 'GET', '/profile/parent', { token: parent })).status).toBe(200);
-    expect((await callApi(env, 'GET', '/profile/someone', { token: parent })).status).toBe(404);
+    expect((await callApi(env, 'GET', '/profile/parent', { token: jasper })).status).toBe(404);
+    expect((await callApi(env, 'PUT', '/profile/parent', { token: jasper, body: { data: { v: 1 }, rev: 0 } })).status).toBe(404);
     expect(env.DB.rows.size).toBe(0);
+  });
+
+  it('turns away a grown-up token from before there was one login', async () => {
+    const env = testEnv();
+    // Signed the old way: { who: 'parent' } with the same secret.
+    const enc = (s: string) => btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const payload = enc(JSON.stringify({ who: 'parent', exp: Date.now() + 86_400_000 }));
+    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(env.AUTH_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    const sig = enc(String.fromCharCode(...new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(payload)))));
+    expect((await callApi(env, 'GET', '/profile/jasper', { token: `${payload}.${sig}` })).status).toBe(401);
   });
 
   it('starts empty and hands back a fresh token', async () => {

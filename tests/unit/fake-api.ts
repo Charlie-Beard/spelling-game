@@ -53,7 +53,6 @@ export function testEnv(over: Partial<Env> = {}): Env & { DB: ReturnType<typeof 
   return {
     DB: fakeDb(),
     JASPER_PASSWORD: 'Owl',
-    PARENT_PASSWORD: 'Toad',
     AUTH_SECRET: 'test-secret',
     ALLOWED_ORIGINS: `${ORIGIN},http://localhost:5173`,
     ...over,

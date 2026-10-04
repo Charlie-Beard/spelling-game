@@ -1,11 +1,11 @@
 import { expect, test, type Page } from '@playwright/test';
-import { fakeCloud, signedInAs, type FakeCloud } from './cloud';
+import { fakeCloud, signedIn, type FakeCloud } from './cloud';
 import { settled } from './wait';
 
 let cloud: FakeCloud;
 test.beforeEach(async ({ page }) => {
   cloud = await fakeCloud(page);
-  await signedInAs(page, 'jasper');
+  await signedIn(page);
 });
 
 /** Waits until the spelling screen accepts taps. */
@@ -63,8 +63,8 @@ test('plays the first chapter from the title screen to the reward', async ({ pag
   expect(saved.chapters.b1c1.done).toBe(true);
   expect(saved.gems).toBe(5);
   // …and in the cloud.
-  await expect.poll(() => cloud.profiles.jasper.data?.cards, { timeout: 10_000 }).toEqual(['hagrid']);
-  expect(cloud.profiles.jasper.data.avatar).toBe('harry');
+  await expect.poll(() => cloud.jasper.data?.cards, { timeout: 10_000 }).toEqual(['hagrid']);
+  expect(cloud.jasper.data.avatar).toBe('harry');
   // Next → back to the map with chapter 2 current.
   const next = page.getByRole('button', { name: 'Next chapter' });
   await expect(next).toHaveCSS('opacity', '1', { timeout: 15_000 });

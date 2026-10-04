@@ -1,22 +1,21 @@
 /**
  * Wizard Words cloud save: a tiny Cloudflare Worker + D1 database that keeps
- * Jasper's and the grown-ups' progress and settings, so they follow the
- * player from device to device. The game itself stays a static site.
+ * Jasper's progress and settings, so they follow him from device to device.
+ * The game itself stays a static site.
  *
  *   POST /login          { password }    → { token, who }
  *   GET  /profile/:who                   → { data, rev, token }
  *   PUT  /profile/:who   { data, rev }   → { rev }, or 409 { data, rev }
  *
- * The password says who you are: one for Jasper, one for the grown-ups. Both
- * are secrets set with `wrangler secret put`, never in the repo. Jasper's
- * token reaches only his own profile; a grown-up's reaches both.
+ * There is one password, Jasper's: a secret set with `wrangler secret put`,
+ * never in the repo. Saves are kept per player, but Jasper is the only one.
  *
  * Saves are versioned (`rev`): a PUT only lands if nobody else saved since
  * the client last synced. Otherwise it gets the newer copy back to merge.
  */
 
-export type Who = 'jasper' | 'parent';
-const WHO: readonly Who[] = ['jasper', 'parent'];
+export type Who = 'jasper';
+const WHO: readonly Who[] = ['jasper'];
 
 // The few D1 and rate-limiter calls used here, so this file typechecks
 // without the full Workers type definitions.
@@ -35,7 +34,6 @@ interface RateLimiter {
 export interface Env {
   DB: Database;
   JASPER_PASSWORD: string;
-  PARENT_PASSWORD: string;
   AUTH_SECRET: string;
   /** Comma-separated origins allowed to call the API (where the game is served). */
   ALLOWED_ORIGINS: string;
@@ -103,13 +101,8 @@ async function same(a: string, b: string): Promise<boolean> {
 }
 
 export async function whosePassword(env: Env, password: unknown): Promise<Who | null> {
-  if (typeof password !== 'string' || !normalise(password)) return null;
-  const p = normalise(password);
-  const [jasper, parent] = await Promise.all([
-    env.JASPER_PASSWORD ? same(p, normalise(env.JASPER_PASSWORD)) : false,
-    env.PARENT_PASSWORD ? same(p, normalise(env.PARENT_PASSWORD)) : false,
-  ]);
-  return jasper ? 'jasper' : parent ? 'parent' : null;
+  if (typeof password !== 'string' || !normalise(password) || !env.JASPER_PASSWORD) return null;
+  return (await same(normalise(password), normalise(env.JASPER_PASSWORD))) ? 'jasper' : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -170,7 +163,7 @@ async function route(env: Env, request: Request): Promise<{ status: number; body
     const auth = request.headers.get('Authorization') ?? '';
     const who = auth.startsWith('Bearer ') ? await verifyToken(env, auth.slice(7)) : null;
     if (!who) return { status: 401, body: { error: 'Please sign in' } };
-    if (who !== 'parent' && who !== target) return { status: 403, body: { error: 'Not yours' } };
+    if (who !== target) return { status: 403, body: { error: 'Not yours' } };
 
     if (request.method === 'GET') {
       return { status: 200, body: { ...(await current(env, target)), token: await signToken(env, who) } };

@@ -38,7 +38,7 @@ export const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout
  */
 export function onTap(el: HTMLElement, fn: (e: PointerEvent) => void): () => void {
   let downId: number | null = null;
-  let last = 0;
+  let last = -Infinity;
   const down = (e: PointerEvent) => {
     if (downId !== null) return;
     downId = e.pointerId;

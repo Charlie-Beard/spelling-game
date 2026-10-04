@@ -16,9 +16,8 @@ switched on (see below).
 2. Tap **Share → Add to Home Screen**, then always play from that icon. It
    opens full-screen and works offline.
 3. The first time, it asks **"What's the password?"** Type Jasper's password
-   to play as Jasper, or the grown-ups' password to sign in as a grown-up.
-   Capitals don't matter. Each device remembers the sign-in, so it is only
-   typed once.
+   (capitals don't matter). Each device remembers it, so it is only typed
+   once.
 4. Optional: turn on **Guided Access** (Settings → Accessibility) to lock
    the iPad to the game.
 
@@ -28,15 +27,13 @@ The game is landscape-only. Turning the iPad upright pauses it.
 
 Jasper's progress and settings (cards, chapters, tricky words, his word
 list, volume, calm mode and so on) are saved on the device **and** in the
-cloud, so they follow him to any device he signs in on. A grown-up has a
-separate save of their own, so playing as a grown-up never changes
-Jasper's progress.
+cloud, so they follow him to any device he signs in on.
 
 - It still works offline. Changes are kept on the iPad and sent when it is
   back online.
 - If two devices change things at the same time (Jasper playing on the
-  iPad while you edit his words on your phone), both sets of changes are
-  kept.
+  iPad while you edit his words on your phone, signed in as him), both
+  sets of changes are kept.
 - Progress saved on the iPad before sign-in was added moves into Jasper's
   cloud save the first time he signs in there.
 
@@ -60,13 +57,12 @@ Jasper's progress.
 
 ### Grown-ups' corner
 
-**Press and hold the cog** (top right of the title or map) for 3 seconds.
+**Tap the gear** (top left, on every screen) and answer the sum, such as
+6 × 8 or 50 ÷ 5, on the number pad. A wrong answer just gives a new sum.
 
-The top shows who is signed in, whether everything is saved to the cloud,
-and a **Sign out** button (tap it twice). Signed in as a grown-up, the
-corner shows **Jasper's** progress and settings, fetched from the cloud, so
-you can check on him and set his words from your own phone or iPad.
-**Showing: Jasper / Me** switches to your own.
+The top shows whether everything is saved to the cloud, and a **Sign out**
+button (tap it twice). To check on him or set his words from your own
+phone or iPad, sign in there with his password.
 
 - **Progress:** chapters done and the words that need practice.
 - **Settings:**
@@ -99,11 +95,9 @@ database, in [`api/`](api/). It is separate from the game, which stays on
 GitHub Pages.
 
 - Live at `https://wizard-words-api.charlesjohnbeard.workers.dev`
-- D1 database `wizard-words`, with one row per player (`jasper`, `parent`)
-  holding their whole save as JSON
-- The two passwords are Worker **secrets**. They are never in this
-  (public) repo. Jasper's sign-in can reach only his own save; a grown-up's
-  can reach both.
+- D1 database `wizard-words`, with one row (`jasper`) holding his whole
+  save as JSON
+- Jasper's password is a Worker **secret**, never in this (public) repo
 
 Unlike the game, the Worker doesn't deploy on push. Run these from `api/`:
 
@@ -114,11 +108,10 @@ npm run deploy                              # after changing api/src
 npm run migrate:remote                      # after adding a migration
 
 npx wrangler secret put JASPER_PASSWORD     # change Jasper's password
-npx wrangler secret put PARENT_PASSWORD     # change the grown-ups' password
 npx wrangler secret put AUTH_SECRET         # any long random string; changing it signs every device out
 ```
 
-Changing a password doesn't sign anyone out. Devices that are already
+Changing the password doesn't sign anyone out. Devices that are already
 signed in stay signed in.
 
 If the game moves to a different address, add it to `ALLOWED_ORIGINS` in
