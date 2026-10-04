@@ -1,5 +1,8 @@
 # Wizard Words — a Harry Potter spelling game
 
+> **Status:** built. Every step below is done; see the README for how to
+> play and deploy.
+
 The plan for a phonics spelling game for a 6-year-old who loves Harry Potter.
 It is a static site hosted on GitHub Pages, built **only for an iPad (11th gen)
 held in landscape**.
@@ -104,8 +107,9 @@ the Battle of Hogwarts.
 | 6. Half-Blood Prince | Split digraphs (a-e, i-e, o-e) | cake, snake, stone, smoke | Horcrux: Nagini |
 | 7. Deathly Hallows | Tricky words and 2-syllable words | magic, dragon, goblin, the, said | **The Battle of Hogwarts** |
 
-- **Chapters:** each book has about 5 chapters of **5 words**, taking about
-  2–3 minutes each. Each chapter is hosted by a character.
+- **Chapters:** books 1–2 have 5 chapters and books 3–7 have 4 (30 in
+  total). Each chapter is **5 words**, takes about 2–3 minutes and is
+  hosted by a character. The battle has 8 words.
 - **Horcrux chapters:** the last chapter of each book is a Horcrux chapter.
   Villains and Death Eaters appear as cheeky cartoon paper cut-outs, never
   gory.
