@@ -45,8 +45,10 @@ export interface Progress {
   /** Words to bring back for another go. */
   review: string[];
   words: Record<string, WordStat>;
-  /** Parent unlocked every chapter. */
+  /** Grown-up unlocked every chapter. */
   unlockAll: boolean;
+  /** Grown-up unlocked every chapter up to this index in ALL_CHAPTERS (-1: none). */
+  unlockedTo: number;
   /** Parent's custom word list (e.g. weekly school spellings). */
   custom: string[];
   chaptersSinceBreak: number;
@@ -71,6 +73,7 @@ export function defaultProgress(prefersReducedMotion = false, name = DEFAULT_NAM
     review: [],
     words: {},
     unlockAll: false,
+    unlockedTo: -1,
     custom: [],
     chaptersSinceBreak: 0,
     lastPlayed: 0,
@@ -111,7 +114,26 @@ export function currentIndex(p: Progress): number {
 export function isUnlocked(p: Progress, chapter: Chapter): boolean {
   if (p.unlockAll) return true;
   const i = ALL_CHAPTERS.indexOf(chapter);
-  return i <= currentIndex(p) || !!p.chapters[chapter.id]?.done;
+  return i <= Math.max(currentIndex(p), p.unlockedTo) || !!p.chapters[chapter.id]?.done;
+}
+
+/** Grown-up control: every chapter up to and including `index` can be played. */
+export function unlockTo(p: Progress, index: number): void {
+  p.unlockedTo = Math.max(p.unlockedTo, index);
+}
+
+/**
+ * Grown-up control: locks every chapter after `index` again, so the next one
+ * to play is no further on than `index + 1`. Cards and Horcruxes already
+ * won are kept; the chapters just count as not done.
+ */
+export function relockAfter(p: Progress, index: number): void {
+  p.unlockAll = false;
+  p.unlockedTo = Math.min(p.unlockedTo, index);
+  for (const c of ALL_CHAPTERS.slice(index + 1)) {
+    const rec = p.chapters[c.id];
+    if (rec) rec.done = false;
+  }
 }
 
 /** Records one chapter's results. Returns what was newly earned. */
@@ -185,4 +207,20 @@ export function startSession(p: Progress, now = Date.now()): void {
 /** Asks Safari to keep our storage (home-screen apps are never evicted). */
 export function requestPersistence(): void {
   void navigator.storage?.persist?.().catch(() => {});
+}
+
+/**
+ * "Start again": clears what was played (chapters, cards, Horcruxes, gems,
+ * word history, character) but keeps the name, settings, word list and the
+ * grown-up's level controls, so a demo stays unlocked after a reset.
+ */
+export function startAgain(p: Progress, fresh: Progress): Progress {
+  return {
+    ...fresh,
+    name: p.name,
+    settings: { ...p.settings },
+    custom: [...p.custom],
+    unlockAll: p.unlockAll,
+    unlockedTo: p.unlockedTo,
+  };
 }

@@ -82,6 +82,7 @@ export function mergeProgress(base: Progress, local: Progress, remote: Progress)
     review: pick(base.review, local.review, remote.review),
     words,
     unlockAll: pick(base.unlockAll, local.unlockAll, remote.unlockAll),
+    unlockedTo: pick(base.unlockedTo, local.unlockedTo, remote.unlockedTo),
     custom: pick(base.custom, local.custom, remote.custom),
     chaptersSinceBreak: pick(base.chaptersSinceBreak, local.chaptersSinceBreak, remote.chaptersSinceBreak),
     lastPlayed: Math.max(local.lastPlayed, remote.lastPlayed),

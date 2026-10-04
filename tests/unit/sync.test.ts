@@ -190,4 +190,54 @@ describe('cloud sync', () => {
     expect(again.state).toBe('synced');
     expect(env.DB.rows.get('jasper')!.rev).toBe(1);
   });
+
+  it('keeps the demo profile apart from Jasper’s, on the same iPad', async () => {
+    const legacy = { v: 1, name: 'Jasper', cards: ['hagrid'], gems: 5 };
+    const ipad = await device({ 'wizard-words:v1': legacy });
+    await ipad.on(() => ipad.api.signIn('owl'));
+    // A demo on the iPad before Jasper's save was ever opened there.
+    const demo = await ipad.on(() => ipad.profiles.CloudProfile.for('demo'));
+    expect(demo.progress.cards).toEqual([]);
+    await ipad.on(() => {
+      playChapter(demo.progress, 0);
+      demo.save();
+      return demo.sync();
+    });
+    const jasper = await ipad.on(() => ipad.profiles.CloudProfile.for('jasper'));
+    expect(jasper.progress.cards).toEqual(['hagrid']);
+    expect(jasper.progress.gems).toBe(5);
+    await ipad.on(() => jasper.sync());
+    expect(JSON.parse(env.DB.rows.get('jasper')!.data).gems).toBe(5);
+    expect(JSON.parse(env.DB.rows.get('demo')!.data).gems).toBe(demo.progress.gems);
+    expect(demo.progress.gems).toBe(5);
+    expect(env.DB.rows.get('demo')!.label).toBe('demo');
+  });
+
+  it('lists, creates and deletes profiles; a deleted one is forgotten on this device', async () => {
+    const ipad = await device();
+    await ipad.on(() => ipad.api.signIn('owl'));
+    const id = await ipad.on(() => ipad.api.createProfile('Grandma Jo', { v: 1, name: 'Grandma Jo' }));
+    expect(id).toBe('grandma-jo');
+    expect(await ipad.on(() => ipad.api.createProfile('Grandma Jo', { v: 1 }))).toBe('grandma-jo-2');
+    expect(await ipad.on(() => ipad.api.listProfiles())).toEqual([
+      { id: 'jasper', label: 'Jasper' },
+      { id: 'grandma-jo', label: 'Grandma Jo' },
+      { id: 'grandma-jo-2', label: 'Grandma Jo' },
+    ]);
+    const p = await ipad.on(() => ipad.profiles.CloudProfile.for('grandma-jo'));
+    await ipad.on(() => p.sync());
+    expect(p.progress.name).toBe('Grandma Jo');
+    expect(ipad.store.has('wizard-words:v1:grandma-jo')).toBe(true);
+    await ipad.on(() => ipad.api.deleteProfile('grandma-jo'));
+    await ipad.on(() => ipad.profiles.CloudProfile.forget('grandma-jo'));
+    expect(ipad.store.has('wizard-words:v1:grandma-jo')).toBe(false);
+    expect(env.DB.rows.has('grandma-jo')).toBe(false);
+  });
+
+  it('remembers which profile this device plays as', async () => {
+    const ipad = await device();
+    expect(await ipad.on(() => ipad.api.activeProfile())).toEqual({ id: 'jasper', label: 'Jasper' });
+    await ipad.on(() => ipad.api.setActiveProfile({ id: 'demo', label: 'Demo' }));
+    expect(await ipad.on(() => ipad.api.activeProfile())).toEqual({ id: 'demo', label: 'Demo' });
+  });
 });

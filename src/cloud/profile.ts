@@ -9,13 +9,13 @@
  */
 import { mergeProgress, same } from '../core/merge';
 import { defaultProgress, restore, type Progress } from '../core/progress';
-import { fetchProfile, SignedOut, storeProfile, type Remote, type Who } from './api';
+import { fetchProfile, JASPER, SignedOut, storeProfile, type Remote } from './api';
 
-/** The save from before sign-in existed. */
+/** The save from before sign-in existed (Jasper's). */
 const LEGACY_KEY = 'wizard-words:v1';
-const dataKey = (who: Who) => `wizard-words:v1:${who}`;
-const syncKey = (who: Who) => `wizard-words:sync:${who}`;
-const baseKey = (who: Who) => `wizard-words:base:${who}`;
+const dataKey = (id: string) => `wizard-words:v1:${id}`;
+const syncKey = (id: string) => `wizard-words:sync:${id}`;
+const baseKey = (id: string) => `wizard-words:base:${id}`;
 
 const PUSH_DELAY_MS = 1500;
 const PULL_EVERY_MS = 2 * 60 * 1000;
@@ -47,9 +47,10 @@ function write(key: string, value: unknown): void {
   }
 }
 
-export function freshProgress(): Progress {
+/** A blank save. Only Jasper's starts with his name in it. */
+export function freshProgress(id = JASPER): Progress {
   const reduce = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  return defaultProgress(reduce);
+  return defaultProgress(reduce, id === JASPER ? undefined : '');
 }
 
 /** Overwrites the live copy in place, so every scene holding it sees the change. */
@@ -59,7 +60,7 @@ function replace(target: Progress, src: Progress): void {
   Object.assign(target.settings, settings);
 }
 
-const open = new Map<Who, CloudProfile>();
+const open = new Map<string, CloudProfile>();
 
 /** Called when the cloud stops accepting this device's sign-in. */
 let signedOut: () => void = () => {};
@@ -68,7 +69,10 @@ export function onSignedOut(fn: () => void): void {
 }
 
 export class CloudProfile {
-  readonly who: Who;
+  /** The profile's id (`jasper`, `demo`, …). */
+  readonly id: string;
+  /** This device already had a copy when the profile was opened. */
+  readonly cached: boolean;
   /** The live copy the game reads and changes. */
   readonly progress: Progress;
   state: SyncState;
@@ -81,21 +85,28 @@ export class CloudProfile {
   private listeners = new Set<() => void>();
 
   /** One instance per player, shared by everything on this device. */
-  static for(who: Who): CloudProfile {
-    let p = open.get(who);
-    if (!p) open.set(who, (p = new CloudProfile(who)));
+  static for(id: string): CloudProfile {
+    let p = open.get(id);
+    if (!p) open.set(id, (p = new CloudProfile(id)));
     return p;
   }
 
-  private constructor(who: Who) {
-    this.who = who;
-    const saved = read(dataKey(who));
-    const legacy = saved ? null : read(LEGACY_KEY);
-    this.progress = restore(saved ?? legacy, freshProgress());
-    const info = read(syncKey(who)) as SyncInfo | null;
+  /** Clears a deleted profile's copy from this device. */
+  static forget(id: string): void {
+    open.delete(id);
+    for (const key of [dataKey(id), syncKey(id), baseKey(id)]) write(key, null);
+  }
+
+  private constructor(id: string) {
+    this.id = id;
+    const saved = read(dataKey(id));
+    const legacy = saved || id !== JASPER ? null : read(LEGACY_KEY);
+    this.progress = restore(saved ?? legacy, freshProgress(id));
+    this.cached = !!(saved ?? legacy);
+    const info = read(syncKey(id)) as SyncInfo | null;
     this.sync_ = info && Number.isInteger(info.rev) ? info : { rev: 0, dirty: !!legacy };
-    const base = read(baseKey(who));
-    this.base = base ? restore(base, freshProgress()) : null;
+    const base = read(baseKey(id));
+    this.base = base ? restore(base, freshProgress(id)) : null;
     if (legacy) {
       // Move the pre-sign-in save over; it goes up to the cloud on the first sync.
       this.persist();
@@ -139,11 +150,11 @@ export class CloudProfile {
 
   private async run(): Promise<void> {
     try {
-      const remote = await fetchProfile(this.who);
+      const remote = await fetchProfile(this.id);
       if (remote.rev !== this.sync_.rev) this.absorb(remote);
       for (let tries = 0; this.sync_.dirty && tries < 4; tries++) {
         const sent = structuredClone(this.progress);
-        const res = await storeProfile(this.who, sent, this.sync_.rev);
+        const res = await storeProfile(this.id, sent, this.sync_.rev);
         if (res.ok) {
           this.sync_.rev = res.rev;
           this.base = sent;
@@ -163,7 +174,7 @@ export class CloudProfile {
 
   /** Takes in the cloud's copy, merged with anything changed here since the last sync. */
   private absorb(remote: Remote): void {
-    const theirs = remote.data ? restore(remote.data, freshProgress()) : null;
+    const theirs = remote.data ? restore(remote.data, freshProgress(this.id)) : null;
     if (!theirs) {
       // Nothing in the cloud yet: this device's copy becomes the first.
       this.sync_ = { rev: remote.rev, dirty: true };
@@ -171,7 +182,7 @@ export class CloudProfile {
       this.persist(true);
       return;
     }
-    const merged = this.sync_.dirty || !this.base ? mergeProgress(this.base ?? freshProgress(), this.progress, theirs) : theirs;
+    const merged = this.sync_.dirty || !this.base ? mergeProgress(this.base ?? freshProgress(this.id), this.progress, theirs) : theirs;
     this.sync_ = { rev: remote.rev, dirty: !same(merged, theirs) };
     this.base = theirs;
     replace(this.progress, merged);
@@ -180,9 +191,9 @@ export class CloudProfile {
   }
 
   private persist(withBase = false): void {
-    write(dataKey(this.who), this.progress);
-    write(syncKey(this.who), this.sync_);
-    if (withBase) write(baseKey(this.who), this.base);
+    write(dataKey(this.id), this.progress);
+    write(syncKey(this.id), this.sync_);
+    if (withBase) write(baseKey(this.id), this.base);
   }
 
   private setState(s: SyncState): void {

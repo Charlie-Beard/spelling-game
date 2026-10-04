@@ -8,7 +8,7 @@ import { installGrain } from './art/grain';
 import { parchmentDefs, uiDefs } from './art/ui';
 import { setVolumes, unlock } from './audio/engine';
 import { loadManifest, setPlayerName } from './audio/voice';
-import { getAuth, setAuth, type Who } from './cloud/api';
+import { activeProfile, getAuth, JASPER, setActiveProfile, setAuth } from './cloud/api';
 import { CloudProfile, keepInSync, onSignedOut } from './cloud/profile';
 import { startSession } from './core/progress';
 import { Game } from './game';
@@ -16,7 +16,7 @@ import { LoginScene } from './scenes/login';
 import { Stage } from './stage';
 import { setCalm } from './ui/anim';
 import { Director } from './ui/director';
-import { h, wait } from './ui/dom';
+import { h, place, wait } from './ui/dom';
 import { installGear } from './ui/gear';
 import type { App } from './ui/scene';
 import { installRotateScreen } from './ui/rotate';
@@ -48,6 +48,13 @@ const app: App = {
     setAuth(null);
     location.reload();
   },
+  switchProfile: async (to) => {
+    // Send this profile's changes, and fetch the other's, so it opens as itself.
+    await Promise.race([Promise.all([profile?.sync(), CloudProfile.for(to.id).sync()]), wait(5000)]);
+    setActiveProfile(to);
+    // Start afresh on the new profile, at the title screen.
+    location.href = location.pathname;
+  },
   go: (scene, t) => director.go(scene, t),
 };
 game.attach(app);
@@ -76,8 +83,13 @@ function applySettings(): void {
   if (audioOn) setVolumes({ master: p.settings.volume });
 }
 
-function start(who: Who): void {
-  profile = CloudProfile.for(who);
+async function start(): Promise<void> {
+  const active = activeProfile();
+  profile = CloudProfile.for(active.id);
+  // A profile new to this device: fetch it before showing anything.
+  if (!profile.cached && active.id !== JASPER) await Promise.race([profile.sync(), wait(5000)]);
+  // Anyone but Jasper gets a name badge, so a demo is never mistaken for his game.
+  if (active.id !== JASPER) stage.el.append(place(h('div', { class: 'profile-badge' }, active.label), 12, 80));
   startSession(profile.progress);
   applySettings();
   profile.onChange(applySettings);
@@ -99,8 +111,8 @@ function start(who: Who): void {
 onSignedOut(() => setAuth(null));
 
 const auth = getAuth();
-if (auth) start(auth.who);
-else void director.go(new LoginScene(app, start));
+if (auth) void start();
+else void director.go(new LoginScene(app, () => void start()));
 
 // Offline support (production builds only).
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {

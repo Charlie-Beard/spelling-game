@@ -265,3 +265,69 @@
 .p-preview span.bad {
   background: #f1d2c8;
 }
+.p-signed label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.parent .p-signed select {
+  min-width: 0;
+  padding: 6px 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.p-btn.small {
+  padding: 8px 14px;
+  font-size: 16px;
+}
+.p-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.p-levels,
+.p-profiles {
+  display: grid;
+  gap: 8px;
+}
+.p-levels {
+  grid-template-columns: repeat(2, 1fr);
+}
+.p-level,
+.p-profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(255, 250, 240, 0.7);
+}
+.p-level > div:first-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.p-level strong {
+  font-size: 18px;
+}
+.p-level small {
+  font-size: 15px;
+  color: var(--ink-500);
+}
+.p-level.done {
+  background: rgba(150, 200, 150, 0.35);
+}
+.p-level.locked {
+  background: rgba(200, 190, 170, 0.35);
+}
+.p-profile strong {
+  font-size: 22px;
+}
+.p-playing {
+  font-size: 17px;
+  color: var(--emerald-600);
+  font-weight: 700;
+}

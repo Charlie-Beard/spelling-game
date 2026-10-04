@@ -6,8 +6,11 @@ import {
   defaultProgress,
   distractorCount,
   isUnlocked,
+  relockAfter,
+  startAgain,
   pickReview,
   recordChapter,
+  unlockTo,
 } from '../../src/core/progress';
 import type { RoundResult } from '../../src/core/round';
 
@@ -74,5 +77,62 @@ describe('recordChapter', () => {
     expect(pickReview(p, ALL_CHAPTERS[0])).toBeUndefined();
     recordChapter(p, ALL_CHAPTERS[1], [res('cat')]);
     expect(p.review).toEqual([]);
+  });
+});
+
+describe('grown-up level controls', () => {
+  const finish = (p: ReturnType<typeof defaultProgress>, n: number) => {
+    for (const c of ALL_CHAPTERS.slice(0, n)) recordChapter(p, c, c.words.map((w) => res(w.text)));
+  };
+
+  it('unlocks up to a chapter without marking anything done', () => {
+    const p = defaultProgress();
+    unlockTo(p, 6);
+    expect(isUnlocked(p, ALL_CHAPTERS[6])).toBe(true);
+    expect(isUnlocked(p, ALL_CHAPTERS[7])).toBe(false);
+    expect(currentIndex(p)).toBe(0);
+    // Unlocking less than is already open changes nothing.
+    unlockTo(p, 2);
+    expect(isUnlocked(p, ALL_CHAPTERS[6])).toBe(true);
+  });
+
+  it('relocks the chapters after one, keeping cards already won', () => {
+    const p = defaultProgress();
+    finish(p, 8);
+    p.unlockAll = true;
+    const cards = [...p.cards];
+    relockAfter(p, 2);
+    expect(p.unlockAll).toBe(false);
+    expect(currentIndex(p)).toBe(3);
+    expect(isUnlocked(p, ALL_CHAPTERS[3])).toBe(true);
+    expect(isUnlocked(p, ALL_CHAPTERS[4])).toBe(false);
+    expect(p.cards).toEqual(cards);
+  });
+
+  it('relocks a manual unlock too', () => {
+    const p = defaultProgress();
+    unlockTo(p, 10);
+    relockAfter(p, 4);
+    expect(isUnlocked(p, ALL_CHAPTERS[4])).toBe(true);
+    expect(isUnlocked(p, ALL_CHAPTERS[5])).toBe(false);
+  });
+});
+
+describe('startAgain', () => {
+  it('clears play but keeps name, settings, words and level controls', () => {
+    const p = defaultProgress();
+    recordChapter(p, ALL_CHAPTERS[0], ALL_CHAPTERS[0].words.map((w) => res(w.text)));
+    p.avatar = 'ron';
+    p.name = 'Ava';
+    p.settings.volume = 0.3;
+    p.custom = ['ship'];
+    p.unlockAll = true;
+    const q = startAgain(p, defaultProgress());
+    expect(q.cards).toEqual([]);
+    expect(q.chapters).toEqual({});
+    expect(q.gems).toBe(0);
+    expect(q.avatar).toBeNull();
+    expect(q).toMatchObject({ name: 'Ava', custom: ['ship'], unlockAll: true });
+    expect(q.settings.volume).toBe(0.3);
   });
 });

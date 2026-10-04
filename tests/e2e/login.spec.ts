@@ -41,7 +41,7 @@ test('signing out (in the grown-ups’ corner) goes back to the password', async
   await expect(page.locator('.letter')).toBeVisible({ timeout: 10_000 });
 
   await openCorner(page);
-  await expect(page.getByText('Signed in as Jasper')).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Profile' })).toHaveValue('jasper');
   await page.getByRole('button', { name: 'Sign out' }).click();
   await page.getByRole('button', { name: 'Tap again to sign out' }).click();
   await expect(page.getByText('What’s the password?')).toBeVisible({ timeout: 10_000 });

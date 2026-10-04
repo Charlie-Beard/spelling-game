@@ -78,7 +78,7 @@ test('settings changed in the corner are saved to the cloud', async ({ page }) =
 
   await page.getByRole('button', { name: 'My words' }).click();
   await page.locator('textarea').fill('ship\nshop');
-  await expect.poll(() => cloud.jasper.data?.custom, { timeout: 10_000 }).toEqual(['ship', 'shop']);
-  expect(cloud.jasper.data.cards).toEqual(['hagrid']);
+  await expect.poll(() => cloud.jasper?.data?.custom, { timeout: 10_000 }).toEqual(['ship', 'shop']);
+  expect(cloud.jasper!.data.cards).toEqual(['hagrid']);
   await expect(page.getByText('Saved to the cloud ✓')).toBeVisible();
 });

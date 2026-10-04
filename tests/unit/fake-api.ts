@@ -1,12 +1,13 @@
 /**
  * The cloud-save worker running in-process, over an in-memory stand-in for
- * its D1 table (it understands just the three statements the worker uses).
+ * its D1 table (it understands just the statements the worker uses).
  */
 import worker, { type Database, type Env } from '../../api/src/index';
 
 interface Row {
   data: string;
   rev: number;
+  label: string;
 }
 
 export function fakeDb(): Database & { rows: Map<string, Row> } {
@@ -21,23 +22,32 @@ export function fakeDb(): Database & { rows: Map<string, Row> } {
           return stmt;
         },
         async first<T>(): Promise<T | null> {
-          if (!sql.startsWith('SELECT')) throw new Error(`fake D1: unexpected ${sql}`);
+          if (sql.startsWith('SELECT COUNT')) return { n: rows.size } as T;
+          if (!sql.startsWith('SELECT data')) throw new Error(`fake D1: unexpected ${sql}`);
           const row = rows.get(args[0] as string);
           return (row ? { ...row } : null) as T | null;
         },
+        async all<T>(): Promise<{ results: T[] }> {
+          if (!sql.startsWith('SELECT who AS id')) throw new Error(`fake D1: unexpected ${sql}`);
+          const results = [...rows].map(([id, r]) => ({ id, label: r.label })).sort((a, b) => a.label.localeCompare(b.label));
+          return { results: results as T[] };
+        },
         async run() {
           if (sql.startsWith('INSERT')) {
-            const [who, data] = args as [string, string];
+            const [who, label, data] = args as [string, string, string];
             if (rows.has(who)) return { meta: { changes: 0 } };
-            rows.set(who, { data, rev: 1 });
+            rows.set(who, { data, rev: 1, label });
             return { meta: { changes: 1 } };
           }
           if (sql.startsWith('UPDATE')) {
-            const [data, , who, rev] = args as [string, string, string, number];
+            const [data, label, , who, rev] = args as [string, string | null, string, string, number];
             const row = rows.get(who);
             if (!row || row.rev !== rev) return { meta: { changes: 0 } };
-            rows.set(who, { data, rev: rev + 1 });
+            rows.set(who, { data, rev: rev + 1, label: label ?? row.label });
             return { meta: { changes: 1 } };
+          }
+          if (sql.startsWith('DELETE')) {
+            return { meta: { changes: rows.delete(args[0] as string) ? 1 : 0 } };
           }
           throw new Error(`fake D1: unexpected ${sql}`);
         },

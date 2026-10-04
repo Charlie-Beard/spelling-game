@@ -60,19 +60,23 @@ cloud, so they follow him to any device he signs in on.
 **Tap the gear** (top left, on every screen) and answer the sum, such as
 6 × 8 or 50 ÷ 5, on the number pad. A wrong answer just gives a new sum.
 
-The top shows whether everything is saved to the cloud, and a **Sign out**
-button (tap it twice). To check on him or set his words from your own
-phone or iPad, sign in there with his password.
+The top shows which **profile** is playing (switch it there), whether
+everything is saved to the cloud, and a **Sign out** button (tap it
+twice). To check on him or set his words from your own phone or iPad,
+sign in there with his password.
+
+Everything below except Record sounds applies to the profile that's playing.
 
 - **Progress:** chapters done and the words that need practice.
+- **Levels:** unlock every chapter, unlock up to a chapter, or lock the ones
+  after a chapter again (cards and Horcruxes already won are kept).
 - **Settings:**
-  - his name (set to Jasper): it is on his Hogwarts letter, and the narrator and characters say "Jasper" out loud
+  - the player's name (Jasper's is Jasper): it is on the Hogwarts letter, and the narrator and characters say "Jasper" out loud
   - volume
   - calm mode (less movement)
   - break reminders
   - Hedwig's idle hint
-  - unlock all chapters
-  - reset
+  - start again: clears what was played, but keeps the settings, word list and levels
 - **Record sounds:** record your own voice for each phonics sound. Computer
   voices are poor at single sounds ("mmm", not "muh"), so this is well worth
   10 minutes. Recordings stay on the device they were made on (they are not
@@ -80,6 +84,11 @@ phone or iPad, sign in there with his password.
   and the home-screen app keep separate storage.
 - **My words:** type in this week's school spellings. They appear on the map
   as "My words".
+- **Profiles:** each profile has its own progress and settings. **Demo**
+  (every chapter unlocked) is for showing the game to people without
+  touching Jasper's progress. Whenever the profile isn't Jasper's, a badge
+  with its name shows under the gear. Add more profiles here, or delete
+  any but Jasper's. Each device remembers which profile it's on.
 
 ## Switching on GitHub Pages (one time)
 
@@ -95,8 +104,8 @@ database, in [`api/`](api/). It is separate from the game, which stays on
 GitHub Pages.
 
 - Live at `https://wizard-words-api.charlesjohnbeard.workers.dev`
-- D1 database `wizard-words`, with one row (`jasper`) holding his whole
-  save as JSON
+- D1 database `wizard-words`, with one row per profile (`jasper`, `demo`, …)
+  holding its name and whole save as JSON
 - Jasper's password is a Worker **secret**, never in this (public) repo
 
 Unlike the game, the Worker doesn't deploy on push. Run these from `api/`:

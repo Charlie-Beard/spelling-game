@@ -1022,3 +1022,20 @@
   width: 100%;
   height: 100%;
 }
+
+/* Which profile is playing, when it isn't Jasper's (e.g. "Demo"). */
+.profile-badge {
+  position: absolute;
+  z-index: 750;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--parchment-100);
+  background: var(--scarlet-500);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+.no-gear .profile-badge {
+  display: none;
+}

@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import type { ProfileInfo } from '../cloud/api';
 import type { CloudProfile } from '../cloud/profile';
 import type { Progress } from '../core/progress';
 import type { Stage } from '../stage';
@@ -25,6 +26,8 @@ export interface App {
   save(): void;
   /** Sends any unsaved progress to the cloud, then back to the password screen. */
   signOut(): Promise<void>;
+  /** Sends any unsaved progress to the cloud, then starts again as `to`. */
+  switchProfile(to: ProfileInfo): Promise<void>;
   go(scene: Scene, transition?: 'page' | 'fade' | 'none'): Promise<void>;
 }
 

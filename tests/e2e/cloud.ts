@@ -5,19 +5,27 @@
  */
 import { expect, type Page } from '@playwright/test';
 
-export interface FakeCloud {
-  jasper: { data: any; rev: number };
+export interface FakeProfile {
+  label: string;
+  data: any;
+  rev: number;
 }
+
+export type FakeCloud = Record<string, FakeProfile>;
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Authorization, Content-Type',
-  'Access-Control-Allow-Methods': 'GET, PUT, POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
 };
 
-export async function fakeCloud(page: Page, seed?: object): Promise<FakeCloud> {
-  const cloud: FakeCloud = { jasper: { data: seed ?? null, rev: seed ? 1 : 0 } };
-  await page.route(/\/(login|profile\/\w+)$/, async (route) => {
+/** `jasper` is Jasper's save; `others` are extra profiles (e.g. { demo: { label: 'Demo', data } }). */
+export async function fakeCloud(page: Page, jasper?: object, others: Record<string, { label: string; data: object }> = {}): Promise<FakeCloud> {
+  const cloud: FakeCloud = {};
+  if (jasper) cloud.jasper = { label: 'Jasper', data: jasper, rev: 1 };
+  for (const [id, p] of Object.entries(others)) cloud[id] = { ...p, rev: 1 };
+
+  await page.route(/\/(login|profiles|profile\/[\w-]+)$/, async (route) => {
     const req = route.request();
     const json = (status: number, body: unknown) => route.fulfill({ status, headers: CORS, contentType: 'application/json', body: JSON.stringify(body) });
     if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: CORS });
@@ -27,15 +35,26 @@ export async function fakeCloud(page: Page, seed?: object): Promise<FakeCloud> {
       const ok = String(req.postDataJSON()?.password ?? '').trim().toLowerCase() === 'owl';
       return ok ? json(200, { token: 'test-jasper', who: 'jasper' }) : json(401, { error: 'Wrong password' });
     }
-    if (!path.endsWith('/profile/jasper')) return json(404, { error: 'Not found' });
     if (req.headers().authorization !== 'Bearer test-jasper') return json(401, { error: 'Please sign in' });
-    const p = cloud.jasper;
-    if (req.method() === 'GET') return json(200, { ...p, token: 'test-jasper' });
+    if (path.endsWith('/profiles')) {
+      const others = Object.entries(cloud)
+        .filter(([id]) => id !== 'jasper')
+        .map(([id, p]) => ({ id, label: p.label }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+      return json(200, { profiles: [{ id: 'jasper', label: 'Jasper' }, ...others] });
+    }
+
+    const id = path.split('/').pop()!;
+    const p = cloud[id];
+    if (req.method() === 'GET') return json(200, { data: p?.data ?? null, rev: p?.rev ?? 0, label: p?.label ?? id, token: 'test-jasper' });
+    if (req.method() === 'DELETE') {
+      delete cloud[id];
+      return json(200, { ok: true });
+    }
     const body = req.postDataJSON();
-    if (body.rev !== p.rev) return json(409, p);
-    p.data = body.data;
-    p.rev++;
-    return json(200, { rev: p.rev });
+    if (body.rev !== (p?.rev ?? 0)) return json(409, { data: p?.data ?? null, rev: p?.rev ?? 0, label: p?.label });
+    cloud[id] = { label: body.label ?? p?.label ?? id, data: body.data, rev: body.rev + 1 };
+    return json(200, { rev: body.rev + 1 });
   });
   return cloud;
 }

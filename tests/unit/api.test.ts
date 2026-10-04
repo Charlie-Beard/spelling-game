@@ -45,13 +45,13 @@ describe('/profile', () => {
     expect((await callApi(env, 'GET', '/profile/jasper', { token: otherSecret })).status).toBe(401);
   });
 
-  it('has only Jasper’s profile (the old grown-up one is gone)', async () => {
+  it('only reaches profiles with sensible ids', async () => {
     const env = testEnv();
-    const jasper = await tokenFor(env, 'owl');
-    expect((await callApi(env, 'GET', '/profile/jasper', { token: jasper })).status).toBe(200);
-    expect((await callApi(env, 'GET', '/profile/parent', { token: jasper })).status).toBe(404);
-    expect((await callApi(env, 'PUT', '/profile/parent', { token: jasper, body: { data: { v: 1 }, rev: 0 } })).status).toBe(404);
-    expect(env.DB.rows.size).toBe(0);
+    const token = await tokenFor(env, 'owl');
+    for (const id of ['Jasper', 'no spaces', '-dash', 'x'.repeat(40)]) {
+      expect((await callApi(env, 'GET', `/profile/${encodeURIComponent(id)}`, { token })).status).toBe(404);
+    }
+    expect((await callApi(env, 'GET', '/profiles')).status).toBe(401);
   });
 
   it('turns away a grown-up token from before there was one login', async () => {
@@ -80,12 +80,12 @@ describe('/profile', () => {
     // A second device that also thought it was first gets the saved copy back.
     const clash = await put({ gems: 9 }, 0);
     expect(clash.status).toBe(409);
-    expect(clash.body).toEqual({ data: { v: 1, gems: 1 }, rev: 1 });
+    expect(clash.body).toEqual({ data: { v: 1, gems: 1 }, rev: 1, label: 'Jasper' });
 
     expect((await put({ gems: 2 }, 1)).body).toEqual({ rev: 2 });
     const stale = await put({ gems: 5 }, 1);
     expect(stale.status).toBe(409);
-    expect(stale.body).toEqual({ data: { v: 1, gems: 2 }, rev: 2 });
+    expect(stale.body).toEqual({ data: { v: 1, gems: 2 }, rev: 2, label: 'Jasper' });
 
     const got = await callApi(env, 'GET', '/profile/jasper', { token });
     expect(got.body).toMatchObject({ data: { v: 1, gems: 2 }, rev: 2 });
@@ -111,5 +111,61 @@ describe('CORS', () => {
     expect(ok.headers.get('Access-Control-Allow-Headers')).toContain('Authorization');
     const other = await callApi(env, 'POST', '/login', { origin: 'https://elsewhere.test', body: { password: 'owl' } });
     expect(other.headers.get('Access-Control-Allow-Origin')).toBeNull();
+  });
+});
+
+describe('profiles', () => {
+  it('always lists Jasper first, then the others by name', async () => {
+    const env = testEnv();
+    const token = await tokenFor(env, 'owl');
+    expect((await callApi(env, 'GET', '/profiles', { token })).body).toEqual({ profiles: [{ id: 'jasper', label: 'Jasper' }] });
+    await callApi(env, 'PUT', '/profile/demo', { token, body: { data: { v: 1 }, rev: 0, label: 'Demo' } });
+    await callApi(env, 'PUT', '/profile/ava', { token, body: { data: { v: 1 }, rev: 0, label: 'Ava' } });
+    await callApi(env, 'PUT', '/profile/jasper', { token, body: { data: { v: 1 }, rev: 0 } });
+    const list = (await callApi(env, 'GET', '/profiles', { token })).body.profiles;
+    expect(list).toEqual([
+      { id: 'jasper', label: 'Jasper' },
+      { id: 'ava', label: 'Ava' },
+      { id: 'demo', label: 'Demo' },
+    ]);
+  });
+
+  it('keeps each profile’s save apart', async () => {
+    const env = testEnv();
+    const token = await tokenFor(env, 'owl');
+    await callApi(env, 'PUT', '/profile/jasper', { token, body: { data: { v: 1, gems: 9 }, rev: 0 } });
+    await callApi(env, 'PUT', '/profile/demo', { token, body: { data: { v: 1, gems: 0 }, rev: 0, label: 'Demo' } });
+    expect((await callApi(env, 'GET', '/profile/jasper', { token })).body.data.gems).toBe(9);
+    const demo = (await callApi(env, 'GET', '/profile/demo', { token })).body;
+    expect(demo).toMatchObject({ data: { gems: 0 }, rev: 1, label: 'Demo' });
+  });
+
+  it('won’t create a profile whose id is taken', async () => {
+    const env = testEnv();
+    const token = await tokenFor(env, 'owl');
+    await callApi(env, 'PUT', '/profile/demo', { token, body: { data: { v: 1 }, rev: 0, label: 'Demo' } });
+    const again = await callApi(env, 'PUT', '/profile/demo', { token, body: { data: { v: 1 }, rev: 0, label: 'Demo 2' } });
+    expect(again.status).toBe(409);
+    expect(env.DB.rows.get('demo')!.label).toBe('Demo');
+  });
+
+  it('deletes other profiles, never Jasper’s', async () => {
+    const env = testEnv();
+    const token = await tokenFor(env, 'owl');
+    await callApi(env, 'PUT', '/profile/jasper', { token, body: { data: { v: 1 }, rev: 0 } });
+    await callApi(env, 'PUT', '/profile/demo', { token, body: { data: { v: 1 }, rev: 0, label: 'Demo' } });
+    expect((await callApi(env, 'DELETE', '/profile/jasper', { token })).status).toBe(400);
+    expect((await callApi(env, 'DELETE', '/profile/demo')).status).toBe(401);
+    expect((await callApi(env, 'DELETE', '/profile/demo', { token })).status).toBe(200);
+    expect([...env.DB.rows.keys()]).toEqual(['jasper']);
+  });
+
+  it('caps the number of profiles', async () => {
+    const env = testEnv();
+    const token = await tokenFor(env, 'owl');
+    for (let i = 0; i < 20; i++) await callApi(env, 'PUT', `/profile/p${i}`, { token, body: { data: { v: 1 }, rev: 0, label: `P${i}` } });
+    expect((await callApi(env, 'PUT', '/profile/one-more', { token, body: { data: { v: 1 }, rev: 0 } })).status).toBe(400);
+    // Jasper's own save is never refused.
+    expect((await callApi(env, 'PUT', '/profile/jasper', { token, body: { data: { v: 1 }, rev: 0 } })).status).toBe(200);
   });
 });
