@@ -106,7 +106,10 @@ export class CompleteScene extends Scene {
     });
     r.append(next, map);
     this.buttons = [next, map];
-    this.buttons.forEach((b) => (b.style.opacity = '0'));
+    this.buttons.forEach((b) => {
+      b.style.opacity = '0';
+      b.style.pointerEvents = 'none';
+    });
   }
 
   async enter(): Promise<void> {
@@ -133,7 +136,10 @@ export class CompleteScene extends Scene {
     await this.sleep(400);
     if (this.o.newReward) await voice.say(c.kind === 'horcrux' ? PHRASES.newHorcrux : PHRASES.newCard);
     sfx.gem();
-    for (const b of this.buttons) void sm(b, 0.35, { startAt: { scale: 0 }, opacity: 1, scale: 1, ease: 'back.out(2)' });
+    for (const b of this.buttons) {
+      b.style.pointerEvents = '';
+      void sm(b, 0.35, { startAt: { scale: 0 }, opacity: 1, scale: 1, ease: 'back.out(2)' });
+    }
     if (!this.o.breakDue) this.onCleanup(breathe(this.buttons[0], 0.06, 1.6));
     if (this.o.breakDue) {
       await this.sleep(600);

@@ -242,7 +242,7 @@ export class SpellScene extends Scene {
     const slotTop = SLOTS.cy - th / 2;
     units.forEach((unit, k) => {
       const w = slotW[k];
-      const el = place(h('div', { class: 'slot', html: slotHole(w, th, hashString(unit.g) + k) }), x, slotTop, w, th);
+      const el = place(h('div', { class: 'slot', 'data-want': unit.g, html: slotHole(w, th, hashString(unit.g) + k) }), x, slotTop, w, th);
       el.dataset.x = String(x);
       this.layer.append(el);
       this.slotEls.push(el);
@@ -284,7 +284,7 @@ export class SpellScene extends Scene {
     const trayTop = TRAY.cy - th / 2;
     tiles.forEach((tile, k) => {
       const w = tileW[k];
-      const el = h('button', { class: 'tile', 'aria-label': `letters ${tile.g}` }) as HTMLButtonElement;
+      const el = h('button', { class: 'tile', 'data-g': tile.g, 'aria-label': `letters ${tile.g}` }) as HTMLButtonElement;
       el.innerHTML = `<div class="glow">${glowBlob()}</div>${tileCard(w, th, hashString(tile.g) * 31 + k * 7 + this.index, '#fffaf0')}<span class="glyph" style="font-size:${font}px">${tile.g}</span>`;
       place(el, x, trayTop, w, th);
       // Tiles sit at slightly different angles, like cards dropped on a desk.

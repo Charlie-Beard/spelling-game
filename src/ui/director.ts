@@ -15,6 +15,7 @@ export class Director {
   private current: Scene | null = null;
   private sheet: HTMLElement;
   private busy = false;
+  private pending: { scene: Scene; transition: 'page' | 'fade' | 'none' } | null = null;
 
   constructor(stage: HTMLElement) {
     this.stage = stage;
@@ -30,7 +31,11 @@ export class Director {
   }
 
   async go(next: Scene, transition: 'page' | 'fade' | 'none' = 'page'): Promise<void> {
-    if (this.busy) return;
+    if (this.busy) {
+      // Keep only the latest request; it runs when the current change ends.
+      this.pending = { scene: next, transition };
+      return;
+    }
     this.busy = true;
     try {
       next.build();
@@ -57,6 +62,11 @@ export class Director {
       this.current = next;
     } finally {
       this.busy = false;
+    }
+    if (this.pending) {
+      const p = this.pending;
+      this.pending = null;
+      return this.go(p.scene, p.transition);
     }
     // Scenes may run long sequences in enter(); don't block navigation on it.
     void next.enter();
