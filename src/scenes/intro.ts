@@ -7,6 +7,7 @@ import { nightSky } from '../art/scenery';
 import { parchment } from '../art/ui';
 import type { Book, Chapter } from '../core/curriculum';
 import { breathe, pop, sm } from '../ui/anim';
+import { personalise } from '../core/phrases';
 import { banner, sealButton, speech } from '../ui/components';
 import { h, place } from '../ui/dom';
 import { Scene, type App } from '../ui/scene';
@@ -43,7 +44,7 @@ export class IntroScene extends Scene {
     this.tap(this.host, () => void this.speak());
     r.append(this.host);
 
-    this.bubble = speech(c.intro, { x: 520, y: 250, w: 560, h: 220 });
+    this.bubble = speech(personalise(c.intro, this.app.progress.name), { x: 520, y: 250, w: 560, h: 220 });
     r.append(this.bubble);
 
     this.play = sealButton('play', { x: 860, y: 520, size: 170, color: C.red, aria: 'Play', name: 'intro-play' });

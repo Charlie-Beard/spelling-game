@@ -1,5 +1,22 @@
 import { expect, test, type Page } from '@playwright/test';
 
+/** Waits until the spelling screen accepts taps. */
+const idle = (page: Page) =>
+  page.waitForFunction(() => {
+    const s = document.querySelector('.scene.spell');
+    return s && !s.hasAttribute('data-busy') && document.querySelector('.slot.target');
+  }, null, { timeout: 30_000 });
+
+/** Taps Play once it has popped in (it starts at zero size). */
+async function play(page: Page) {
+  const btn = page.getByRole('button', { name: 'Play' });
+  await expect(async () => {
+    const box = await btn.boundingBox();
+    expect(box && box.width > 100).toBeTruthy();
+  }).toPass({ timeout: 10_000 });
+  await btn.click({ force: true });
+}
+
 /** Spells whatever word is on screen, tapping the right tile for each slot. */
 async function spellWord(page: Page) {
   for (;;) {
@@ -23,7 +40,7 @@ test('plays the first chapter from the title screen to the reward', async ({ pag
   await expect(stop).toContainText('Hagrid');
   await stop.click({ force: true });
   // Intro → play
-  await page.getByRole('button', { name: 'Play' }).click({ force: true });
+  await play(page);
   for (let w = 0; w < 5; w++) {
     await expect(page.locator('.slot.target')).toBeVisible({ timeout: 20_000 });
     await spellWord(page);
@@ -45,15 +62,16 @@ test('plays the first chapter from the title screen to the reward', async ({ pag
 test('wrong tiles step up to Hedwig placing the letter', async ({ page }) => {
   test.setTimeout(60_000);
   await page.goto('/?scene=chapter&id=b1c1');
-  await page.getByRole('button', { name: 'Play' }).click({ force: true });
-  await expect(page.locator('.slot.target')).toBeVisible({ timeout: 20_000 });
+  await play(page);
+  await idle(page);
   const want = await page.locator('.slot.target').getAttribute('data-want');
   const wrong = page.locator(`.tile:not(.placed):not([data-g="${want}"])`).first();
   await wrong.click();
-  await page.waitForTimeout(1800);
+  await page.waitForTimeout(100);
+  await idle(page);
   await wrong.click();
   await expect(page.locator('.tile.glowing')).toHaveAttribute('data-g', want!, { timeout: 5000 });
-  await page.waitForTimeout(1800);
+  await idle(page);
   await page.locator(`.tile:not(.placed):not([data-g="${want}"])`).first().click();
   // Hedwig places it: the first slot is no longer the target.
   await expect(page.locator('.slot').first()).toHaveClass(/done/, { timeout: 8000 });
@@ -62,7 +80,7 @@ test('wrong tiles step up to Hedwig placing the letter', async ({ page }) => {
 test('a fast second tap while a letter is flying is not lost', async ({ page }) => {
   test.setTimeout(60_000);
   await page.goto('/?scene=chapter&id=b1c1');
-  await page.getByRole('button', { name: 'Play' }).click({ force: true });
+  await play(page);
   await page.waitForFunction(() => {
     const s = document.querySelector('.scene.spell');
     return s && !s.hasAttribute('data-busy') && document.querySelector('.slot.target');

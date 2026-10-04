@@ -63,7 +63,7 @@ export class CompleteScene extends Scene {
       r.append(place(h('div', { class: 'reward-name' }, `You found ${HORCRUX_NAMES[c.reward].replace(/^The /, 'the ')}!`), 0, 500, 1180));
     } else if (c.kind === 'battle') {
       const me = this.app.progress.avatar ?? 'harry';
-      const card = frogCard(characters[me](), 'Hero of Hogwarts', { w: 290 });
+      const card = frogCard(characters[me](), this.app.progress.name.trim() ? `${this.app.progress.name.trim()}, Hero of Hogwarts` : 'Hero of Hogwarts', { w: 290 });
       this.reward = place(h('div', { class: 'card-reward' }), 445, 140, 290, 406);
       this.reward.append(card);
       r.append(this.reward);
@@ -134,7 +134,7 @@ export class CompleteScene extends Scene {
     await this.sleep(400);
     if (this.o.newReward && c.kind !== 'battle') await voice.say(c.kind === 'horcrux' ? PHRASES.newHorcrux : PHRASES.newCard);
     // Say who (or what) it is, so the card means something.
-    const name = c.kind === 'horcrux' ? HORCRUX_NAMES[c.reward] : c.kind === 'battle' ? 'Hero of Hogwarts' : HOST_NAMES[c.host];
+    const name = c.kind === 'horcrux' ? HORCRUX_NAMES[c.reward] : c.kind === 'battle' ? '{name}, Hero of Hogwarts!' : HOST_NAMES[c.host];
     if (name) {
       void pop(this.reward, 1.05);
       await voice.say(name);

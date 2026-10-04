@@ -5,6 +5,7 @@
  * ever stored here, never in the repository.
  */
 import { ALL_CHAPTERS, type Avatar, type Chapter } from './curriculum';
+import { DEFAULT_NAME } from './phrases';
 import type { RoundResult } from './round';
 
 export interface Settings {
@@ -61,7 +62,7 @@ const BREAK_RESET_MS = 20 * 60 * 1000;
 export function defaultProgress(prefersReducedMotion = false): Progress {
   return {
     v: 1,
-    name: '',
+    name: DEFAULT_NAME,
     avatar: null,
     chapters: {},
     cards: [],

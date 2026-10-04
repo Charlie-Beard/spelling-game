@@ -44,7 +44,7 @@ The game is landscape-only. Turning the iPad upright pauses it.
 
 - **Progress:** chapters done and the words that need practice.
 - **Settings:**
-  - his name, which is saved only on the iPad and shown on his Hogwarts letter
+  - his name (set to Jasper): it is on his Hogwarts letter, and the narrator and characters say "Jasper" out loud
   - volume
   - calm mode (less movement)
   - break reminders

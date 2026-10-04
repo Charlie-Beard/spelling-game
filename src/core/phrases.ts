@@ -5,9 +5,10 @@
  */
 
 export const PRAISE = [
-  'Brilliant!',
-  'Well done!',
+  'Brilliant, {name}!',
+  'Well done, {name}!',
   'Wicked!',
+  'Great spelling, {name}!',
   'Amazing spelling!',
   'Fantastic!',
   'Super!',
@@ -18,24 +19,24 @@ export const PRAISE = [
 ];
 
 export const PHRASES = {
-  welcome: 'Welcome to Wizard Words!',
-  choose: 'Who do you want to be?',
+  welcome: 'Welcome to Wizard Words, {name}!',
+  choose: 'Who do you want to be, {name}?',
   harry: 'Harry Potter!',
   ron: 'Ron Weasley!',
   hermione: 'Hermione Granger!',
-  letsGo: 'Let’s go!',
+  letsGo: 'Let’s go, {name}!',
   canYouSpell: 'Can you spell…',
   listen: 'Listen…',
   tryAgain: 'Hmm, try another one.',
   listenSound: 'Listen to the sound…',
   hedwigHelp: 'Hedwig can help!',
   hedwigHere: 'Here you go!',
-  chapterDone: 'You finished the chapter!',
+  chapterDone: 'You finished the chapter, {name}!',
   newCard: 'You got a new wizard card!',
   newHorcrux: 'You found a Horcrux!',
   battleStart: 'Spell each word to cast a shield!',
-  battleWin: 'You saved Hogwarts! Expelliarmus!',
-  breakTime: 'Great work! Time for a little break.',
+  battleWin: 'You saved Hogwarts, {name}! Expelliarmus!',
+  breakTime: 'Great work, {name}! Time for a little break.',
   turnSideways: 'Please turn the iPad sideways.',
   nextChapter: 'Ready for the next one?',
   allDone: 'Hooray! All done!',
@@ -45,6 +46,25 @@ export type PhraseKey = keyof typeof PHRASES;
 
 /** Announced when he arrives in a new book. */
 export const bookLine = (n: number, title: string): string => `Book ${n}: ${title}!`;
+
+/** The player's name. Lines may contain {name}. */
+export const DEFAULT_NAME = 'Jasper';
+
+/** A line with the child's name in it. */
+export function personalise(text: string, name: string): string {
+  const n = name.trim();
+  return n ? text.split('{name}').join(n) : generic(text);
+}
+
+/** The same line without a name ("Well done, {name}!" → "Well done!"). */
+export function generic(text: string): string {
+  const t = text
+    .replace(/,\s*\{name\}/g, '')
+    .replace(/\{name\},\s*/g, '')
+    .replace(/\s*\{name\}/g, '')
+    .replace(/\s+([!?.…])/g, '$1');
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
 
 /** Stable id for any spoken line, used as its audio file name. */
 export function lineId(text: string): string {

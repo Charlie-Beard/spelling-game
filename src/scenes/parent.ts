@@ -8,7 +8,7 @@
 import { setVolumes } from '../audio/engine';
 import { deleteRecording, listRecordings, saveRecording } from '../audio/recordings';
 import { sfx } from '../audio/sfx';
-import { voice } from '../audio/voice';
+import { setPlayerName, voice } from '../audio/voice';
 import { C } from '../art/palette';
 import { parchment } from '../art/ui';
 import { ALL_CHAPTERS, HORCRUXES } from '../core/curriculum';
@@ -130,6 +130,7 @@ export class ParentScene extends Scene {
     const name = h('input', { type: 'text', value: p.name, placeholder: 'e.g. Sam', maxlength: 20, autocomplete: 'off' }) as HTMLInputElement;
     name.addEventListener('input', () => {
       p.name = name.value;
+      setPlayerName(p.name);
       save();
     });
 
@@ -184,12 +185,13 @@ export class ParentScene extends Scene {
       }
       const fresh = reset();
       Object.assign(p, fresh);
+      setPlayerName(p.name);
       save();
       this.show('settings');
     });
 
     this.body.append(
-      row('Child’s name', name, 'Only saved on this iPad. Shown on the Hogwarts letter.'),
+      row('Child’s name', name, 'Shown on his Hogwarts letter. The narrator and characters say “Jasper” out loud; other names are shown but not spoken.'),
       row('Volume', vol),
       row('Calm mode', calm, 'Less movement: no paper jitter, shorter animations, no confetti.'),
       row('Break reminder', brk, 'A gentle “time for a break” screen.'),
