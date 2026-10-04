@@ -1,5 +1,5 @@
-import '@fontsource/andika/400.css';
-import '@fontsource/andika/700.css';
+import '@fontsource/andika/latin-400.css';
+import '@fontsource/andika/latin-700.css';
 import './styles/base.css';
 import './styles/paper.css';
 import './styles/ui.css';
@@ -57,3 +57,8 @@ else if (scene === 'album') game.album();
 else if (scene === 'parent') game.parent();
 else if (scene === 'chapter') game.chapter(q.get('id') ?? 'b1c1');
 else game.title();
+
+// Offline support (production builds only).
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => void navigator.serviceWorker.register('./sw.js').catch(() => {}));
+}

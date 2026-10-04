@@ -1,6 +1,6 @@
 /** Development-only art lab: renders illustrations for review. */
-import '@fontsource/andika/400.css';
-import '@fontsource/andika/700.css';
+import '@fontsource/andika/latin-400.css';
+import '@fontsource/andika/latin-700.css';
 import './styles/base.css';
 import './styles/paper.css';
 import { installGrain } from './art/grain';
