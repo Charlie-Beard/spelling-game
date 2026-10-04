@@ -11,6 +11,7 @@
 import { gsap } from 'gsap';
 import { sfx } from '../audio/sfx';
 import { voice } from '../audio/voice';
+import { characters } from '../art/characters';
 import { hedwig } from '../art/characters/hedwig';
 import { C } from '../art/palette';
 import { hashString, rng } from '../art/paper';
@@ -64,6 +65,7 @@ export class SpellScene extends Scene {
   private starsEl!: HTMLElement;
   private gemsEl!: HTMLElement;
   private gemCount!: HTMLElement;
+  private caster!: HTMLElement;
 
   /** The desk layer (parchment + word); battle mode slides it away. */
   protected panel!: HTMLElement;
@@ -144,6 +146,11 @@ export class SpellScene extends Scene {
 
     this.layer = h('div', { class: 'word-layer' });
     this.panel.append(this.layer);
+
+    // The child's character, hidden below the edge until a word is spelt.
+    const avatar = this.app.progress.avatar ?? 'harry';
+    this.caster = place(h('div', { class: 'caster', html: characters[avatar]().replace(/viewBox="[^"]*"/, 'viewBox="20 10 260 330"') }), 190, 830, 180, 228);
+    this.panel.append(this.caster);
     this.startBlinking();
   }
 
@@ -466,6 +473,7 @@ export class SpellScene extends Scene {
     await capped(voice.word(this.round.word.text), 2500);
     if (!this.alive) return;
 
+    await this.cast();
     sfx.success();
     this.sparkles();
     this.fillStar(this.index);
@@ -494,6 +502,31 @@ export class SpellScene extends Scene {
       await this.afterAll();
       if (this.alive) this.o.onDone(this.results);
     }
+  }
+
+  /** The child's character pops up and casts a spell at the picture. */
+  private async cast(): Promise<void> {
+    if (isCalm()) return;
+    const wand = this.caster.querySelector('[data-part="wand"]');
+    await sm(this.caster, 0.35, { y: -250, ease: 'back.out(1.4)' });
+    sfx.sparkle();
+    if (wand) void gsap.timeline().to(wand, { rotation: -35, duration: 0.12, ease: stepped(0.12) }).to(wand, { rotation: 0, duration: 0.25, ease: stepped(0.25) });
+    for (let k = 0; k < 6; k++) {
+      const p = place(h('div', { class: 'particle', html: star(true, `cast${k % 3}`) }), 340, 600);
+      this.root.append(p);
+      gsap.to(p, {
+        x: PIC.x + PIC.s / 2 - 340 + (Math.random() - 0.5) * 120,
+        y: PIC.y + PIC.s / 2 - 600 + (Math.random() - 0.5) * 120,
+        rotation: 200,
+        scale: 1.4,
+        duration: 0.5,
+        delay: k * 0.05,
+        ease: stepped(0.5, 'power1.out'),
+        onComplete: () => p.remove(),
+      });
+    }
+    await this.sleep(450);
+    void sm(this.caster, 0.35, { y: 0, ease: 'power2.in', delay: 0.6 });
   }
 
   private nextPraise(): string {

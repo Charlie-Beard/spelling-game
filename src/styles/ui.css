@@ -849,3 +849,13 @@
   height: 100%;
   overflow: visible;
 }
+
+.caster {
+  position: absolute;
+  z-index: 40;
+  pointer-events: none;
+}
+.caster svg {
+  width: 100%;
+  height: 100%;
+}
