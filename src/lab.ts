@@ -6,6 +6,7 @@ import './styles/paper.css';
 import { installGrain } from './art/grain';
 import { picture, pictureNames } from './art/pictures';
 import { characters } from './art/characters';
+import { horcruxArt } from './art/horcruxes';
 
 installGrain();
 const params = new URLSearchParams(location.search);
@@ -15,7 +16,9 @@ const size = Number(params.get('size') ?? 210);
 const all: Record<string, () => string> =
   set === 'chars'
     ? characters
-    : Object.fromEntries(pictureNames().map((n) => [n, () => picture(n)]));
+    : set === 'horcrux'
+      ? horcruxArt
+      : Object.fromEntries(pictureNames().map((n) => [n, () => picture(n)]));
 const names = Object.keys(all).filter((n) => !only || only.includes(n));
 document.body.style.cssText = 'position:static;overflow:auto;background:#e9d9b4;touch-action:auto';
 document.body.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:14px;padding:16px">${names
