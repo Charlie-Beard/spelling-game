@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { readdirSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
 
@@ -17,17 +17,24 @@ function serviceWorker(): Plugin {
     },
     generateBundle(_opts, bundle) {
       const files = new Set<string>(Object.keys(bundle));
+      // Bundle names already carry content hashes; public files (audio) don't,
+      // so hash their bytes too, or a re-recorded clip would never reach a
+      // device that has the old one cached.
+      const contents = createHash('sha1');
       const walk = (dir: string) => {
-        for (const f of readdirSync(dir)) {
+        for (const f of readdirSync(dir).sort()) {
           const p = join(dir, f);
           if (statSync(p).isDirectory()) walk(p);
-          else files.add(relative('public', p).split('\\').join('/'));
+          else {
+            files.add(relative('public', p).split('\\').join('/'));
+            contents.update(readFileSync(p));
+          }
         }
       };
       walk('public');
       files.delete('sw.js');
       const list = ['./', ...[...files].filter((f) => !f.endsWith('.map')).sort()];
-      const version = createHash('sha1').update(list.join('|')).digest('hex').slice(0, 10);
+      const version = contents.update(list.join('|')).digest('hex').slice(0, 10);
       this.emitFile({
         type: 'asset',
         fileName: 'sw.js',
