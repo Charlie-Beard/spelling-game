@@ -35,13 +35,22 @@ export const PHRASES = {
   newCard: 'You got a new wizard card!',
   newHorcrux: 'You found a Horcrux!',
   battleStart: 'Spell each word to cast a shield!',
-  battleWin: 'You saved Hogwarts, {name}! Expelliarmus!',
+  battleWin: 'You did it, {name}! You saved Hogwarts!',
+  protego: 'Protego!',
+  expelliarmus: 'Expelliarmus!',
   turnSideways: 'Please turn the iPad sideways.',
   nextChapter: 'Ready for the next one?',
   allDone: 'Hooray! All done!',
 } as const;
 
 export type PhraseKey = keyof typeof PHRASES;
+
+/** Voldemort's lines in the final duel (his own voice). */
+export const VOLDEMORT = {
+  taunt: 'Ha! You will never beat me!',
+  spell: 'Stupefy!',
+  lose: 'Nooooo!',
+} as const;
 
 /** Announced when he arrives in a new book. */
 export const bookLine = (n: number, title: string): string => `Book ${n}: ${title}!`;

@@ -49,6 +49,7 @@ function noiseBurst(t: number, o: { freq: number; q?: number; peak?: number; dec
   const ac = audio();
   const src = ac.createBufferSource();
   src.buffer = noise();
+  src.loop = true;
   src.playbackRate.value = 0.8 + Math.random() * 0.4;
   const f = ac.createBiquadFilter();
   f.type = o.type ?? 'bandpass';
@@ -199,6 +200,82 @@ export const sfx = {
     const t = now();
     tone(392, t, { wave: 'sine', peak: 0.12, attack: 0.05, decay: 0.9, glideTo: 784 });
     [1046.5, 1318.51, 1567.98].forEach((n, i) => bell(n, t + 0.15 + i * 0.05, 0.1, 0.9));
+  },
+
+  // --- The duel with Voldemort (exciting, but still round and warm) ---
+
+  /** Rolling thunder as Voldemort arrives. */
+  thunder(): void {
+    const t = now();
+    noiseBurst(t, { freq: 700, q: 0.5, peak: 0.28, attack: 0.04, decay: 1.9, type: 'lowpass', sweepTo: 90 });
+    noiseBurst(t + 0.35, { freq: 400, q: 0.5, peak: 0.18, attack: 0.1, decay: 1.4, type: 'lowpass', sweepTo: 70 });
+    tone(55, t, { wave: 'sine', peak: 0.2, attack: 0.05, decay: 1.8, glideTo: 38 });
+  },
+
+  /** The hero's spell flies: a bright rising "fwee-ip!". */
+  zap(): void {
+    const t = now();
+    noiseBurst(t, { freq: 900, q: 1.2, peak: 0.16, attack: 0.02, decay: 0.3, sweepTo: 6000 });
+    tone(330, t, { wave: 'triangle', peak: 0.14, attack: 0.01, decay: 0.3, glideTo: 1320 });
+    [1567.98, 2093.0, 2637.02].forEach((n, i) => bell(n, t + 0.08 + i * 0.04, 0.06, 0.4));
+  },
+
+  /** Voldemort's spell: a low, falling "vwoom". */
+  darkZap(): void {
+    const t = now();
+    noiseBurst(t, { freq: 2600, q: 1.4, peak: 0.16, attack: 0.02, decay: 0.42, sweepTo: 260 });
+    tone(520, t, { wave: 'triangle', peak: 0.13, attack: 0.01, decay: 0.42, glideTo: 110 });
+    tone(523, t, { wave: 'sine', peak: 0.08, attack: 0.01, decay: 0.42, glideTo: 104, detune: 30 });
+  },
+
+  /** A spell bounces off a shield: a ringing magical "ting-clang". */
+  block(): void {
+    const t = now();
+    noiseBurst(t, { freq: 2400, q: 0.8, peak: 0.2, decay: 0.12 });
+    bell(659.25, t, 0.16, 1.1);
+    bell(987.77, t + 0.01, 0.12, 0.9);
+    bell(1396.91, t + 0.02, 0.08, 0.7);
+  },
+
+  /** A spell hits something: a soft, deep "boomf". */
+  boom(): void {
+    const t = now();
+    tone(140, t, { wave: 'sine', peak: 0.3, attack: 0.01, decay: 0.7, glideTo: 40 });
+    noiseBurst(t, { freq: 1200, q: 0.5, peak: 0.24, attack: 0.01, decay: 0.6, type: 'lowpass', sweepTo: 120 });
+  },
+
+  /** Two spells locked together: crackling and humming, rising in pitch. */
+  crackle(seconds: number): void {
+    const t = now();
+    const ac = audio();
+    [[110, 0], [110, 14], [165, -9]].forEach(([f, det]) => {
+      const o = ac.createOscillator();
+      const g = ac.createGain();
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(f, t);
+      o.frequency.exponentialRampToValueAtTime(f * 2.6, t + seconds);
+      o.detune.value = det;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.06, t + 0.3);
+      g.gain.setValueAtTime(0.06, t + seconds - 0.15);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + seconds);
+      o.connect(g).connect(buses.sfx);
+      o.start(t);
+      o.stop(t + seconds + 0.05);
+    });
+    // Sparky crackles, getting busier.
+    for (let s = 0; s < seconds; ) {
+      noiseBurst(t + s, { freq: 2500 + Math.random() * 4000, q: 2, peak: 0.05 + Math.random() * 0.08, decay: 0.03 + Math.random() * 0.05 });
+      s += 0.03 + Math.random() * 0.12 * (1 - s / seconds / 1.5);
+    }
+  },
+
+  /** The final hit: a big bright burst. */
+  triumph(): void {
+    const t = now();
+    tone(98, t, { wave: 'sine', peak: 0.32, attack: 0.01, decay: 1.2, glideTo: 36 });
+    noiseBurst(t, { freq: 3000, q: 0.4, peak: 0.26, attack: 0.01, decay: 1.4, type: 'lowpass', sweepTo: 150 });
+    [523.25, 783.99, 1046.5, 1567.98, 2093.0].forEach((n, i) => bell(n, t + 0.05 + i * 0.03, 0.14, 1.6));
   },
 };
 

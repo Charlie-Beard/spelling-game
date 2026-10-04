@@ -856,17 +856,62 @@
 .smoke {
   position: absolute;
 }
-.beam {
-  position: absolute;
-  border-radius: 7px;
-  background: linear-gradient(90deg, #ffd7a8, #ff5a3c);
-  box-shadow: 0 0 22px #ff8a5c;
-  z-index: 5;
-}
 .spark {
   position: absolute;
   border-radius: 50%;
   z-index: 6;
+}
+/* The duel with Voldemort */
+.battle-vold svg {
+  transform: scaleX(-1);
+}
+.duel-dark,
+.duel-flash {
+  position: absolute;
+  inset: -40px;
+  pointer-events: none;
+}
+.duel-dark {
+  background: #0b0d24;
+  opacity: 0;
+}
+.duel-flash {
+  z-index: 8;
+  opacity: 0;
+}
+.duel-fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 5;
+}
+.bolt,
+.clash,
+.protego {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.bolt {
+  z-index: 6;
+  background: radial-gradient(circle closest-side, #fff 0 24%, var(--c) 48%, transparent 100%);
+}
+.clash {
+  z-index: 6;
+  background: radial-gradient(circle closest-side, #fff 0 30%, #ffe9a8 46%, rgba(255, 190, 110, 0.6) 66%, transparent 100%);
+}
+.protego {
+  z-index: 4;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(191, 227, 255, 0.06) 0 70%,
+    rgba(191, 227, 255, 0.5) 88%,
+    rgba(255, 255, 255, 0.9) 94%,
+    rgba(191, 227, 255, 0) 100%
+  );
 }
 
 /* ---------- Rotate-to-landscape ---------- */

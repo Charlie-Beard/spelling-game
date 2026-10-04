@@ -1100,13 +1100,23 @@
       "speaker": "narrator"
     },
     {
-      "id": "inbi9e",
-      "text": "You saved Hogwarts, Jasper! Expelliarmus!",
+      "id": "9cwuo2",
+      "text": "You did it, Jasper! You saved Hogwarts!",
       "speaker": "narrator"
     },
     {
-      "id": "1h586n5",
-      "text": "You saved Hogwarts! Expelliarmus!",
+      "id": "1gd2z1t",
+      "text": "You did it! You saved Hogwarts!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "198p46e",
+      "text": "Protego!",
+      "speaker": "narrator"
+    },
+    {
+      "id": "ir83l",
+      "text": "Expelliarmus!",
       "speaker": "narrator"
     },
     {
@@ -1193,6 +1203,21 @@
       "id": "1hzi10n",
       "text": "Magic!",
       "speaker": "narrator"
+    },
+    {
+      "id": "2ja8er",
+      "text": "Ha! You will never beat me!",
+      "speaker": "voldemort"
+    },
+    {
+      "id": "4ar9sm",
+      "text": "Stupefy!",
+      "speaker": "voldemort"
+    },
+    {
+      "id": "10clt3z",
+      "text": "Nooooo!",
+      "speaker": "voldemort"
     },
     {
       "id": "1er07h0",

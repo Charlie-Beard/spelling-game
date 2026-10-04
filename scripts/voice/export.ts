@@ -6,7 +6,7 @@ import { writeFileSync } from 'node:fs';
 import { ALL_CHAPTERS, ALL_WORDS, BOOKS } from '../../src/core/curriculum';
 import { GRAPHEME_PHONEME } from '../../src/core/phonics';
 import { HOST_NAMES } from '../../src/core/names';
-import { bookLine, DEFAULT_NAME, generic, lineId, personalise, PHRASES, PRAISE } from '../../src/core/phrases';
+import { bookLine, DEFAULT_NAME, generic, lineId, personalise, PHRASES, PRAISE, VOLDEMORT } from '../../src/core/phrases';
 import { HORCRUX_NAMES } from '../../src/art/horcruxes';
 
 const lines: { id: string; text: string; speaker: string }[] = [];
@@ -23,6 +23,7 @@ const push = (text: string, speaker: string) => {
 };
 Object.values(PHRASES).forEach((t) => add(t));
 PRAISE.forEach((t) => add(t));
+Object.values(VOLDEMORT).forEach((t) => add(t, 'voldemort'));
 Object.values(HOST_NAMES).forEach((t) => add(t));
 Object.values(HORCRUX_NAMES).forEach((t) => add(t));
 add('Hero of Hogwarts');
