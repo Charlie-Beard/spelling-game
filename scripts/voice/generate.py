@@ -93,7 +93,7 @@ class ElevenLabsVoice:
         self.key = os.environ.get("ELEVENLABS_API_KEY")
         if not self.key:
             sys.exit("Set ELEVENLABS_API_KEY (from elevenlabs.io → Profile → API keys).")
-        cfg = json.load(open(os.path.join(HERE, "elevenlabs.json")))
+        cfg = json.load(open(os.path.join(HERE, "elevenlabs.json"), encoding="utf-8"))
         self.model = cfg["model_id"]
         self.phoneme_model = cfg.get("phoneme_model", "eleven_v4")
         self.can_phonemes = phonemes
@@ -170,7 +170,8 @@ def main():
         v = KokoroVoice(args.model)
 
     only = set(args.only.split(","))
-    data = json.load(open(os.path.join(HERE, "lines.json")))
+    # utf-8 explicitly: Windows would otherwise read ’ as "â€™" and the voice reads that out.
+    data = json.load(open(os.path.join(HERE, "lines.json"), encoding="utf-8"))
     for d in ("words", "ph", "lines"):
         os.makedirs(os.path.join(OUT, d), exist_ok=True)
 
@@ -200,14 +201,14 @@ def main():
         lines = [l for l in data["lines"] if not args.speaker or l["speaker"] == args.speaker]
         for line in take(lines):
             make(os.path.join(OUT, "lines", f"{line['id']}.mp3"),
-                 lambda tmp, l=line: v.line(l["text"].replace("’", "'"), l["speaker"], tmp))
+                 lambda tmp, l=line: v.line(l["text"].replace("’", "'").replace("…", "..."), l["speaker"], tmp))
 
     manifest = {
         "words": sorted(f[:-4] for f in os.listdir(os.path.join(OUT, "words")) if f.endswith(".mp3")),
         "ph": sorted(f[:-4] for f in os.listdir(os.path.join(OUT, "ph")) if f.endswith(".mp3")),
         "lines": sorted(f[:-4] for f in os.listdir(os.path.join(OUT, "lines")) if f.endswith(".mp3")),
     }
-    json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w"))
+    json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8"))
     print("manifest:", {k2: len(v2) for k2, v2 in manifest.items()})
 
 
