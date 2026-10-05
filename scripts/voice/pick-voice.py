@@ -5,6 +5,7 @@ your account, and sets it in elevenlabs.json.
     python scripts/voice/pick-voice.py neville                # best match
     python scripts/voice/pick-voice.py neville --pick 2       # the 2nd on the list
     python scripts/voice/pick-voice.py neville --list         # just show the list
+    python scripts/voice/pick-voice.py neville --name Joshua  # the one whose name starts "Joshua"
 
 Searching costs nothing. Each candidate has a preview link to listen to first.
 Needs ELEVENLABS_API_KEY.
@@ -71,6 +72,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("character", choices=sorted(WANTED))
     ap.add_argument("--pick", type=int, default=1, help="which of the listed voices to use (1 = best)")
+    ap.add_argument("--name", help="use the listed voice whose name starts with this")
     ap.add_argument("--list", action="store_true", help="only list the candidates")
     args = ap.parse_args()
     key = os.environ.get("ELEVENLABS_API_KEY")
@@ -95,7 +97,15 @@ def main():
     if args.list:
         return
 
-    chosen = ranked[args.pick - 1]
+    if args.name:
+        # Look through every match, not just the top 5.
+        everyone = sorted(found.values(), key=lambda v: score(v, want), reverse=True)
+        named = [v for v in everyone if (v.get("name") or "").lower().startswith(args.name.lower())]
+        if not named:
+            sys.exit(f'No voice named "{args.name}" in the results. Try --list.')
+        chosen = named[0]
+    else:
+        chosen = ranked[args.pick - 1]
     added = request("POST", f"/voices/add/{chosen['public_owner_id']}/{chosen['voice_id']}", key,
                     {"new_name": f"{chosen.get('name')} ({args.character})"})
     voice_id = added.get("voice_id", chosen["voice_id"])
@@ -107,7 +117,7 @@ def main():
     if not pattern.search(text):
         sys.exit(f'No "{args.character}" entry in elevenlabs.json.')
     open(path, "w", encoding="utf-8", newline="").write(pattern.sub(lambda m: m.group(1) + voice_id + m.group(2), text, count=1))
-    print(f"Chose #{args.pick}: {chosen.get('name')}. Added to your account, and set as {args.character}'s voice "
+    print(f"Chose {chosen.get('name')}. Added to your account, and set as {args.character}'s voice "
           f"in elevenlabs.json ({voice_id}).")
 
 
