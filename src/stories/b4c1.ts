@@ -260,16 +260,22 @@ const drop = (): string =>
 
 export default defineStory({
   lines: {
-    welcome: { who: 'moody', text: 'Welcome to the Quidditch World Cup! Keep your eyes open. Constant vigilance!' },
-    eye: { who: 'moody', text: 'My magic eye spins all the way round. It sees everything!' },
-    spot: { who: 'moody', text: 'A bee! A sheep! And… a mermaid’s tail? What a muddle!' },
-    rain: { who: 'narrator', text: 'Then down comes the rain… but look! The golden snitch!' },
+    welcome: { who: 'moody', text: 'Welcome to the Quidditch World Cup! Keep your eyes peeled… constant vigilance!' },
+    eye: { who: 'moody', text: 'Ha! My magic eye spins right round… it sees everything!' },
+    spot: { who: 'moody', text: 'Oi! A bee! A sheep! And… is that a mermaid’s tail? What a muddle!' },
+    rain: { who: 'moody', text: 'Hah, rain! Typical. But look up there… the golden snitch!' },
     catch: { who: 'narrator', text: 'You zoom after it… and catch it! The crowd stamps their feet!' },
     end: { who: 'moody', text: 'Brilliant flying, {name}! Even my magic eye couldn’t keep up!' },
   },
 
   async play(k) {
     k.backdrop(stadium());
+    k.dim(0.2);
+    k.light(56, 140, 150, { color: C.candle, strength: 0.5 });
+    k.light(1124, 140, 150, { color: C.candle, strength: 0.5 });
+    k.light(590, 620, 300, { color: C.candle, strength: 0.25 });
+    k.ambient('stars', { count: 12, area: [0, 0, 1180, 200], z: 2 });
+    k.music('adventure');
 
     /** A slow paper firework: a spark rises, then the rays open and fade. */
     const firework = async (x: number, y: number, color: string, tip: string): Promise<void> => {
@@ -302,28 +308,38 @@ export default defineStory({
     moody.append(eye);
     k.fx.stomp(2, 0.35);
     await k.enter(moody, 'left', 0.8);
-    await k.say('welcome', moody);
+    k.float(moody, 4, 2.6);
 
-    // Players zoom past, and the magic eye spins after them.
-    const green = k.add(player(C.green, C.greenDark, C.brownDark, 'b4c1-green'), { x: 0, y: 0, w: 180, z: 6, flip: true });
-    const red = k.add(player(C.red, C.redDark, C.ginger, 'b4c1-red'), { x: 0, y: 0, w: 180, z: 6 });
-    k.set(green, { x: 1220, y: 70, rotation: 4 });
-    k.set(red, { x: -220, y: 190, rotation: -4 });
-    broomZoom();
-    eyeWhirr(1.3);
-    void k.spin(eye, 2, 1.3);
-    await k.to(green, 1.2, { x: -240, y: 40, ease: 'power1.inOut' });
-    broomZoom();
-    void k.to(red, 1.2, { x: 1240, y: 150, ease: 'power1.inOut' });
+    // Players zoom past while Moody talks, and the magic eye spins after them.
+    const flyby = async (): Promise<void> => {
+      const green = k.add(player(C.green, C.greenDark, C.brownDark, 'b4c1-green'), { x: 0, y: 0, w: 180, z: 6, flip: true });
+      const red = k.add(player(C.red, C.redDark, C.ginger, 'b4c1-red'), { x: 0, y: 0, w: 180, z: 6 });
+      k.set(green, { x: 1220, y: 70, rotation: 4 });
+      k.set(red, { x: -220, y: 190, rotation: -4 });
+      broomZoom();
+      eyeWhirr(1.3);
+      void k.spin(eye, 2, 1.3);
+      await k.to(green, 1.2, { x: -240, y: 40, ease: 'power1.inOut' });
+      broomZoom();
+      await k.to(red, 1.2, { x: 1240, y: 150, ease: 'power1.inOut' });
+      k.remove(green);
+      k.remove(red);
+    };
+    const stick = async (): Promise<void> => {
+      await k.wait(2800);
+      k.fx.thud();
+      await k.shake(moody, 4, 1);
+    };
+    await k.all(k.say('welcome', moody), k.wait(1500).then(flyby), stick());
+    void k.camera({ zoom: 1.5, x: 170, y: 470 }, 0.9);
+    eyeWhirr(1);
     await k.all(k.say('eye', moody), k.spin(eye, -1, 1));
-    k.remove(green);
-    k.remove(red);
 
     // Something odd at every corner: a bee, a sheep and a mermaid's tail.
-    const bee = k.picture('bee', { x: 0, y: 0, w: 90, z: 25 });
-    const sheep = k.picture('sheep', { x: 640, y: 500, w: 180, z: 12 });
-    const tankEl = k.add(tank(), { x: 500, y: 410, w: 150, z: 9 });
-    const tail = k.picture('tail', { x: 515, y: 335, w: 120, z: 8 });
+    const bee = k.picture('bee', { x: 0, y: 0, w: 120, z: 25 });
+    const sheep = k.picture('sheep', { x: 640, y: 500, w: 200, z: 12 });
+    const tankEl = k.add(tank(), { x: 470, y: 395, w: 190, z: 9 });
+    const tail = k.picture('tail', { x: 490, y: 300, w: 150, z: 8 });
     k.set(bee, { x: 1200, y: 260 });
     k.set(sheep, { opacity: 0 });
     k.set(tankEl, { opacity: 0 });
@@ -355,6 +371,7 @@ export default defineStory({
       }
       await k.to(tail, 0.2, { rotation: 180 });
     };
+    await k.camera({ zoom: 1.2, x: 470, y: 420 }, 1);
     await k.all(k.say('spot', moody), odd());
     // The bee buzzes off.
     buzz(0.9);
@@ -366,12 +383,27 @@ export default defineStory({
     const clouds = [k.picture('rain', { x: 120, y: -30, w: 260, z: 7 }), k.picture('rain', { x: 520, y: -50, w: 280, z: 7 }), k.picture('rain', { x: 880, y: -20, w: 240, z: 7 })];
     rainPatter(4);
     await k.all(...clouds.map((c, i) => k.enter(c, 'top', 0.8 + i * 0.15)));
+    const gloom = k.dim(0.15, '#1a2238');
+    let raining = true;
+    let dropN = 0;
     if (!k.calm) {
-      for (let i = 0; i < 14; i++) {
-        const d = k.add(drop(), { x: 80 + ((i * 383) % 1020), y: 120, w: 18, z: 7 });
-        void k.to(d, 1.1, { y: 380 + (i % 3) * 60, opacity: 0, delay: (i % 7) * 0.18, ease: 'power1.in' }).then(() => k.remove(d));
-      }
+      void (async (): Promise<void> => {
+        while (raining) {
+          for (let j = 0; j < 4; j++) {
+            const i = dropN++;
+            const d = k.add(drop(), { x: 80 + ((i * 383) % 1020), y: 120, w: 18, z: 7 });
+            void k.to(d, 1.1, { y: 380 + (i % 3) * 60, opacity: 0, ease: 'power1.in' }).then(() => k.remove(d));
+          }
+          await k.wait(350);
+        }
+      })();
     }
+    void (async (): Promise<void> => {
+      while (raining) {
+        await k.wait(2000);
+        if (raining) rainPatter(2);
+      }
+    })();
 
     // The golden snitch!
     const sn = k.add(snitch(), { x: 0, y: 0, w: 100, z: 30 });
@@ -382,12 +414,16 @@ export default defineStory({
     k.set(sn, { x: 980, y: 200, scale: 0, opacity: 1 });
     void k.to(sn, 0.4, { scale: 1, ease: 'back.out(2)' });
     k.fx.twinkle();
+    tone(1400, now(), { wave: 'triangle', peak: 0.03, decay: 0.6, vibrato: [40, 60] });
     const snitchDance = async (): Promise<void> => {
+      k.sparkle(780 + 50, 140 + 35, 4, 40);
       await k.to(sn, 0.7, { x: 780, y: 140 });
+      k.sparkle(880 + 50, 250 + 35, 4, 40);
       await k.to(sn, 0.7, { x: 880, y: 250 });
+      k.sparkle(760 + 50, 200 + 35, 4, 40);
       await k.to(sn, 0.6, { x: 760, y: 200 });
     };
-    await k.all(k.say('rain'), snitchDance());
+    await k.all(k.say('rain', moody), snitchDance());
 
     // You zoom in on your broom and chase it.
     const rider = k.add(broom(), { x: 340, y: 90, w: 300, z: 28 });
@@ -396,10 +432,13 @@ export default defineStory({
     k.set(rider, { rotation: -6 });
     broomZoom();
     await k.enter(rider, 'left', 0.8);
+    void k.camera({ zoom: 1.3, x: 820, y: 260 }, 0.9);
     const chase = async (): Promise<void> => {
       broomZoom();
+      k.sparkle(900 + 50, 110 + 35, 4, 40);
       void k.to(sn, 0.6, { x: 900, y: 110 });
       await k.to(rider, 0.7, { x: 260, y: -40, rotation: 4 });
+      k.sparkle(820 + 50, 240 + 35, 4, 40);
       void k.to(sn, 0.6, { x: 820, y: 240 });
       await k.to(rider, 0.6, { x: 330, y: 50, rotation: -4 });
       // Got it! The snitch flies into your hand.
@@ -410,17 +449,23 @@ export default defineStory({
       rider.append(sn);
       k.set(sn, { x: 226 - 50, y: 220 - 40 });
       k.fx.pop();
+      k.music('triumph');
       k.sparkle(340 + 420 + 226, 90 + 20 + 220, 16, 140);
       await k.pop(rider, 1.1);
+      await k.to(rider, 0.15, { rotation: 6 });
+      await k.to(rider, 0.3, { rotation: 0, ease: 'back.out(3)' });
     };
     await k.all(k.say('catch'), chase());
 
     // The crowd goes wild: stamping feet, fireworks, confetti.
+    void k.camera({}, 1.2);
     crowdRoar(3, 0.12);
-    k.fx.stomp(4, 0.3);
+    k.fx.stomp(6, 0.25);
     // The front row's feet, stamping on the edge of the pitch.
-    const feet = [k.picture('feet', { x: 285, y: 432, w: 90, z: 5 }), k.picture('feet', { x: 400, y: 424, w: 90, z: 5 }), k.picture('feet', { x: 690, y: 424, w: 90, z: 5 }), k.picture('feet', { x: 805, y: 432, w: 90, z: 5 })];
-    for (const f of feet) void k.appear(f, 0.3).then(() => k.hop(f, 26, 3));
+    const feet = [300, 430, 690, 820].map((x) => k.picture('feet', { x, y: 400, w: 130, z: 5 }));
+    for (const f of feet) void k.appear(f, 0.3).then(() => k.hop(f, 30, 3));
+    raining = false;
+    void k.fade(gloom, 0, 1);
     void Promise.all(clouds.map((c) => k.exit(c, 'top', 0.9)));
     void k.glow(C.goldLight, 0.3, 1.2);
     k.confetti(36);
@@ -437,6 +482,7 @@ export default defineStory({
     k.fx.jingle();
     k.sparkle(760, 300, 18, 200);
     await k.all(k.hop(rider, 36, 1), k.hop(moody, 14, 1), k.hop(sheep, 20, 1));
-    await k.wait(1200);
+    k.float(rider, 6, 2.2);
+    await k.wait(1500);
   },
 });

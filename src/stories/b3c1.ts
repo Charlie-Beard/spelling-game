@@ -402,12 +402,12 @@ function catCurled(): string {
 
 export default defineStory({
   lines: {
-    intro: { who: 'narrator', text: 'A cosy night in the Gryffindor common room. The fire is crackling…' },
-    spot: { who: 'crookshanks', text: 'Mrrow! A chocolate frog! I’m going to catch it!' },
+    intro: { who: 'narrator', text: 'A cosy night by the common room fire… crackle, crackle. Who’s that?' },
+    spot: { who: 'crookshanks', text: 'Mrrow! A chocolate frog! Sneaky, sneaky… I’m going to catch it!' },
     drum: { who: 'narrator', text: 'Pounce! He misses the frog… and lands on the drum. Bom!' },
-    crab: { who: 'crookshanks', text: 'Ow! Who pinched my tail? A crab!' },
-    flag: { who: 'narrator', text: 'Then the flag flops down… right on his head!' },
-    lap: { who: 'crookshanks', text: 'Phew! Chasing is tiring. Your lap is the best spot, {name}.' },
+    crab: { who: 'crookshanks', text: 'Yeowch! Who pinched my tail? Oh… a crab!' },
+    flag: { who: 'crookshanks', text: 'Hey! Who turned out the lights? Get off, silly flag!' },
+    lap: { who: 'crookshanks', text: 'Phew! Chasing is tiring. Your lap is the comfiest spot, {name}.' },
     slug: { who: 'narrator', text: 'A slug slides by… but Crookshanks is far too sleepy to chase it.' },
   },
 
@@ -418,11 +418,23 @@ export default defineStory({
     const flames = k.add(fire(), { x: 530, y: 455, w: 180, z: 3 });
     const flag = k.picture('flag', { x: 590, y: 102, w: 150, z: 4 });
     const drum = k.picture('drum', { x: 70, y: 470, w: 170, z: 8 });
-    const box = k.add(frogBox(), { x: 600, y: 540, w: 100, z: 9 });
+    const box = k.add(frogBox(), { x: 700, y: 560, w: 100, z: 9 });
     const lid = box.querySelector<SVGGElement>('[data-part="lid"]');
     const hero = k.character('hero', { x: 865, y: 330, z: 9 });
     k.add(chairFront(), { x: 826, y: 512, w: 350, z: 15 });
-    const frog = k.add(chocFrog(), { x: 595, y: 440, w: 110, z: 16 });
+    const frog = k.add(chocFrog(), { x: 690, y: 450, w: 140, z: 16 });
+    k.dim(0.22);
+    k.light(620, 520, 300, { color: C.candle, strength: 0.5, flicker: true });
+    k.light(470, 160, 60, { color: C.candle });
+    k.light(770, 160, 60, { color: C.candle });
+    k.ambient('embers', { count: 10, z: 5, area: [540, 360, 160, 220] });
+    k.music('cosy');
+    /** Frog landing: a squash, a pop and a few sparkles. */
+    const land = (x: number, y: number): void => {
+      k.sparkle(x + 70, y + 60, 5, 40);
+      k.fx.pop();
+      void k.to(frog, 0.1, { scaleY: 0.85, scaleX: 1.1, transformOrigin: '50% 100%' }).then(() => k.to(frog, 0.15, { scaleY: 1, scaleX: 1 }));
+    };
     const cat = k.add(catStanding(), { x: 300, y: 465, w: 240, z: 12 });
     const tail = cat.querySelector<SVGGElement>('[data-part="tail"]');
     k.set([frog, cat], { opacity: 0 });
@@ -446,7 +458,6 @@ export default defineStory({
     if (!k.calm) k.float(flames, 3, 1.4);
 
     // ---- a cosy night; in pads Crookshanks
-    await k.wait(150);
     crackle(4.5);
     await k.say('intro');
     k.fx.patter(7, 0.1);
@@ -454,6 +465,8 @@ export default defineStory({
     swish();
 
     // ---- the Chocolate Frog jumps out of its box
+    k.music('sneaky');
+    void k.camera({ zoom: 1.3, x: 430, y: 470 }, 1.4);
     k.fx.pop();
     if (lid) void k.to(lid, 0.3, { rotation: -50, svgOrigin: '6 48', ease: 'back.out(2)' });
     await k.pop(box, 1.1);
@@ -461,13 +474,15 @@ export default defineStory({
     croak();
     await k.appear(frog, 0.35);
     k.fx.boing();
-    await leapTo(frog, 690, 512, 70, 0.5);
+    await leapTo(frog, 780, 520, 70, 0.5);
+    land(780, 520);
     await k.say('spot', cat);
 
     // ---- it hops right over him, onto the drum…
     croak();
     k.fx.boing();
     await leapTo(frog, 100, 452, 220, 0.9);
+    land(100, 452);
     k.face(cat, true);
     // …he crouches, wiggles…
     await k.to(cat, 0.25, { scaleY: 0.88, scaleX: 1.06, transformOrigin: '50% 95%', ease: 'power1.out' });
@@ -475,7 +490,7 @@ export default defineStory({
     k.fx.whizz();
     void k.wait(300).then(() => {
       croak();
-      return leapTo(frog, 690, 512, 240, 0.9);
+      return leapTo(frog, 780, 520, 240, 0.9).then(() => land(780, 520));
     });
     await k.all(leapTo(cat, 30, 384, 120, 0.7), k.to(cat, 0.25, { scaleY: 1, scaleX: 1 }));
     bom();
@@ -484,8 +499,8 @@ export default defineStory({
     k.fx.boing();
     await k.all(leapTo(cat, 210, 465, 130, 0.7), k.to(cat, 0.2, { scaleY: 1 }));
     k.face(cat, false);
-    await k.shake(cat, 5, 2);
-    await k.say('drum');
+    swish();
+    await k.all(k.shake(cat, 5, 2), k.say('drum'));
 
     // ---- after the frog again! (Something is hiding by the rug…)
     k.fx.patter(6, 0.1);
@@ -507,11 +522,13 @@ export default defineStory({
     await k.say('crab', cat);
     if (tail) void k.to(tail, 0.3, { scale: 1, svgOrigin: '58 146' });
     k.fx.patter(5, 0.08);
-    await k.exit(crab, 'left', 0.8);
+    await k.exit(crab, 'left', 0.6);
     k.remove(crab);
 
     // ---- the flag topples off the mantelpiece onto his head
     k.face(cat, false);
+    void k.camera({ zoom: 1.2, x: 470, y: 400 }, 1.0);
+    k.fx.creak();
     await k.shake(flag, 5, 2);
     flag.style.zIndex = '14';
     k.fx.whizz();
@@ -521,24 +538,31 @@ export default defineStory({
     const wobble = async (): Promise<void> => {
       await k.all(k.shake(cat, 8, 3), k.shake(flag, 8, 3));
     };
-    await k.all(k.say('flag'), wobble());
+    await k.all(k.say('flag', cat), wobble());
     // Shake it off!
     k.fx.poof();
     await k.to(flag, 0.5, { x: '+=90', y: '+=90', rotation: '+=70', opacity: 0, ease: 'power2.in' });
     k.remove(flag);
+    swish();
 
     // ---- the frog hops up onto your armchair; Crookshanks gives up
+    k.music('dreamy');
+    void k.camera({ zoom: 1.35, x: 920, y: 470 }, 1.4);
     croak();
     k.fx.boing();
     await leapTo(frog, 815, 420, 130, 0.6);
+    land(815, 420);
     void k.hop(hero, 14);
     k.fx.twinkle();
     k.sparkle(870, 470, 8, 70);
     sigh();
     k.fx.patter(4, 0.1);
     await k.walk(cat, 160, 0.6, 2);
+    await k.to(cat, 0.2, { scaleY: 0.88, scaleX: 1.06, transformOrigin: '50% 95%', ease: 'power1.out' });
     k.fx.boing();
-    await leapTo(cat, 875, 420, 110, 0.6);
+    await k.all(leapTo(cat, 875, 420, 110, 0.6), k.to(cat, 0.2, { scaleY: 1, scaleX: 1 }));
+    k.fx.thud();
+    await k.to(cat, 0.1, { scaleY: 0.9, transformOrigin: '50% 95%' });
     // He curls up on your lap.
     const curled = k.add(catCurled(), { x: 905, y: 512, w: 200, z: 12 });
     k.set(curled, { opacity: 0 });
@@ -546,6 +570,7 @@ export default defineStory({
     await k.all(k.fade(cat, 0, 0.2), k.fade(curled, 1, 0.25));
     k.remove(cat);
     await k.pop(curled, 1.06);
+    if (!k.calm) gsap.to(curled, { scaleY: 1.03, transformOrigin: '50% 100%', duration: 1.15, yoyo: true, repeat: -1, ease: stepped(1.15, 'sine.inOut') });
     purr(3);
     k.sparkle(1005, 540, 8, 90);
     await k.say('lap', curled);
@@ -557,6 +582,7 @@ export default defineStory({
     await k.all(k.enter(slug, 'left', 1.8), k.say('slug'));
 
     // ---- a happy, cosy ending
+    await k.camera({}, 1.5);
     k.fx.jingle();
     crackle(2);
     void k.glow(C.candle, 0.25, 1.4);
@@ -565,6 +591,6 @@ export default defineStory({
     croak();
     await k.all(k.hop(frog, 26), k.hop(slug, 10));
     purr(2.4);
-    await k.wait(300);
+    await k.wait(1500);
   },
 });

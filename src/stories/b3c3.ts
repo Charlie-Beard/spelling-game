@@ -10,7 +10,7 @@
 import { gsap } from 'gsap';
 import { characters } from '../art/characters';
 import { stepped } from '../ui/anim';
-import { band, C, circle, curve, defineStory, dot, ellipse, group, ink, type Kit, noiseBurst, NOTE, now, piece, poly, raw, rect, rng, svg, tone, bell, type Node, type Pt } from './kit';
+import { band, C, circle, curve, defineStory, dot, ellipse, group, ink, type Kit, noiseBurst, now, piece, poly, raw, rect, rng, svg, tone, type Node, type Pt } from './kit';
 
 // ------------------------------------------------------------------ sounds
 
@@ -38,21 +38,6 @@ function chirp(): void {
   tone(1050, t, { wave: 'triangle', peak: 0.09, attack: 0.01, decay: 0.12, glideTo: 1650, vibrato: [28, 40], lowpass: 3600 });
   tone(1350, t + 0.16, { wave: 'triangle', peak: 0.08, attack: 0.01, decay: 0.16, glideTo: 2000, vibrato: [28, 50], lowpass: 3600 });
   tone(340, t + 0.38, { wave: 'sawtooth', peak: 0.05, attack: 0.03, decay: 0.38, glideTo: 270, vibrato: [13, 26], lowpass: 900 });
-}
-
-/** A soaring tune: a slow climb, a long held note, and a gentle fall. */
-function soar(): void {
-  const t = now();
-  const melody: Array<[number, number, number]> = [
-    [NOTE.G4, 0, 0.4], [NOTE.C5, 0.35, 0.4], [NOTE.E5, 0.7, 0.4], [NOTE.G5, 1.05, 1.0],
-    [NOTE.A5, 2.0, 0.3], [NOTE.G5, 2.3, 0.3], [NOTE.E5, 2.6, 0.3], [NOTE.C6, 2.9, 1.3],
-  ];
-  for (const [f, d, len] of melody) {
-    tone(f, t + d, { wave: 'triangle', peak: 0.075, attack: 0.06, decay: len, lowpass: 2200, vibrato: [5, 3] });
-    bell(f * 2, t + d, 0.03, len * 0.8);
-  }
-  // a soft low drone underneath
-  tone(NOTE.C3, t, { wave: 'triangle', peak: 0.05, attack: 0.6, decay: 3.4, lowpass: 600 });
 }
 
 /** The alarm clock going off, softly. */
@@ -92,7 +77,7 @@ const WOOD = '#8f6c4a';
 /** Buckbeak's viewBox, and where a rider sits on his back. */
 const BW = 460;
 const BH = 360;
-const RIDER = { x: 185, y: 8, w: 130 };
+const RIDER = { x: 200, y: 24, w: 108 };
 
 /**
  * Buckbeak side-on, facing left (460 × 360): parts `head`, `wing`, `wingFar`,
@@ -336,9 +321,10 @@ function nearStrip(): string {
     // reeds along the near edge of the far shore
     ...[120, 560, 980, 1500, 1900].map((x) => ink([[x, 80], [x + 4, 60]], { width: 3, color: '#3e5a4c' })),
     // the forest, with a dark floor that stays calm under the captions
-    piece(curve([[SHORE - 80, 460], [SHORE - 70, 100], [SHORE + 40, 40], [3840, 40], [3840, 460]], 1), '#2c4a3a', { rough: 1.2 }),
+    piece(curve([[SHORE - 260, 460], [SHORE - 140, 300], [SHORE - 40, 150], [SHORE + 80, 60], [3840, 40], [3840, 460]], 1), '#2c4a3a', { rough: 1.2 }),
+    piece(band([[SHORE - 260, 300], [SHORE - 40, 150], [SHORE + 80, 90]], 26), '#7a8a5a'),
     ...trees,
-    piece(rect(SHORE - 30, 140, 1560, 320), '#264232', { rough: 1.2, shadow: false }),
+    piece(rect(SHORE + 80, 140, 1480, 320), '#264232', { rough: 1.2, shadow: false }),
   ]);
 }
 
@@ -382,10 +368,10 @@ const HERO = { x: 40, y: 345, w: 250 };
 
 export default defineStory({
   lines: {
-    hello: { who: 'hagrid', text: 'Blimey, flying time! Now remember… always bow to Buckbeak first!' },
+    hello: { who: 'hagrid', text: 'Hear that clock? Blimey, flying time! Always bow to Buckbeak first!' },
     bow: { who: 'narrator', text: 'You bow low… Buckbeak stares… and stares… and bows back!' },
-    ride: { who: 'hagrid', text: 'He likes you, {name}! Climb up… and hold on tight!' },
-    fly: { who: 'buckbeak', text: 'Up we go! Over the forest… and the shining lake!' },
+    ride: { who: 'hagrid', text: 'Brilliant! He likes you, {name}! Climb on… and hold on tight!' },
+    fly: { who: 'buckbeak', text: 'Hold tight! Up we go! Over the forest… and the shining lake!' },
     dip: { who: 'narrator', text: 'Swoop! Buckbeak dips one claw in the water. Splish!' },
     land: { who: 'hagrid', text: 'What a flier! A plum for Buckbeak… and milk for you!' },
   },
@@ -431,29 +417,43 @@ export default defineStory({
     const hero = k.character('hero', { ...HERO, z: 12 });
     k.set([hagrid, hero], { opacity: 0 });
     const paddockProps = [clock, stick, twig, hagrid, plum, milk, bask];
+    k.music('cosy');
+    let sun = k.light(240, 250, 200, { color: C.candle, strength: 0.3 });
+    const squash = async (el: HTMLElement): Promise<void> => {
+      await k.to(el, 0.12, { scaleY: 0.93, scaleX: 1.04, transformOrigin: '50% 100%' });
+      await k.to(el, 0.2, { scaleY: 1, scaleX: 1, ease: 'back.out(2)' });
+    };
 
     // ---- The clock rings: flying time!
-    await k.wait(600);
+    await k.wait(200);
     alarm();
     await k.shake(clock, 4, 4);
     if (head) void k.to(head, 0.3, { rotation: 8 }).then(() => k.to(head, 0.3, { rotation: 0 }));
     chirp();
     k.sfx.whoosh();
     await k.enter(hagrid, 'right');
-    await k.say('hello', hagrid);
+    const peck = async (): Promise<void> => {
+      if (!head) return;
+      for (let i = 0; i < 2; i++) {
+        await k.to(head, 0.25, { rotation: -22 });
+        await k.to(head, 0.15, { rotation: 0 });
+        await k.wait(400);
+      }
+    };
+    await k.all(k.say('hello', hagrid), peck());
 
     // ---- The bow.
     k.fx.patter(5);
     await k.enter(hero, 'left');
     const bowScene = async (): Promise<void> => {
       await k.to(hero, 0.5, { rotation: 10, y: 22, scaleY: 0.94, transformOrigin: '50% 100%', ease: 'power2.out' });
-      await k.wait(500);
+      await k.wait(400);
       // Buckbeak stares…
       if (head) {
         await k.to(head, 0.3, { rotation: 6 });
-        await k.wait(500);
+        await k.wait(400);
         await k.to(head, 0.3, { rotation: -4 });
-        await k.wait(300);
+        await k.wait(250);
       }
       // …and bows back!
       await k.all(
@@ -461,17 +461,21 @@ export default defineStory({
         k.to(bb, 0.6, { rotation: -4, transformOrigin: '40% 100%', ease: 'power2.inOut' }),
       );
       k.fx.twinkle();
-      await k.wait(500);
+      k.sfx.reveal();
+      await k.wait(300);
     };
+    void k.camera({ zoom: 1.3, x: 380, y: 450 }, 1.4);
     await k.all(k.say('bow'), bowScene());
     chirp();
     k.sparkle(560, 360, 14, 170);
+    k.fx.patter(4, 0.12);
     await k.all(
       k.to(hero, 0.4, { rotation: 0, y: 0, scaleY: 1, ease: 'back.out(2)' }),
       head ? k.to(head, 0.4, { rotation: 0, ease: 'back.out(2)' }) : k.wait(0),
       k.to(bb, 0.4, { rotation: 0, ease: 'back.out(2)' }),
       k.hop(hagrid, 30, 1),
     );
+    if (wing) void k.to(wing, 0.2, { rotation: -12 }).then(() => k.to(wing, 0.2, { rotation: 0 }));
     await k.say('ride', hagrid);
 
     // ---- Up onto his back.
@@ -489,10 +493,11 @@ export default defineStory({
     rider?.setAttribute('opacity', '1');
     k.set(hero, { opacity: 0 });
     k.fx.thud();
-    await k.pop(bb, 1.04);
+    await k.all(k.pop(bb, 1.04), k.camera({}, 0.8));
     chirp();
 
     // ---- Take off!
+    k.music('adventure');
     let stopFlap = flapping(0.55);
     wingbeat(4, 0.5);
     wind(2.5);
@@ -508,7 +513,10 @@ export default defineStory({
     await k.fade(curtain, 1, 0.35);
     k.caption('');
     k.set(paddockProps, { opacity: 0 });
+    k.remove(sun);
     k.backdrop(sky());
+    const sun2 = k.light(930, 400, 260, { color: C.candle, strength: 0.35 });
+    k.ambient('dust', { count: 8, z: 5 });
     const far = k.add(farStrip(), { x: 0, y: 360, w: 2400, h: 200, z: 2, still: true });
     const near = k.add(nearStrip(), { x: 0, y: 400, w: 3800, h: 440, z: 4, still: true });
     k.set(far, { x: -1220 });
@@ -519,19 +527,20 @@ export default defineStory({
 
     // Soar in from the right as the land rolls by below.
     const FLY = { x: -70, y: -150 };
-    soar();
     wind(4);
     const scroll = k.all(k.to(far, 8.5, { x: 0, ease: 'sine.inOut' }), k.to(near, 8.5, { x: 0, ease: 'sine.inOut' }));
     wingbeat(2, 0.55);
     await k.to(bb, 1.3, { x: FLY.x, y: FLY.y, ease: 'power2.out' });
     stopFlap();
     const glide = !k.calm ? gsap.to(bb, { y: `+=${12}`, duration: 0.9, yoyo: true, repeat: -1, ease: stepped(0.9, 'sine.inOut') }) : null;
+    void k.camera({ zoom: 1.2, x: 590, y: 340 }, 2);
     await k.say('fly', bb);
 
     // Dip a claw in the shining lake.
     glide?.kill();
     await k.wait(400);
     const dip = async (): Promise<void> => {
+      k.sfx.whoosh();
       await k.to(bb, 0.9, { x: FLY.x - 30, y: FLY.y + 186, rotation: -8, ease: 'power2.in' });
       const [bx, by] = at(bb);
       const cx = bx + 270 * S;
@@ -553,6 +562,7 @@ export default defineStory({
     // ---- Home again: off to the left, and back to the paddock.
     wind(2);
     wingbeat(2, 0.5);
+    await k.camera({}, 0.6);
     await k.to(bb, 1.0, { x: -900, y: -260, rotation: -6, ease: 'power2.in' });
     const curtain2 = k.add(cover, { x: 0, y: 0, w: 1180, h: 820, z: 60 });
     k.set(curtain2, { opacity: 0 });
@@ -560,7 +570,9 @@ export default defineStory({
     k.caption('');
     k.remove(far);
     k.remove(near);
+    k.remove(sun2);
     k.backdrop(paddock());
+    sun = k.light(240, 250, 200, { color: C.candle, strength: 0.3 });
     k.set(paddockProps, { opacity: 1 });
     k.set(bb, { x: 800, y: -520, rotation: -10 });
     await k.fade(curtain2, 0, 0.4);
@@ -573,6 +585,8 @@ export default defineStory({
     pose(false);
     await k.to(bb, 0.25, { y: 0, ease: 'power2.in' });
     k.fx.thud();
+    k.music('triumph');
+    void squash(bb);
     void k.quake(4);
     void k.hop(twig, 30, 1);
     void k.hop(stick, 20, 1);
@@ -588,10 +602,11 @@ export default defineStory({
     k.fx.boing();
     await jump(k, hero, HERO.x, HERO.y, 120, 0.7, { scale: 1 });
     k.fx.thud();
+    void squash(hero);
 
     // ---- Treats: a plum for Buckbeak and milk for the hero.
     const treats = async (): Promise<void> => {
-      await k.wait(500);
+      await k.wait(200);
       k.fx.whizz();
       await jump(k, plum, BB.x + 4, BB.y + 46, 160, 0.8);
       gulp();
@@ -607,7 +622,6 @@ export default defineStory({
     await k.all(k.say('land', hagrid), treats());
 
     // ---- One more bow each, and a happy cheer.
-    soar();
     k.confetti(34);
     k.sparkle(560, 340, 16, 220);
     await k.all(
@@ -622,6 +636,6 @@ export default defineStory({
     );
     k.fx.jingle();
     await k.all(k.hop(hero, 40, 2), k.hop(hagrid, 30, 2), k.hop(milk, 20, 2));
-    await k.wait(600);
+    await k.wait(1500);
   },
 });

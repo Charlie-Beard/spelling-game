@@ -208,13 +208,13 @@ const RAT_HEAD = '140 42 110 86';
 
 export default defineStory({
   lines: {
-    snigger: { who: 'wormtail', text: 'Hee hee! The shiny locket is all mine. I’ll hide it in this gift box!' },
+    snigger: { who: 'wormtail', text: 'Hee hee! The shiny locket is all mine… I’ll hide it in this gift box!' },
     tiptoe: { who: 'narrator', text: 'Creak… creak… You tiptoe into the dark, dusty Shrieking Shack.' },
-    who: { who: 'wormtail', text: 'Who’s there? Is it a cat? I don’t like cats!' },
-    lumos: { who: 'narrator', text: 'You lift your wand and say Lumos! Bright light fills every dusty corner!' },
+    who: { who: 'wormtail', text: 'W-who’s there? Is it a cat? Oh, I don’t like cats!' },
+    lumos: { who: 'narrator', text: 'You lift your wand and whisper… Lumos! Warm light fills every dusty corner!' },
     eek: { who: 'wormtail', text: 'Eek! Too bright! Too bright! I’m off!' },
-    bye: { who: 'wormtail', text: 'Squeak! Squeak! Bye-bye, shiny locket!' },
-    cheer: { who: 'narrator', text: 'Hooray, {name}! You found the lost locket!' },
+    bye: { who: 'wormtail', text: 'Squeak! Oh no… I dropped the shiny locket! Bye-bye!' },
+    cheer: { who: 'narrator', text: 'Hooray, {name}! You found the lost locket… and look, it’s glowing!' },
   },
 
   async play(k) {
@@ -231,7 +231,10 @@ export default defineStory({
     k.set(belt, { rotation: 82, transformOrigin: '50% 50%' });
 
     const dark = k.add(gloom(), { x: 0, y: 0, w: W, h: 820, z: 8, still: true });
-    k.set(dark, { opacity: 0.62 });
+    k.set(dark, { opacity: 0.5 });
+    k.music('sneaky');
+    k.ambient('dust', { count: 14, z: 30, area: [440, 300, 420, 380] });
+    k.light(525, 220, 150, { color: C.cream, strength: 0.3 });
 
     const gift = k.picture('gift', { x: 520, y: 470, w: 150, z: 9 });
 
@@ -259,41 +262,60 @@ export default defineStory({
 
     // A creaky, dusty old shack…
     floorCreak(0.9);
-    await k.wait(900);
+    await k.wait(600);
     floorCreak(1.1);
-    await k.wait(700);
+    await k.wait(400);
 
     // Wormtail creeps in with his prize.
     k.fx.sneak();
     await k.all(k.fade(worm, 1, 0.3), k.enter(worm, 'right', 0.9));
     k.sparkle(822, 420, 6, 60);
+    void k.camera({ zoom: 1.35, x: 740, y: 440 }, 1.4);
+    let fidget = !k.calm;
+    const wiggle = async (): Promise<void> => {
+      let sign = 1;
+      while (fidget) {
+        await k.to(worm, 0.3, { rotation: 3 * sign });
+        sign = -sign;
+      }
+      await k.to(worm, 0.15, { rotation: 0 });
+    };
+    void wiggle();
     await k.all(
       k.say('snigger', worm),
-      k.wait(2600).then(() => k.pop(gift, 1.08)),
+      k.wait(2600).then(() => { k.fx.pop(); return k.pop(gift, 1.08); }),
     );
 
     // You tiptoe in over the creaky floorboards.
+    fidget = false;
+    await k.camera({}, 1.0);
+    k.set(hero, { rotation: -4 });
+    fidget = !k.calm;
+    void wiggle();
     await k.all(
       k.say('tiptoe'),
       (async () => {
         for (let i = 0; i < 4; i++) {
           floorCreak(0.85 + (i % 2) * 0.3);
           await k.walk(hero, 120, 0.8, 1);
-          await k.wait(200);
+          await k.wait(120);
         }
       })(),
     );
+    k.set(hero, { rotation: 0 });
 
     // He hears the creaks and freezes.
     k.fx.uhoh();
     await k.all(k.say('who', worm), k.shake(worm, 8, 2));
+    fidget = false;
 
     // Lumos!
     lumosChime();
+    k.music('magic');
     await k.to(hero, 0.2, { y: -12 });
     await k.all(k.to(light, 0.4, { opacity: 1 }), k.to(hero, 0.2, { y: 0 }));
-    void k.glow(C.candle, 0.45, 1.4);
-    await k.all(k.fade(dark, 0, 1.1), k.say('lumos'));
+    k.light(396, 505, 330, { color: C.candle, strength: 0.55 });
+    await k.all(k.fade(dark, 0.08, 1.1), k.say('lumos'));
     k.float(light, 5, 1.6);
 
     // Too bright for Wormtail!
@@ -304,11 +326,18 @@ export default defineStory({
     const locket = k.horcrux('locket', { x: 822, y: 470, w: 100, z: 14 });
     const rat0 = k.add(rat(), { x: 740, y: 512, w: 170, z: 13 });
     k.set(rat0, { opacity: 0 });
+    await k.to(worm, 0.15, { scaleY: 0.85, scaleX: 1.08, transformOrigin: '50% 100%' });
     ratPop();
+    void k.camera({ zoom: 1.3, x: 880, y: 500 }, 0.8);
+    k.fx.whizz();
     k.puff(820, 470, 300, C.stoneLight);
     await k.all(
       k.vanish(worm, 0.25),
-      k.wait(150).then(() => k.appear(rat0, 0.3)),
+      k.wait(150).then(async () => {
+        await k.appear(rat0, 0.3);
+        await k.to(rat0, 0.1, { scaleY: 0.85 });
+        await k.to(rat0, 0.1, { scaleY: 1 });
+      }),
       k.to(locket, 0.35, { y: -150, rotation: 200, ease: 'power2.out' }),
     );
     squeak();
@@ -338,11 +367,15 @@ export default defineStory({
     await k.vanish(peek, 0.25);
 
     // You pick up the locket, and it glows.
+    await k.camera({}, 1.4);
     await k.walk(hero, 300, 1.2, 3);
+    k.music('triumph');
     locketChime();
     k.sparkle(872, 600, 18, 170);
     void k.glow(C.goldLight, 0.35, 1.4);
-    await k.to(locket, 0.9, { x: 30, y: -170, rotation: 720, scale: 1.6, ease: 'sine.out' });
+    await k.to(locket, 0.9, { x: -150, y: -200, rotation: 720, scale: 1.5, ease: 'sine.out' });
+    k.sfx.gem();
+    k.light(722, 420, 160, { color: C.goldLight, strength: 0.5 });
     k.float(locket, 6, 2.4);
 
     // Hooray!
@@ -351,6 +384,6 @@ export default defineStory({
     void k.pop(gift, 1.12);
     void k.to(mask, 0.3, { rotation: 6 }).then(() => k.to(mask, 0.4, { rotation: -6 }));
     await k.all(k.say('cheer'), k.hop(hero, 50, 2));
-    await k.wait(1200);
+    await k.wait(1500);
   },
 });

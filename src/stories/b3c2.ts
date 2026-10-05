@@ -171,7 +171,7 @@ function googlyEye(x: number, y: number, r: number, lookX: number, lookY: number
 /** The boggart as a big, round, googly-eyed spider (340 × 280), skates hidden. */
 function spider(): string {
   const cx = 170;
-  const legColor = '#2a2530';
+  const legColor = '#3a3244';
   const legs: Node[] = [];
   const feet: number[] = [];
   for (const s of [-1, 1]) {
@@ -201,8 +201,8 @@ function spider(): string {
   return svg({ w: 340, h: 280, name: 'b3c2-spider', label: 'a boggart spider' }, [
     piece(ellipse(cx, 262, 150, 12), 'rgba(40,25,10,0.18)', { edge: 'cut', fibre: false, shadow: false }),
     ...legs,
-    piece(curve(fur, 1), C.charcoal, { rough: 1.3 }),
-    piece(ellipse(cx - 20, 92, 36, 22, -20), '#4d4858', { edge: 'cut', fibre: false, shadow: false }),
+    piece(curve(fur, 1), '#5b4f6b', { rough: 1.3 }),
+    piece(ellipse(cx - 20, 92, 36, 22, -20), '#7a6e8a', { edge: 'cut', fibre: false, shadow: false }),
     ...googlyEye(cx - 30, 116, 26, 7, 8),
     ...googlyEye(cx + 30, 112, 24, -6, -6),
     ...googlyEye(cx - 12, 72, 9, 2, 2),
@@ -229,13 +229,13 @@ function chocolate(seed: string): string {
 
 export default defineStory({
   lines: {
-    hello: { who: 'lupin', text: 'Hear that rattle? There’s a boggart hiding in my wardrobe!' },
+    hello: { who: 'lupin', text: 'Shh… hear that rattle? There’s a boggart hiding in my wardrobe!' },
     teach: { who: 'lupin', text: 'Boggarts hate being laughed at. Point your wand and say… Riddikulus!' },
-    spider: { who: 'narrator', text: 'Out pops a big, googly-eyed spider! You hold up your wand…' },
-    cast: { who: 'narrator', text: 'Riddikulus! Now the spider is wearing roller skates!' },
-    wobble: { who: 'narrator', text: 'Wibble, wobble… whoops! It can’t stop!' },
-    praise: { who: 'lupin', text: 'Ha! Brilliant, {name}! Laughing beats a boggart every time.' },
-    choc: { who: 'lupin', text: 'Now… chocolate for everyone!' },
+    spider: { who: 'narrator', text: 'Creak! Out pops a big, googly-eyed spider! You hold up your wand…' },
+    cast: { who: 'narrator', text: 'Riddikulus! Pop! Now the spider is wearing roller skates!' },
+    wobble: { who: 'lupin', text: 'Wibble, wobble… whoops! Oh dear, it can’t stop!' },
+    praise: { who: 'lupin', text: 'Ha ha! Brilliant, {name}! Laughing beats a boggart every time.' },
+    choc: { who: 'lupin', text: 'Now… chocolate for everyone! Even the birds in the nest!' },
   },
 
   async play(k) {
@@ -252,30 +252,35 @@ export default defineStory({
     const lamp = k.picture('lamp', { x: 905, y: 466, w: 100, z: 13 });
     const hero = k.character('hero', { x: 10, y: 350, z: 9 });
     k.set([lupin, hero], { opacity: 0 });
+    k.music('sneaky');
+    k.ambient('dust', { count: 14, z: 5 });
+    const gloom = k.dim(0.18);
+    k.light(955, 500, 90, { color: C.candle, flicker: true });
 
     const rattleAll = async (amount = 6, times = 3): Promise<void> => {
       rattle(times * 3);
       await k.all(k.shake(ward, amount, times), k.shake(nest, amount * 1.4, times), k.shake(lamp, amount * 0.5, times));
     };
 
-    await k.wait(700);
-    await rattleAll(5, 2);
+    await k.wait(200);
     k.sfx.whoosh();
-    await k.enter(lupin, 'right');
+    await k.all(rattleAll(5, 2), k.enter(lupin, 'right'));
     k.fx.patter(5);
     await k.enter(hero, 'left');
-    await k.wait(200);
     void rattleAll(4, 2);
     await k.say('hello', lupin);
 
     // The lesson: the hero's wand.
-    const wand = k.picture('wand', { x: 215, y: 330, w: 130, z: 20 });
+    const wand = k.picture('wand', { x: 200, y: 370, w: 130, z: 20 });
+    k.set(wand, { rotation: -20 });
     k.fx.twinkle();
     await k.appear(wand);
     k.sparkle(310, 360, 8, 80);
+    void k.camera({ zoom: 1.25, x: 330, y: 420 }, 1.2);
     await k.say('teach', lupin);
 
     // Out pops the boggart!
+    void k.camera({ zoom: 1.35, x: 610, y: 430 }, 0.9);
     await rattleAll(9, 3);
     k.fx.creak();
     k.fx.poof();
@@ -287,18 +292,25 @@ export default defineStory({
     const spiderEl = k.add(spider(), { x: 470, y: 400, w: 290, z: 14 });
     k.fx.pop();
     await k.all(k.appear(spiderEl, 0.45), k.hop(nest, 30), k.shake(hero, 10, 2));
+    k.fx.sneak();
+    await k.to(spiderEl, 0.35, { y: '+=60', ease: 'power2.out' });
+    await k.to(spiderEl, 0.1, { scaleY: 0.9 });
+    await k.to(spiderEl, 0.1, { scaleY: 1 });
     await k.say('spider', hero);
 
     // Riddikulus!
+    k.music('magic');
     k.fx.spell();
-    await k.to(wand, 0.25, { rotation: -25, ease: 'back.out(2)' });
-    await k.beam([320, 380], [615, 500], C.goldLight);
+    await k.to(wand, 0.25, { rotation: -35, ease: 'back.out(2)' });
+    await k.beam([315, 385], [615, 500], C.goldLight);
     void k.glow(C.goldLight, 0.35, 0.8);
+    void k.fade(gloom, 0, 0.8);
+    k.fx.twinkle();
     k.fx.twinkle();
     k.fx.pop();
     spiderEl.querySelector('[data-part="skates"]')?.setAttribute('opacity', '1');
     k.puff(615, 610, 160, C.goldLight);
-    await k.all(k.pop(spiderEl, 1.12), k.to(wand, 0.3, { rotation: 0 }));
+    await k.all(k.pop(spiderEl, 1.12), k.to(wand, 0.3, { rotation: -20 }));
     await k.say('cast', spiderEl);
 
     // Wibble, wobble … crash!
@@ -313,22 +325,27 @@ export default defineStory({
         await k.to(spiderEl, 0.85, { x, rotation, ease: 'sine.inOut' });
       }
     };
+    void k.camera({ zoom: 1.12, x: 500, y: 450 }, 1.2);
     const rolled = skate();
-    await k.say('wobble');
+    await k.say('wobble', lupin);
     rolling = false;
     await rolled;
     // Off it rolls, straight into the tent.
+    await k.to(spiderEl, 0.2, { x: '+=30', rotation: 12 });
     skates(0.9);
     k.fx.whizz();
     await k.to(spiderEl, 0.7, { x: -190, y: '+=10', rotation: -30, scale: 0.6, ease: 'power2.in' });
     k.fx.thud();
+    k.fx.boing();
     await k.fade(spiderEl, 0, 0.15);
     k.remove(spiderEl);
+    await k.to(tent, 0.12, { scaleY: 0.85, transformOrigin: '50% 100%' });
+    void k.to(tent, 0.4, { scaleY: 1, ease: 'back.out(3)' });
     await k.shake(tent, 12, 3);
     laugh();
     void k.shake(lupin, 6, 3);
     void k.shake(hero, 6, 3);
-    await k.wait(500);
+    await k.wait(300);
     k.fx.poof();
     k.puff(375, 470, 200, C.stoneLight);
     k.fx.fizzle();
@@ -343,8 +360,10 @@ export default defineStory({
       k.fx.knock(1);
       void k.hop(nest, 10);
     }
-    await k.wait(300);
-
+    k.music('triumph');
+    await k.camera({}, 1.4);
+    void k.shake(nest, 3, 2);
+    setTimeout(cheep, 1800);
     await k.say('praise', lupin);
 
     // Chocolate for everyone!
