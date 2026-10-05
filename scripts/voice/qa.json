@@ -1,14 +1,31 @@
 {
- "checked": "2026-10-04",
+ "checked": "2026-10-05",
  "clips": {
   "lines/1001tlp": {
    "flags": [],
    "hash": "029390e3ed",
    "hints": []
   },
+  "lines/1009vca": {
+   "flags": [],
+   "hash": "2490723a81",
+   "hints": []
+  },
   "lines/1026o4x": {
    "flags": [],
    "hash": "2075d7a1a2",
+   "hints": []
+  },
+  "lines/10clt3z": {
+   "flags": [],
+   "hash": "2414fb4c52",
+   "hints": [
+    "Whisper heard “No!”"
+   ]
+  },
+  "lines/10es61f": {
+   "flags": [],
+   "hash": "6163937bf0",
    "hints": []
   },
   "lines/10m1apz": {
@@ -21,14 +38,54 @@
    "hash": "ce3ab5a7c3",
    "hints": []
   },
+  "lines/10usa7m": {
+   "flags": [],
+   "hash": "f9f1869d77",
+   "hints": []
+  },
+  "lines/10vwhwe": {
+   "flags": [],
+   "hash": "5a69192ced",
+   "hints": []
+  },
+  "lines/10zi1fj": {
+   "flags": [],
+   "hash": "c2b41d2394",
+   "hints": []
+  },
   "lines/116n8nh": {
    "flags": [],
    "hash": "a622496b1a",
    "hints": []
   },
+  "lines/11a6a25": {
+   "flags": [],
+   "hash": "11aa96ec2c",
+   "hints": []
+  },
+  "lines/11m3vwg": {
+   "flags": [],
+   "hash": "6c2955b2c3",
+   "hints": []
+  },
+  "lines/11njgqg": {
+   "flags": [],
+   "hash": "f1c8666177",
+   "hints": []
+  },
   "lines/11q8hul": {
    "flags": [],
-   "hash": "27415b516f",
+   "hash": "b5772389c0",
+   "hints": []
+  },
+  "lines/11vpwiq": {
+   "flags": [],
+   "hash": "e8f3505405",
+   "hints": []
+  },
+  "lines/128nik": {
+   "flags": [],
+   "hash": "0f96232ba9",
    "hints": []
   },
   "lines/128vgum": {
@@ -38,7 +95,44 @@
   },
   "lines/12mkg1a": {
    "flags": [],
-   "hash": "5a56bb1474",
+   "hash": "847deb2b2e",
+   "hints": []
+  },
+  "lines/12sy33i": {
+   "flags": [],
+   "hash": "3119ae5ff1",
+   "hints": [
+    "Whisper heard “Ding, creature's golden pie is ready. It smells wonderful.”"
+   ]
+  },
+  "lines/12u0q1o": {
+   "flags": [],
+   "hash": "43cf517abb",
+   "hints": []
+  },
+  "lines/139gwhd": {
+   "flags": [],
+   "hash": "717569428a",
+   "hints": []
+  },
+  "lines/13i1vz4": {
+   "flags": [],
+   "hash": "a2d8cf8b7d",
+   "hints": []
+  },
+  "lines/13j0cd6": {
+   "flags": [],
+   "hash": "6c513fecfb",
+   "hints": []
+  },
+  "lines/13kvul7": {
+   "flags": [],
+   "hash": "062c09f8db",
+   "hints": []
+  },
+  "lines/13sjcq6": {
+   "flags": [],
+   "hash": "398a8f6251",
    "hints": []
   },
   "lines/14tf5u": {
@@ -46,9 +140,29 @@
    "hash": "6c8564a88c",
    "hints": []
   },
+  "lines/14ua7t": {
+   "flags": [],
+   "hash": "cffefd1b92",
+   "hints": []
+  },
   "lines/14uhgy9": {
    "flags": [],
    "hash": "e7cd3f712a",
+   "hints": []
+  },
+  "lines/14vksqv": {
+   "flags": [],
+   "hash": "2b8ae7419a",
+   "hints": []
+  },
+  "lines/14wzw27": {
+   "flags": [],
+   "hash": "1da1801b29",
+   "hints": []
+  },
+  "lines/154ql1y": {
+   "flags": [],
+   "hash": "caf110351f",
    "hints": []
   },
   "lines/15fh1zy": {
@@ -66,6 +180,11 @@
    "hash": "bf50c0edea",
    "hints": []
   },
+  "lines/15s3awm": {
+   "flags": [],
+   "hash": "3ff537ceea",
+   "hints": []
+  },
   "lines/16azk88": {
    "flags": [],
    "hash": "c7c22f2799",
@@ -74,6 +193,31 @@
   "lines/16ba1dz": {
    "flags": [],
    "hash": "65a17fab5d",
+   "hints": []
+  },
+  "lines/16gf8uh": {
+   "flags": [],
+   "hash": "2b998a64ca",
+   "hints": []
+  },
+  "lines/16q3xku": {
+   "flags": [],
+   "hash": "ec6f61f01d",
+   "hints": []
+  },
+  "lines/16udkxj": {
+   "flags": [],
+   "hash": "34b69920fb",
+   "hints": []
+  },
+  "lines/16umu5g": {
+   "flags": [],
+   "hash": "5644f205de",
+   "hints": []
+  },
+  "lines/16x58u3": {
+   "flags": [],
+   "hash": "1df97b89ec",
    "hints": []
   },
   "lines/17ifmvi": {
@@ -86,6 +230,16 @@
    "hash": "3be192b08e",
    "hints": []
   },
+  "lines/1893eku": {
+   "flags": [],
+   "hash": "861064642e",
+   "hints": []
+  },
+  "lines/18962un": {
+   "flags": [],
+   "hash": "d50f9cf1b1",
+   "hints": []
+  },
   "lines/18d4qj7": {
    "flags": [],
    "hash": "bd017fd3f2",
@@ -93,9 +247,29 @@
     "Whisper heard “Hm, try another one.”"
    ]
   },
+  "lines/18ddhnx": {
+   "flags": [],
+   "hash": "bc55911d11",
+   "hints": []
+  },
+  "lines/18muyl9": {
+   "flags": [],
+   "hash": "0ceaa660c4",
+   "hints": []
+  },
   "lines/19455hi": {
    "flags": [],
    "hash": "eb441e6dea",
+   "hints": []
+  },
+  "lines/198p46e": {
+   "flags": [],
+   "hash": "02b67fb8b5",
+   "hints": []
+  },
+  "lines/19cf4jh": {
+   "flags": [],
+   "hash": "607e27c840",
    "hints": []
   },
   "lines/19cm7lq": {
@@ -106,6 +280,21 @@
   "lines/19pst6c": {
    "flags": [],
    "hash": "12f6b5d6da",
+   "hints": []
+  },
+  "lines/19x0t5b": {
+   "flags": [],
+   "hash": "edb9306907",
+   "hints": []
+  },
+  "lines/1a1chba": {
+   "flags": [],
+   "hash": "2b5e11c3da",
+   "hints": []
+  },
+  "lines/1a4xmnm": {
+   "flags": [],
+   "hash": "ce4eed1bcd",
    "hints": []
   },
   "lines/1amy3vw": {
@@ -123,9 +312,29 @@
    "hash": "b93ebe3c65",
    "hints": []
   },
+  "lines/1bouvpg": {
+   "flags": [],
+   "hash": "516c57aac8",
+   "hints": []
+  },
+  "lines/1bpk7fj": {
+   "flags": [],
+   "hash": "6860498fd4",
+   "hints": []
+  },
   "lines/1bxso98": {
    "flags": [],
    "hash": "3d84eff81d",
+   "hints": []
+  },
+  "lines/1bxt7jx": {
+   "flags": [],
+   "hash": "34297a73d9",
+   "hints": []
+  },
+  "lines/1bxzkgk": {
+   "flags": [],
+   "hash": "cbcec048f3",
    "hints": []
   },
   "lines/1bzo70s": {
@@ -141,6 +350,26 @@
   "lines/1ces7iq": {
    "flags": [],
    "hash": "e344084f2e",
+   "hints": []
+  },
+  "lines/1cgitjc": {
+   "flags": [],
+   "hash": "99e951e862",
+   "hints": []
+  },
+  "lines/1chpsf8": {
+   "flags": [],
+   "hash": "e30db84f32",
+   "hints": []
+  },
+  "lines/1cvz1l3": {
+   "flags": [],
+   "hash": "56cccd5d3b",
+   "hints": []
+  },
+  "lines/1d2ivbh": {
+   "flags": [],
+   "hash": "9af1295149",
    "hints": []
   },
   "lines/1dgqr1i": {
@@ -165,6 +394,21 @@
    "hash": "3a2e9a10d1",
    "hints": []
   },
+  "lines/1dt4kkn": {
+   "flags": [],
+   "hash": "841f2f299e",
+   "hints": []
+  },
+  "lines/1e9cejr": {
+   "flags": [],
+   "hash": "08f646d64a",
+   "hints": []
+  },
+  "lines/1ejewcv": {
+   "flags": [],
+   "hash": "5737be0d1f",
+   "hints": []
+  },
   "lines/1enssqk": {
    "flags": [],
    "hash": "70f2908a34",
@@ -173,6 +417,11 @@
   "lines/1eo08po": {
    "flags": [],
    "hash": "181468ef05",
+   "hints": []
+  },
+  "lines/1eos4zt": {
+   "flags": [],
+   "hash": "bc1085dea7",
    "hints": []
   },
   "lines/1er07h0": {
@@ -217,9 +466,19 @@
    "hash": "b5773587ba",
    "hints": []
   },
+  "lines/1fs9a88": {
+   "flags": [],
+   "hash": "2b8475673a",
+   "hints": []
+  },
   "lines/1fva6or": {
    "flags": [],
    "hash": "48437a3526",
+   "hints": []
+  },
+  "lines/1g67zlt": {
+   "flags": [],
+   "hash": "67c1330ea6",
    "hints": []
   },
   "lines/1g6k4x": {
@@ -228,6 +487,31 @@
    "hints": [
     "Whisper heard “Hagrid's Hot.”"
    ]
+  },
+  "lines/1g87d5s": {
+   "flags": [],
+   "hash": "a3503bf50a",
+   "hints": []
+  },
+  "lines/1gd2z1t": {
+   "flags": [],
+   "hash": "ec70f4b1e7",
+   "hints": []
+  },
+  "lines/1gvetg1": {
+   "flags": [],
+   "hash": "d6e6376765",
+   "hints": []
+  },
+  "lines/1h22mzb": {
+   "flags": [],
+   "hash": "a88f32b71f",
+   "hints": []
+  },
+  "lines/1h4c70y": {
+   "flags": [],
+   "hash": "a1a3f46ced",
+   "hints": []
   },
   "lines/1h586n5": {
    "flags": [],
@@ -238,6 +522,18 @@
    "flags": [],
    "hash": "bd62c7988b",
    "hints": []
+  },
+  "lines/1hldn1h": {
+   "flags": [],
+   "hash": "d6943206d4",
+   "hints": []
+  },
+  "lines/1hxq3jn": {
+   "flags": [],
+   "hash": "474d3d2e87",
+   "hints": [
+    "Whisper heard “Piotrten, lokomotor!”"
+   ]
   },
   "lines/1hzi10n": {
    "flags": [],
@@ -259,6 +555,33 @@
    "hash": "d8ffd1f4c0",
    "hints": []
   },
+  "lines/1inwxi": {
+   "flags": [],
+   "hash": "7f5d88e2b3",
+   "hints": [
+    "Whisper heard “Number 11, number 13, but where's number 12?”"
+   ]
+  },
+  "lines/1isvclb": {
+   "flags": [],
+   "hash": "f5273dede2",
+   "hints": []
+  },
+  "lines/1ituai2": {
+   "flags": [],
+   "hash": "a3f522f25b",
+   "hints": []
+  },
+  "lines/1iz70xn": {
+   "flags": [],
+   "hash": "7d0664a5a8",
+   "hints": []
+  },
+  "lines/1jc9aye": {
+   "flags": [],
+   "hash": "afb24d25e7",
+   "hints": []
+  },
   "lines/1jfeojm": {
    "flags": [],
    "hash": "fb43744d0d",
@@ -273,11 +596,35 @@
     "Whisper heard “Hi Jasper, I'm Neville. We practice spells in secret. Let's practice spelling too.”"
    ]
   },
+  "lines/1jx7m0v": {
+   "flags": [],
+   "hash": "cbba181d43",
+   "hints": []
+  },
   "lines/1jys883": {
    "flags": [],
    "hash": "4fe6098b78",
    "hints": [
     "Whisper heard “About a buckbeak, the hippogriff, he bows back. Now spell these, Jasper.”"
+   ]
+  },
+  "lines/1jyy6bx": {
+   "flags": [],
+   "hash": "a06507687a",
+   "hints": [
+    "Whisper heard “Oh, you did it, Jasper. Everyone's cheering, even me.”"
+   ]
+  },
+  "lines/1kb0pkm": {
+   "flags": [],
+   "hash": "b07db03c6a",
+   "hints": []
+  },
+  "lines/1kgzld3": {
+   "flags": [],
+   "hash": "4d031d2207",
+   "hints": [
+    "Whisper heard “Forks glows golds unwoosh warm magic flames”"
    ]
   },
   "lines/1kpm1n7": {
@@ -292,6 +639,21 @@
     "Whisper heard “Professor McGonigal.”"
    ]
   },
+  "lines/1l6zvys": {
+   "flags": [],
+   "hash": "7bddbdda9d",
+   "hints": []
+  },
+  "lines/1lw4yy2": {
+   "flags": [],
+   "hash": "5f3292f704",
+   "hints": []
+  },
+  "lines/1lw77y4": {
+   "flags": [],
+   "hash": "043a1210ca",
+   "hints": []
+  },
   "lines/1m9m385": {
    "flags": [],
    "hash": "71296aecfe",
@@ -302,6 +664,11 @@
    "hash": "3ea5bef285",
    "hints": []
   },
+  "lines/1mjtdik": {
+   "flags": [],
+   "hash": "ec74bfd3cf",
+   "hints": []
+  },
   "lines/1mq2n7s": {
    "flags": [],
    "hash": "c3febb789a",
@@ -310,6 +677,11 @@
   "lines/1msfiym": {
    "flags": [],
    "hash": "874dce1cb1",
+   "hints": []
+  },
+  "lines/1mt2ffy": {
+   "flags": [],
+   "hash": "10fec8762c",
    "hints": []
   },
   "lines/1mukkcn": {
@@ -332,6 +704,21 @@
    "hash": "bb92084aa5",
    "hints": []
   },
+  "lines/1myzvpz": {
+   "flags": [],
+   "hash": "453ef8ed2c",
+   "hints": []
+  },
+  "lines/1n180l2": {
+   "flags": [],
+   "hash": "e0254edd9c",
+   "hints": []
+  },
+  "lines/1n1edx5": {
+   "flags": [],
+   "hash": "1d56493ac0",
+   "hints": []
+  },
   "lines/1nhfa19": {
    "flags": [],
    "hash": "01f1285fc0",
@@ -342,9 +729,43 @@
    "hash": "914a63d5c8",
    "hints": []
   },
+  "lines/1njr5qo": {
+   "flags": [],
+   "hash": "997911e5a0",
+   "hints": []
+  },
+  "lines/1nop76j": {
+   "flags": [],
+   "hash": "85cd84a897",
+   "hints": [
+    "Whisper heard “Hehe, that tickled. I feel much better now. Thank you, Jasper.”"
+   ]
+  },
+  "lines/1o45iu": {
+   "flags": [],
+   "hash": "5593a96cdf",
+   "hints": []
+  },
+  "lines/1oj6woe": {
+   "flags": [],
+   "hash": "bb4b9e2b39",
+   "hints": []
+  },
+  "lines/1oq64ja": {
+   "flags": [],
+   "hash": "17bf8841b2",
+   "hints": [
+    "Whisper heard “Rivet, catch me if you can.”"
+   ]
+  },
   "lines/1ov17dm": {
    "flags": [],
    "hash": "fe3b55d0a7",
+   "hints": []
+  },
+  "lines/1p04ier": {
+   "flags": [],
+   "hash": "640e9cd2db",
    "hints": []
   },
   "lines/1p30gsx": {
@@ -352,9 +773,19 @@
    "hash": "b4b6d58051",
    "hints": []
   },
+  "lines/1p514dk": {
+   "flags": [],
+   "hash": "ab38e698be",
+   "hints": []
+  },
   "lines/1pc25lz": {
    "flags": [],
    "hash": "4a5e811e29",
+   "hints": []
+  },
+  "lines/1pdzu7a": {
+   "flags": [],
+   "hash": "6aa91a2383",
    "hints": []
   },
   "lines/1poldt2": {
@@ -367,15 +798,42 @@
    "hash": "dd04cf24a1",
    "hints": []
   },
+  "lines/1qf8qk2": {
+   "flags": [],
+   "hash": "983bb9de7f",
+   "hints": []
+  },
   "lines/1qhyaqz": {
    "flags": [],
    "hash": "39fd668092",
+   "hints": []
+  },
+  "lines/1qsml7g": {
+   "flags": [],
+   "hash": "e95a335fb3",
+   "hints": []
+  },
+  "lines/1qx345u": {
+   "flags": [],
+   "hash": "2c90781da2",
+   "hints": []
+  },
+  "lines/1r4143o": {
+   "flags": [],
+   "hash": "bae5db25c2",
    "hints": []
   },
   "lines/1rc09p6": {
    "flags": [],
    "hash": "2f67053a30",
    "hints": []
+  },
+  "lines/1rn60h4": {
+   "flags": [],
+   "hash": "d5617a8c93",
+   "hints": [
+    "Whisper heard “Oh, Master Jasper, creature has cooked all morning, mind the flying pans.”"
+   ]
   },
   "lines/1rp7tw8": {
    "flags": [],
@@ -389,14 +847,46 @@
     "Whisper heard “The Great Whole Feast.”"
    ]
   },
+  "lines/1s16tyc": {
+   "flags": [],
+   "hash": "5d9fa06dda",
+   "hints": []
+  },
+  "lines/1scpdp": {
+   "flags": [],
+   "hash": "c733eb9a9a",
+   "hints": []
+  },
   "lines/1sezzb4": {
    "flags": [],
    "hash": "a9695152d9",
    "hints": []
   },
+  "lines/1sljtnx": {
+   "flags": [],
+   "hash": "fec08be110",
+   "hints": []
+  },
   "lines/1su58vr": {
    "flags": [],
    "hash": "4dd403e65e",
+   "hints": []
+  },
+  "lines/1t2vp30": {
+   "flags": [],
+   "hash": "f82f628a96",
+   "hints": [
+    "Whisper heard “You go round that way, I'll go round this way, hehe.”"
+   ]
+  },
+  "lines/1tqf59q": {
+   "flags": [],
+   "hash": "23ea022222",
+   "hints": []
+  },
+  "lines/1truvvl": {
+   "flags": [],
+   "hash": "31baf4c654",
    "hints": []
   },
   "lines/1ts9m0a": {
@@ -406,9 +896,34 @@
     "Whisper heard “Creature.”"
    ]
   },
+  "lines/1tyibs5": {
+   "flags": [],
+   "hash": "af5a8e0968",
+   "hints": []
+  },
+  "lines/1u7inb0": {
+   "flags": [],
+   "hash": "ab07fc8519",
+   "hints": []
+  },
   "lines/1u81vmp": {
    "flags": [],
    "hash": "fcc498d138",
+   "hints": []
+  },
+  "lines/1ugxtml": {
+   "flags": [],
+   "hash": "f649043ac7",
+   "hints": []
+  },
+  "lines/1ui0pzd": {
+   "flags": [],
+   "hash": "a9d5eaa78b",
+   "hints": []
+  },
+  "lines/1ukj3j4": {
+   "flags": [],
+   "hash": "10cab504c6",
    "hints": []
   },
   "lines/1ulfpge": {
@@ -421,14 +936,39 @@
    "hash": "c9ce58f6f6",
    "hints": []
   },
+  "lines/1vatjqw": {
+   "flags": [],
+   "hash": "4a108fb771",
+   "hints": []
+  },
   "lines/1vl8xm0": {
    "flags": [],
    "hash": "aa327fdab7",
    "hints": []
   },
+  "lines/1vmw7na": {
+   "flags": [],
+   "hash": "ad48131cfa",
+   "hints": []
+  },
+  "lines/1vq38qp": {
+   "flags": [],
+   "hash": "ae5b63e69d",
+   "hints": []
+  },
+  "lines/1w42lcs": {
+   "flags": [],
+   "hash": "078f74705a",
+   "hints": []
+  },
   "lines/1wcc7bm": {
    "flags": [],
    "hash": "d3737e19d4",
+   "hints": []
+  },
+  "lines/1wg4wa8": {
+   "flags": [],
+   "hash": "4ff7ac88ea",
    "hints": []
   },
   "lines/1x3wnzg": {
@@ -441,14 +981,44 @@
    "hash": "947186c447",
    "hints": []
   },
+  "lines/1x6947y": {
+   "flags": [],
+   "hash": "f13b7c2bfb",
+   "hints": []
+  },
+  "lines/1xb4muj": {
+   "flags": [],
+   "hash": "db9502fd79",
+   "hints": []
+  },
   "lines/1xglioz": {
    "flags": [],
    "hash": "32dd1355e2",
    "hints": []
   },
+  "lines/1xqe4tj": {
+   "flags": [],
+   "hash": "51950fbd6d",
+   "hints": []
+  },
+  "lines/1xqv4wq": {
+   "flags": [],
+   "hash": "d430f5e90a",
+   "hints": []
+  },
+  "lines/1y1uxaj": {
+   "flags": [],
+   "hash": "29cdd05dab",
+   "hints": []
+  },
   "lines/1yfdnbs": {
    "flags": [],
    "hash": "e485b6bddc",
+   "hints": []
+  },
+  "lines/1yku7f2": {
+   "flags": [],
+   "hash": "472bd26aa3",
    "hints": []
   },
   "lines/1yrow8r": {
@@ -461,6 +1031,21 @@
    "hash": "c5364cdf8f",
    "hints": []
   },
+  "lines/2ehaxe": {
+   "flags": [],
+   "hash": "e8a2a56b94",
+   "hints": []
+  },
+  "lines/2ej9ty": {
+   "flags": [],
+   "hash": "0cc72c45a0",
+   "hints": []
+  },
+  "lines/2ja8er": {
+   "flags": [],
+   "hash": "933a9376ec",
+   "hints": []
+  },
   "lines/2namlj": {
    "flags": [],
    "hash": "652dfe6d35",
@@ -471,6 +1056,11 @@
   "lines/2qyrar": {
    "flags": [],
    "hash": "50265f0afa",
+   "hints": []
+  },
+  "lines/2te05a": {
+   "flags": [],
+   "hash": "8f331142d0",
    "hints": []
   },
   "lines/3mbnn9": {
@@ -487,6 +1077,11 @@
     "Whisper heard “Slug Horns Potions”"
    ]
   },
+  "lines/3veps9": {
+   "flags": [],
+   "hash": "6f4006af10",
+   "hints": []
+  },
   "lines/3w6n45": {
    "flags": [],
    "hash": "4648c01790",
@@ -502,14 +1097,51 @@
    "hash": "1635882763",
    "hints": []
   },
+  "lines/46rx0w": {
+   "flags": [],
+   "hash": "4deb95b4f5",
+   "hints": []
+  },
+  "lines/4ar9sm": {
+   "flags": [],
+   "hash": "cbfdda86dc",
+   "hints": [
+    "Whisper heard “STUPIFY”"
+   ]
+  },
   "lines/4u4etf": {
    "flags": [],
    "hash": "9abb996d5c",
    "hints": []
   },
+  "lines/5fzoe3": {
+   "flags": [],
+   "hash": "7a17724220",
+   "hints": []
+  },
+  "lines/5hefh3": {
+   "flags": [],
+   "hash": "c80f24b431",
+   "hints": []
+  },
   "lines/5v5rf2": {
    "flags": [],
    "hash": "7752a57d3e",
+   "hints": []
+  },
+  "lines/5za5ai": {
+   "flags": [],
+   "hash": "1ceb2f9574",
+   "hints": []
+  },
+  "lines/62x2zh": {
+   "flags": [],
+   "hash": "af2c9b3cf1",
+   "hints": []
+  },
+  "lines/64n7t0": {
+   "flags": [],
+   "hash": "f58c48ea1c",
    "hints": []
   },
   "lines/6jese2": {
@@ -527,14 +1159,98 @@
    "hash": "5caa58c60d",
    "hints": []
   },
+  "lines/6u55k5": {
+   "flags": [],
+   "hash": "5d06dae326",
+   "hints": [
+    "Whisper heard “Oh, so sleepy. So cosy. Just a little nap.”"
+   ]
+  },
+  "lines/6u5xau": {
+   "flags": [],
+   "hash": "3d3c4e5916",
+   "hints": []
+  },
+  "lines/750v0w": {
+   "flags": [],
+   "hash": "2598dba178",
+   "hints": []
+  },
+  "lines/7cgm8o": {
+   "flags": [],
+   "hash": "09264e5c49",
+   "hints": []
+  },
   "lines/7fw2ya": {
    "flags": [],
    "hash": "ed42dec1f8",
    "hints": []
   },
+  "lines/7ihz7g": {
+   "flags": [],
+   "hash": "02cd1a7f19",
+   "hints": []
+  },
+  "lines/7mt8fu": {
+   "flags": [],
+   "hash": "aa5ce36644",
+   "hints": []
+  },
+  "lines/7mvqrh": {
+   "flags": [],
+   "hash": "d2b8040360",
+   "hints": []
+  },
+  "lines/7rzx7i": {
+   "flags": [],
+   "hash": "1bef7c578b",
+   "hints": []
+  },
+  "lines/7sd8kr": {
+   "flags": [],
+   "hash": "9d9457a96c",
+   "hints": []
+  },
+  "lines/7udcod": {
+   "flags": [],
+   "hash": "c4a71cd734",
+   "hints": []
+  },
+  "lines/84z9x3": {
+   "flags": [],
+   "hash": "04cdfa9a37",
+   "hints": []
+  },
   "lines/8czfkz": {
    "flags": [],
    "hash": "1231c4016a",
+   "hints": []
+  },
+  "lines/8fzqf0": {
+   "flags": [],
+   "hash": "5e7a03cee8",
+   "hints": []
+  },
+  "lines/8slf1o": {
+   "flags": [],
+   "hash": "63780ed85f",
+   "hints": [
+    "Whisper heard “Boggart's hate being laughed at point your wand and say ridiculous”"
+   ]
+  },
+  "lines/8yobfl": {
+   "flags": [],
+   "hash": "3899e827db",
+   "hints": []
+  },
+  "lines/9b8q69": {
+   "flags": [],
+   "hash": "1518efeed5",
+   "hints": []
+  },
+  "lines/9cwuo2": {
+   "flags": [],
+   "hash": "0c413259ff",
    "hints": []
   },
   "lines/9ri8a3": {
@@ -547,6 +1263,31 @@
    "hash": "f5e2ea5096",
    "hints": []
   },
+  "lines/a0ojht": {
+   "flags": [],
+   "hash": "07e992d72e",
+   "hints": []
+  },
+  "lines/ahz768": {
+   "flags": [],
+   "hash": "81d27e782b",
+   "hints": []
+  },
+  "lines/ak9c42": {
+   "flags": [],
+   "hash": "cfc67c0f69",
+   "hints": []
+  },
+  "lines/amappo": {
+   "flags": [],
+   "hash": "d905061bfe",
+   "hints": []
+  },
+  "lines/atfi5b": {
+   "flags": [],
+   "hash": "6cd9cfcd0f",
+   "hints": []
+  },
   "lines/b4k2ga": {
    "flags": [],
    "hash": "9edefd06ec",
@@ -557,9 +1298,19 @@
    "hash": "fed0a963b8",
    "hints": []
   },
+  "lines/bypyto": {
+   "flags": [],
+   "hash": "41139d0a38",
+   "hints": []
+  },
   "lines/c3tc4b": {
    "flags": [],
    "hash": "846614b534",
+   "hints": []
+  },
+  "lines/c9x0vw": {
+   "flags": [],
+   "hash": "84213efa29",
    "hints": []
   },
   "lines/ccvp7u": {
@@ -579,6 +1330,21 @@
     "Whisper heard “Creatures' Kitchen”"
    ]
   },
+  "lines/cxe4ne": {
+   "flags": [],
+   "hash": "2843b2ea3a",
+   "hints": []
+  },
+  "lines/dlk5x": {
+   "flags": [],
+   "hash": "ef35528076",
+   "hints": []
+  },
+  "lines/dmyrc2": {
+   "flags": [],
+   "hash": "f1b8eccc8e",
+   "hints": []
+  },
   "lines/dos1g8": {
    "flags": [],
    "hash": "12eb118722",
@@ -589,19 +1355,61 @@
    "hash": "5f81edb468",
    "hints": []
   },
+  "lines/dxd3oy": {
+   "flags": [],
+   "hash": "6e0ccbf0d1",
+   "hints": []
+  },
+  "lines/e8rtrm": {
+   "flags": [],
+   "hash": "efb47bf631",
+   "hints": []
+  },
+  "lines/ea3too": {
+   "flags": [],
+   "hash": "077a18ccbc",
+   "hints": []
+  },
   "lines/epffp2": {
    "flags": [],
    "hash": "0e95b892fb",
    "hints": []
+  },
+  "lines/euobum": {
+   "flags": [],
+   "hash": "4ebab77839",
+   "hints": []
+  },
+  "lines/ffwq86": {
+   "flags": [],
+   "hash": "1911cefdfa",
+   "hints": [
+    "Whisper heard “You lift your wand and call out Axio Broom. Whoosh!”"
+   ]
   },
   "lines/fh63xf": {
    "flags": [],
    "hash": "cb153c5237",
    "hints": []
   },
+  "lines/fkwxa0": {
+   "flags": [],
+   "hash": "b134a34548",
+   "hints": []
+  },
   "lines/fnxaok": {
    "flags": [],
    "hash": "f889ae8c28",
+   "hints": []
+  },
+  "lines/ftt7ji": {
+   "flags": [],
+   "hash": "fc8d269c42",
+   "hints": []
+  },
+  "lines/g60b3r": {
+   "flags": [],
+   "hash": "c4e80471d0",
    "hints": []
   },
   "lines/ghokm": {
@@ -612,6 +1420,11 @@
   "lines/gn8ww": {
    "flags": [],
    "hash": "232b46265e",
+   "hints": []
+  },
+  "lines/gpa4v1": {
+   "flags": [],
+   "hash": "1c09ad26a2",
    "hints": []
   },
   "lines/gpoi5b": {
@@ -636,6 +1449,16 @@
    "hash": "00f858bf26",
    "hints": []
   },
+  "lines/hiv2ib": {
+   "flags": [],
+   "hash": "08e929461f",
+   "hints": []
+  },
+  "lines/hp7zmm": {
+   "flags": [],
+   "hash": "014f39aab8",
+   "hints": []
+  },
   "lines/i4k5wk": {
    "flags": [],
    "hash": "1977e32c17",
@@ -651,10 +1474,22 @@
    "hash": "5a920b8765",
    "hints": []
   },
+  "lines/ir83l": {
+   "flags": [],
+   "hash": "68c61be8a6",
+   "hints": []
+  },
   "lines/javk6k": {
    "flags": [],
    "hash": "ab62c67fe1",
    "hints": []
+  },
+  "lines/jctp9m": {
+   "flags": [],
+   "hash": "9312a4f5a4",
+   "hints": [
+    "Whisper heard “R.O. A Grindylows tugging your flipper. Quick, give it a boot and a book.”"
+   ]
   },
   "lines/jefoy6": {
    "flags": [],
@@ -671,14 +1506,39 @@
    "hash": "a2b64bf91a",
    "hints": []
   },
+  "lines/jvk5o0": {
+   "flags": [],
+   "hash": "dbc8426d5a",
+   "hints": []
+  },
   "lines/k48sa7": {
    "flags": [],
    "hash": "1d56d03d8a",
    "hints": []
   },
+  "lines/kdohjj": {
+   "flags": [],
+   "hash": "5614ae5edb",
+   "hints": []
+  },
+  "lines/klkmjp": {
+   "flags": [],
+   "hash": "fb46158898",
+   "hints": []
+  },
+  "lines/ko597a": {
+   "flags": [],
+   "hash": "717e43b594",
+   "hints": []
+  },
   "lines/ksa1q5": {
    "flags": [],
    "hash": "9648274361",
+   "hints": []
+  },
+  "lines/l0dnxt": {
+   "flags": [],
+   "hash": "1363e7e22c",
    "hints": []
   },
   "lines/le3t5h": {
@@ -691,9 +1551,19 @@
    "hash": "2740fd01ac",
    "hints": []
   },
+  "lines/lradvq": {
+   "flags": [],
+   "hash": "945a054b06",
+   "hints": []
+  },
   "lines/lv3ro0": {
    "flags": [],
    "hash": "79705592ad",
+   "hints": []
+  },
+  "lines/m50fhs": {
+   "flags": [],
+   "hash": "c47b970fa9",
    "hints": []
   },
   "lines/m59myr": {
@@ -706,9 +1576,29 @@
    "hash": "479c60706c",
    "hints": []
   },
+  "lines/mfejwr": {
+   "flags": [],
+   "hash": "1081edd38c",
+   "hints": []
+  },
+  "lines/mhf9n0": {
+   "flags": [],
+   "hash": "317b2edc5e",
+   "hints": []
+  },
   "lines/mk0c9u": {
    "flags": [],
    "hash": "1d93fdebf7",
+   "hints": []
+  },
+  "lines/myku9v": {
+   "flags": [],
+   "hash": "2e135a381e",
+   "hints": []
+  },
+  "lines/n4j63y": {
+   "flags": [],
+   "hash": "36758e2e24",
    "hints": []
   },
   "lines/n5czbb": {
@@ -736,14 +1626,46 @@
    "hash": "2e3be3bc88",
    "hints": []
   },
+  "lines/obht3v": {
+   "flags": [],
+   "hash": "584c8c80f6",
+   "hints": []
+  },
+  "lines/og2u7x": {
+   "flags": [],
+   "hash": "085290d516",
+   "hints": []
+  },
   "lines/opg03a": {
    "flags": [],
    "hash": "a78efe69e2",
    "hints": []
   },
+  "lines/ouxd98": {
+   "flags": [],
+   "hash": "8d90bb1798",
+   "hints": [
+    "Whisper heard “Ooh, floating nargles, buzzy raksperts, and a crumple-horned snork hack, he's shy.”"
+   ]
+  },
+  "lines/oypq4g": {
+   "flags": [],
+   "hash": "26dd4cb0ab",
+   "hints": []
+  },
+  "lines/p4pwka": {
+   "flags": [],
+   "hash": "746e035f60",
+   "hints": []
+  },
   "lines/p8r1n0": {
    "flags": [],
    "hash": "9691d34b64",
+   "hints": []
+  },
+  "lines/pahh1": {
+   "flags": [],
+   "hash": "09d206a2b9",
    "hints": []
   },
   "lines/pmisf5": {
@@ -768,9 +1690,29 @@
    "hash": "74ac0d4a0d",
    "hints": []
   },
+  "lines/pxv8uk": {
+   "flags": [],
+   "hash": "95978728d8",
+   "hints": []
+  },
+  "lines/pykfk3": {
+   "flags": [],
+   "hash": "82622981ec",
+   "hints": []
+  },
+  "lines/q2difr": {
+   "flags": [],
+   "hash": "2fd1b0172c",
+   "hints": []
+  },
   "lines/q7c949": {
    "flags": [],
    "hash": "696f8e76eb",
+   "hints": []
+  },
+  "lines/qe3poa": {
+   "flags": [],
+   "hash": "63236553ba",
    "hints": []
   },
   "lines/qrq02c": {
@@ -783,9 +1725,24 @@
    "hash": "c88e41f12e",
    "hints": []
   },
+  "lines/rmxawp": {
+   "flags": [],
+   "hash": "77cbc3500c",
+   "hints": []
+  },
+  "lines/rw2ayt": {
+   "flags": [],
+   "hash": "4093ece7c5",
+   "hints": []
+  },
   "lines/s1kbfs": {
    "flags": [],
    "hash": "0521cd0533",
+   "hints": []
+  },
+  "lines/scaxrz": {
+   "flags": [],
+   "hash": "6000cce5fd",
    "hints": []
   },
   "lines/sgigq7": {
@@ -798,6 +1755,21 @@
    "hash": "e2cc0c5122",
    "hints": []
   },
+  "lines/sq9d6z": {
+   "flags": [],
+   "hash": "d67873d79d",
+   "hints": []
+  },
+  "lines/t4op9z": {
+   "flags": [],
+   "hash": "f21e444e76",
+   "hints": []
+  },
+  "lines/t58v58": {
+   "flags": [],
+   "hash": "5f302e06c6",
+   "hints": []
+  },
   "lines/tcw4pj": {
    "flags": [],
    "hash": "cbdd4dfd8f",
@@ -808,9 +1780,19 @@
    "hash": "6d0523cd48",
    "hints": []
   },
+  "lines/tgdp16": {
+   "flags": [],
+   "hash": "6f598d3f4a",
+   "hints": []
+  },
   "lines/thsthk": {
    "flags": [],
    "hash": "bd1724f4c0",
+   "hints": []
+  },
+  "lines/thvd1x": {
+   "flags": [],
+   "hash": "b6ac84844a",
    "hints": []
   },
   "lines/u0ez04": {
@@ -823,9 +1805,39 @@
    "hash": "7456d50e85",
    "hints": []
   },
+  "lines/ugfi0g": {
+   "flags": [],
+   "hash": "1b6777b22e",
+   "hints": []
+  },
   "lines/ujnztm": {
    "flags": [],
    "hash": "26388c0262",
+   "hints": []
+  },
+  "lines/uv9h9a": {
+   "flags": [],
+   "hash": "f594d11b32",
+   "hints": []
+  },
+  "lines/uvdl9g": {
+   "flags": [],
+   "hash": "58c55edeaf",
+   "hints": []
+  },
+  "lines/v9y130": {
+   "flags": [],
+   "hash": "44e7f43cae",
+   "hints": []
+  },
+  "lines/vfa2we": {
+   "flags": [],
+   "hash": "07f03e276f",
+   "hints": []
+  },
+  "lines/vmuc7h": {
+   "flags": [],
+   "hash": "471bc324c0",
    "hints": []
   },
   "lines/vp2a8t": {
@@ -840,6 +1852,11 @@
     "Whisper heard “Creature will help Master Jasper, Creature has packed a picnic.”"
    ]
   },
+  "lines/w5o1h6": {
+   "flags": [],
+   "hash": "cff092a31a",
+   "hints": []
+  },
   "lines/w964xr": {
    "flags": [],
    "hash": "39968cf514",
@@ -847,9 +1864,21 @@
     "Whisper heard “Creature will help master. Creature has packed a picnic.”"
    ]
   },
+  "lines/web4b7": {
+   "flags": [],
+   "hash": "7db98f2bdd",
+   "hints": [
+    "Whisper heard “Oui! Dobby's ears go flap, flap, flap!”"
+   ]
+  },
   "lines/wnj9ar": {
    "flags": [],
    "hash": "2fc0bbcabd",
+   "hints": []
+  },
+  "lines/wvogn0": {
+   "flags": [],
+   "hash": "b2b973d9e5",
    "hints": []
   },
   "lines/wyfbec": {
@@ -862,9 +1891,34 @@
    "hash": "a3da50edf6",
    "hints": []
   },
+  "lines/xdt1qj": {
+   "flags": [],
+   "hash": "c2e33710fd",
+   "hints": []
+  },
+  "lines/xee9f5": {
+   "flags": [],
+   "hash": "bd3799e95d",
+   "hints": []
+  },
+  "lines/xjdnuq": {
+   "flags": [],
+   "hash": "58b043837e",
+   "hints": []
+  },
+  "lines/xo0ull": {
+   "flags": [],
+   "hash": "3c2218f35d",
+   "hints": []
+  },
   "lines/xpupj": {
    "flags": [],
    "hash": "c7fc4cf6cc",
+   "hints": []
+  },
+  "lines/y0z9vk": {
+   "flags": [],
+   "hash": "6e67962f97",
    "hints": []
   },
   "lines/y16pab": {
@@ -872,9 +1926,34 @@
    "hash": "06fc430996",
    "hints": []
   },
+  "lines/y7onfj": {
+   "flags": [],
+   "hash": "19ba32c140",
+   "hints": []
+  },
   "lines/yfm08k": {
    "flags": [],
    "hash": "0acb320016",
+   "hints": []
+  },
+  "lines/yxa6hp": {
+   "flags": [],
+   "hash": "753aa6e79a",
+   "hints": []
+  },
+  "lines/z46oxw": {
+   "flags": [],
+   "hash": "c0d9ada80f",
+   "hints": []
+  },
+  "lines/za1v1x": {
+   "flags": [],
+   "hash": "56977d427b",
+   "hints": []
+  },
+  "lines/zac5fy": {
+   "flags": [],
+   "hash": "2576809d1c",
    "hints": []
   },
   "lines/zm6i2k": {
