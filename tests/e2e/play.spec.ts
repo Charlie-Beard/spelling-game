@@ -38,7 +38,7 @@ async function spellWord(page: Page) {
 }
 
 test('plays the first chapter from the title screen to the reward', async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(300_000);
   await page.goto('/');
   await settled(page.locator('.letter'));
   await page.locator('.letter').click({ force: true });
@@ -55,6 +55,12 @@ test('plays the first chapter from the title screen to the reward', async ({ pag
     await expect(page.locator('.slot.target')).toBeVisible({ timeout: 20_000 });
     await spellWord(page);
   }
+  // The reward story plays to the end, then Next leads to the card.
+  await expect(page.locator('.scene.story')).toBeVisible({ timeout: 30_000 });
+  const done = page.getByRole('button', { name: 'Next', exact: true });
+  await expect(done).toBeVisible({ timeout: 120_000 });
+  await settled(done);
+  await done.click({ force: true });
   // Reward
   await expect(page.locator('.card-reward')).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('.card-reward')).toContainText('Hagrid');
@@ -103,4 +109,12 @@ test('a fast second tap while a letter is flying is not lost', async ({ page }) 
   // Tap the second letter immediately, while the first is still in the air.
   await page.locator(`.tile:not(.placed)[data-g="${wants[1]}"]`).first().click({ force: true });
   await expect(page.locator('.tile.placed')).toHaveCount(2, { timeout: 3000 });
+});
+
+test('the reward story can be skipped', async ({ page }) => {
+  test.setTimeout(60_000);
+  await page.goto('/?scene=story&id=b1c1');
+  await expect(page.locator('.scene.story')).toBeVisible({ timeout: 10_000 });
+  await page.getByRole('button', { name: 'Skip the story' }).click({ force: true });
+  await expect(page.locator('.scene.map')).toBeVisible({ timeout: 10_000 });
 });

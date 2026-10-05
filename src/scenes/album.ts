@@ -7,6 +7,7 @@ import { HORCRUX_NAMES, horcruxArt } from '../art/horcruxes';
 import { C } from '../art/palette';
 import { parchment } from '../art/ui';
 import { ALL_CHAPTERS, HORCRUXES } from '../core/curriculum';
+import { hasStory } from './story';
 import { pop, sm } from '../ui/anim';
 import { banner, frogCard, sealButton } from '../ui/components';
 import { h, place } from '../ui/dom';
@@ -74,11 +75,24 @@ export class AlbumScene extends Scene {
     holder.append(big);
     veil.append(holder);
     veil.append(sealButton('close', { x: 1050, y: 40, size: 90, color: C.slate, aria: 'Close', name: 'album-close' }));
+    // Watch the chapter's story again.
+    const chapter = ALL_CHAPTERS.find((c) => c.reward === id && c.kind !== 'battle');
+    let watch: HTMLElement | null = null;
+    if (chapter && hasStory(chapter.id)) {
+      watch = sealButton('play', { x: 900, y: 360, size: 130, color: C.red, aria: 'Watch the story', name: 'album-watch' });
+      veil.append(watch);
+      this.tap(watch, () => {
+        sfx.tap();
+        voice.stop();
+        this.app.nav.story(chapter.id, () => this.app.nav.album());
+      });
+    }
     this.root.append(veil);
     this.zoom = veil;
     gsap.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.2 });
     void sm(holder, 0.4, { startAt: { scale: 0.3, rotation: -10 }, scale: 1, rotation: 0, ease: 'back.out(1.7)' });
-    this.tap(veil, () => {
+    this.tap(veil, (e) => {
+      if (watch && e.target instanceof Node && watch.contains(e.target)) return;
       sfx.tap();
       veil.remove();
       this.zoom = null;

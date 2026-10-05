@@ -13,6 +13,8 @@ export interface Nav {
   chapter(id: string): void;
   practice(): void;
   album(): void;
+  /** Plays a chapter's reward story, then calls `back`. */
+  story(chapterId: string, back: () => void): void;
   parent(): void;
 }
 

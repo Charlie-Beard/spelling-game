@@ -44,6 +44,10 @@ cloud, so they follow him to any device he signs in on.
   mat, rat, bat**.
 - **Every chapter has a host character.** Finishing it wins that host's
   **Chocolate Frog card**.
+- **Every chapter ends with a reward story:** a 30-second paper-puppet show
+  with the chapter's characters, its five words as props, sound effects and
+  voices. He is the hero of each one. The album plays them again.
+  A small button skips the story.
 - **Books 1–6 end with a Horcrux.** **Book 7 ends with the Battle of
   Hogwarts**, where each word casts a shield and Voldemort is disarmed with
   *Expelliarmus*.
@@ -133,11 +137,14 @@ game with `VITE_API_URL=http://localhost:8787 npm run dev`.
 
 ```bash
 npm install
-npm run dev          # http://localhost:5173 (add ?scene=map, ?scene=chapter&id=b3c2 …)
+npm run dev          # http://localhost:5173 (add ?scene=map, ?scene=chapter&id=b3c2, ?scene=story&id=b1c1 …)
 npm test             # unit tests (game logic, curriculum, art coverage)
 npm run test:e2e     # Playwright: full chapter play-through at iPad sizes
 npm run build        # production build to dist/ (with offline service worker)
 ```
+
+`node scripts/storyshots.mjs b1c1` films a chapter's reward story as a strip
+of screenshots (with the dev server running) and prints its captions.
 
 `/lab.html` (dev only) is an art gallery. Use `?set=chars` for characters,
 `?set=horcrux` for the Horcruxes, and `?p=cat,hat` to show particular words.
@@ -150,8 +157,9 @@ npm run build        # production build to dist/ (with offline service worker)
 | `src/art/paper.ts` | The torn-paper engine: tearing, fibre edges, shadows, stop-motion boil |
 | `src/art/pictures/` | 145 word illustrations, one file per book |
 | `src/art/characters/` | 33 character portraits |
-| `src/scenes/` | Title, choose, map, intro, spell, battle, complete, album, grown-ups |
-| `src/audio/` | Web Audio engine, synthesised sound effects, narrator, recordings |
+| `src/scenes/` | Title, choose, map, intro, spell, battle, story, complete, album, grown-ups |
+| `src/stories/` | One reward story per chapter, written as a script against `kit.ts` (puppets, captions, voice, sounds) |
+| `src/audio/` | Web Audio engine, synthesised sound effects (`synth.ts` for the stories), narrator, recordings |
 | `scripts/voice/` | Records narration with Kokoro (offline neural TTS) or ElevenLabs, and checks it |
 | `scripts/icons.ts` | Renders the app icons from the game's own art |
 

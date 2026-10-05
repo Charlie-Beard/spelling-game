@@ -1,8 +1,8 @@
 /**
  * Game flow:
  *
- *   title → (choose character, first time) → map → intro → spell → reward
- *                                             ↑__________________________|
+ *   title → (choose character, first time) → map → intro → spell → story → reward
+ *                                             ↑__________________________________|
  *
  * plus the collection album and the grown-ups' corner.
  */
@@ -20,6 +20,7 @@ import { IntroScene } from './scenes/intro';
 import { MapScene } from './scenes/map';
 import { ParentScene } from './scenes/parent';
 import { SpellScene } from './scenes/spell';
+import { hasStory, StoryScene } from './scenes/story';
 import { TitleScene } from './scenes/title';
 import type { App, Nav } from './ui/scene';
 
@@ -115,7 +116,7 @@ export class Game implements Nav {
     const p = this.app.progress;
     const { newReward, gems } = recordChapter(p, chapter, results);
     this.app.save();
-    void this.app.go(
+    const reward = () =>
       new CompleteScene(this.app, {
         book,
         chapter,
@@ -123,8 +124,17 @@ export class Game implements Nav {
         newReward,
         onNext: () => this.next(chapter),
         onMap: () => this.map(book.n, chapter.id),
-      }),
-    );
+      });
+    // The reward story first, then the card.
+    if (hasStory(chapter.id)) void this.app.go(new StoryScene(this.app, { book, chapter, onDone: () => void this.app.go(reward()) }));
+    else void this.app.go(reward());
+  }
+
+  /** Plays a chapter's reward story on its own (dev preview, or watching it again). */
+  story(id: string, back: () => void): void {
+    const found = findChapter(id);
+    if (!found || !hasStory(id)) return back();
+    void this.app.go(new StoryScene(this.app, { book: found.book, chapter: found.chapter, onDone: back }));
   }
 
   /** After a chapter: straight into the next one (it's one tap, no choices). */

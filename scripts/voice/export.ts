@@ -8,6 +8,7 @@ import { GRAPHEME_PHONEME } from '../../src/core/phonics';
 import { HOST_NAMES } from '../../src/core/names';
 import { bookLine, DEFAULT_NAME, generic, lineId, personalise, PHRASES, PRAISE, VOLDEMORT } from '../../src/core/phrases';
 import { HORCRUX_NAMES } from '../../src/art/horcruxes';
+import { STORIES } from '../../src/stories';
 
 const lines: { id: string; text: string; speaker: string }[] = [];
 const add = (template: string, speaker = 'narrator') => {
@@ -33,6 +34,11 @@ ALL_CHAPTERS.forEach((c) => {
   add(c.intro, c.host);
   add(c.title);
 });
+// The reward stories' lines, each in its speaker's voice.
+for (const load of Object.values(STORIES)) {
+  const story = (await load()).default;
+  Object.values(story.lines).forEach((l) => add(l.text, l.who));
+}
 
 const phonemes = [...new Set(Object.values(GRAPHEME_PHONEME)), 'oo-short', 'schwa'];
 // Each word's sounds, so check.py knows which vowel to listen for.

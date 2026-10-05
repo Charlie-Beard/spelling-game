@@ -4,6 +4,7 @@ import './styles/base.css';
 import './styles/paper.css';
 import './styles/ui.css';
 import './styles/parent.css';
+import './styles/story.css';
 import { installGrain } from './art/grain';
 import { parchmentDefs, uiDefs } from './art/ui';
 import { setVolumes, unlock } from './audio/engine';
@@ -93,7 +94,7 @@ async function start(): Promise<void> {
   profile.onChange(applySettings);
   keepInSync(profile);
 
-  // Dev shortcuts: ?scene=map|choose|album|parent|chapter&id=b1c1
+  // Dev shortcuts: ?scene=map|choose|album|parent|chapter|story&id=b1c1
   const q = new URLSearchParams(location.search);
   const scene = q.get('scene');
   if (scene === 'map') game.map(Number(q.get('book')) || undefined);
@@ -101,6 +102,7 @@ async function start(): Promise<void> {
   else if (scene === 'album') game.album();
   else if (scene === 'parent') game.parent();
   else if (scene === 'chapter') game.chapter(q.get('id') ?? 'b1c1');
+  else if (scene === 'story') game.story(q.get('id') ?? 'b1c1', () => game.map());
   else game.title();
 }
 
