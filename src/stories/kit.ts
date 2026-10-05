@@ -26,7 +26,7 @@
  */
 import { gsap } from 'gsap';
 import { sfx } from '../audio/sfx';
-import { fx } from '../audio/synth';
+import { fx, musicBed, type Mood, type MusicBed } from '../audio/synth';
 import { voice } from '../audio/voice';
 import { characters } from '../art/characters';
 import { hedwig } from '../art/characters/hedwig';
@@ -34,7 +34,8 @@ import { horcruxArt } from '../art/horcruxes';
 import { C } from '../art/palette';
 import { circle, curve, piece, rng, svg, type Pt } from '../art/paper';
 import { picture } from '../art/pictures';
-import { star } from '../art/ui';
+import { parchment, star } from '../art/ui';
+import { HOST_NAMES } from '../core/names';
 import type { Avatar, Book, Chapter } from '../core/curriculum';
 import { personalise } from '../core/phrases';
 import { isCalm, stepped } from '../ui/anim';
@@ -88,8 +89,14 @@ export interface PlaceOpts {
  * so it never fights a tween.
  */
 export class Kit<K extends string = string> {
-  /** The 1180 × 820 story stage. */
+  /**
+   * The story's world: the 1180 × 820 layer the backdrop and actors live in.
+   * The camera moves and zooms it; captions and the scene-cut sheet sit
+   * above it, on the stage.
+   */
   readonly root: HTMLElement;
+  /** The outer stage (captions, overlays). */
+  readonly stage: HTMLElement;
   readonly book: Book;
   readonly chapter: Chapter;
   /** The child's character: 'harry', 'ron' or 'hermione'. */
@@ -105,10 +112,14 @@ export class Kit<K extends string = string> {
   private lines: Record<string, Line>;
   private alive: () => boolean;
   private captionEl: HTMLElement;
-  private captionText: HTMLElement;
+  private captionLine: HTMLElement;
+  private tag: HTMLElement;
+  private bed: MusicBed | null = null;
 
   constructor(o: { root: HTMLElement; book: Book; chapter: Chapter; hero: Avatar; name: string; lines: Record<string, Line>; alive: () => boolean }) {
-    this.root = o.root;
+    this.stage = o.root;
+    this.root = h('div', { class: 'story-world' });
+    this.stage.append(this.root);
     this.book = o.book;
     this.chapter = o.chapter;
     this.hero = o.hero;
@@ -117,9 +128,18 @@ export class Kit<K extends string = string> {
     this.alive = o.alive;
     this.calm = isCalm();
     this.captionEl = place(h('div', { class: 'story-caption', 'aria-live': 'polite' }), 150, 690, 880, 110);
-    this.captionText = h('div', { class: 'story-caption-text' });
-    this.captionEl.append(this.captionText);
-    this.root.append(this.captionEl);
+    const box = h('div', { class: 'story-caption-text' });
+    this.tag = h('div', { class: 'story-tag', style: `background:${o.book.color}` });
+    this.captionLine = h('span');
+    box.append(this.tag, this.captionLine);
+    this.captionEl.append(box);
+    this.stage.append(this.captionEl);
+  }
+
+  /** Stops the music. Called by the story scene when the show ends. */
+  dispose(): void {
+    this.bed?.stop();
+    this.bed = null;
   }
 
   // ---------------------------------------------------------------- building
@@ -143,7 +163,7 @@ export class Kit<K extends string = string> {
     const inner = h('div', { class: 'story-flip', html });
     if (o.flip) inner.style.transform = 'scaleX(-1)';
     el.append(inner);
-    this.root.insertBefore(el, this.captionEl);
+    this.root.append(el);
     return el;
   }
 
@@ -206,21 +226,36 @@ export class Kit<K extends string = string> {
     const line = this.lines[key];
     if (!line) throw new Error(`No line "${key}"`);
     const text = personalise(line.text, this.name);
-    this.caption(text);
+    this.caption(text, line.who);
     const stopBob = speaker ? this.talk(speaker) : () => {};
+    this.bed?.duck(true);
     // A stuck clip must never stall the show.
     await Promise.race([voice.say(line.text), wait(1500 + text.length * 110)]);
+    this.bed?.duck(false);
     stopBob();
     await this.wait(250);
   }
 
-  /** Shows a caption without speech ('' hides it). */
-  caption(text: string): void {
+  /**
+   * Shows a caption without speech ('' hides it). With `who` (a character
+   * id), a name tag with their little portrait sits on the caption.
+   */
+  caption(text: string, who?: string): void {
     if (!text) {
       this.captionEl.classList.remove('on');
       return;
     }
-    this.captionText.textContent = text;
+    this.captionLine.textContent = text;
+    const id = who === 'hero' ? this.hero : who;
+    const name = id && id !== 'narrator' ? HOST_NAMES[id] : undefined;
+    this.tag.hidden = !name;
+    if (name && this.tag.dataset.who !== id) {
+      this.tag.dataset.who = id;
+      const art = characters[id!]?.() ?? '';
+      // Just the face, in a little round frame.
+      this.tag.innerHTML = `<span class="story-chip">${art.replace(/viewBox="[^"]*"/, 'viewBox="78 62 144 144"')}</span><span>${name}</span>`;
+    }
+    this.captionEl.classList.toggle('narrator', !name);
     this.captionEl.classList.add('on');
   }
 
@@ -330,8 +365,7 @@ export class Kit<K extends string = string> {
   /** Shakes the whole stage (a big stomp or crash). Gentle and short. */
   async quake(amount = 8): Promise<void> {
     if (this.calm) return;
-    const els = [...this.root.children].filter((c) => c !== this.captionEl);
-    for (const dx of [amount, -amount, amount * 0.6, -amount * 0.6, 0]) await this.to(els, 0.06, { x: `+=${dx}`, ease: 'none' });
+    for (const dx of [amount, -amount, amount * 0.6, -amount * 0.6]) await this.to(this.root, 0.06, { x: `+=${dx}`, ease: 'none' });
   }
 
   // -------------------------------------------------------------- particles
@@ -342,7 +376,7 @@ export class Kit<K extends string = string> {
     for (let i = 0; i < count; i++) {
       const p = place(h('div', { class: 'particle', html: star(true, `story${i % 3}`) }), x, y);
       p.style.zIndex = '50';
-      this.root.insertBefore(p, this.captionEl);
+      this.root.append(p);
       const a = Math.random() * Math.PI * 2;
       const r = spread * (0.4 + Math.random() * 0.6);
       gsap.to(p, {
@@ -375,7 +409,7 @@ export class Kit<K extends string = string> {
       const c = colors[i % colors.length];
       const p = place(h('div', { class: 'story-confetti', style: `background:${c}` }), 100 + Math.random() * 980, -30);
       p.style.zIndex = '55';
-      this.root.insertBefore(p, this.captionEl);
+      this.root.append(p);
       const d = 2.2 + Math.random() * 1.2;
       gsap.to(p, {
         y: 900,
@@ -395,7 +429,7 @@ export class Kit<K extends string = string> {
    */
   async glow(color: string = C.candle, strength = 0.5, seconds = 0.8): Promise<void> {
     const el = place(h('div', { class: 'story-wash', style: `background:${color}` }), 0, 0, 1180, 820);
-    this.root.insertBefore(el, this.captionEl);
+    this.stage.insertBefore(el, this.captionEl);
     gsap.set(el, { opacity: 0 });
     await this.to(el, seconds / 2, { opacity: this.calm ? strength / 2 : strength, ease: 'sine.out' });
     await this.to(el, seconds / 2, { opacity: 0, ease: 'sine.in' });
@@ -408,12 +442,167 @@ export class Kit<K extends string = string> {
     const ang = (Math.atan2(to[1] - from[1], to[0] - from[0]) * 180) / Math.PI;
     const el = place(h('div', { class: 'story-beam', style: `background:${color};box-shadow:0 0 18px ${color}` }), from[0], from[1] - 7, len, 14);
     el.style.zIndex = '45';
-    this.root.insertBefore(el, this.captionEl);
+    this.root.append(el);
     gsap.set(el, { rotation: ang, transformOrigin: '0% 50%', scaleX: 0 });
     await this.to(el, seconds, { scaleX: 1, ease: 'power2.out' });
     this.sparkle(to[0], to[1], 10, 90);
     await this.to(el, 0.25, { opacity: 0, ease: 'none' });
     el.remove();
+  }
+
+  // ------------------------------------------------------------- atmosphere
+
+  /**
+   * Starts quiet background music in a mood (replacing any already
+   * playing). It dips under every spoken line and fades out at the end.
+   */
+  music(mood: Mood): void {
+    if (!this.alive()) return;
+    this.bed?.stop();
+    this.bed = musicBed(mood);
+  }
+
+  /** Stops the background music (it fades). */
+  silence(): void {
+    this.bed?.stop();
+    this.bed = null;
+  }
+
+  /**
+   * Fills the scene with slow, looping atmosphere: floating dust motes,
+   * fireflies, snow, rain, bubbles, rising embers or twinkling stars.
+   * In front of the actors unless `z` says otherwise. Skipped in calm mode.
+   */
+  ambient(kind: 'dust' | 'fireflies' | 'snow' | 'rain' | 'bubbles' | 'embers' | 'stars', o: { count?: number; z?: number; area?: [number, number, number, number] } = {}): void {
+    if (this.calm || !this.alive()) return;
+    const [ax, ay, aw, ah] = o.area ?? [0, 0, 1180, 690];
+    const look = {
+      dust: { size: [3, 6], color: C.goldLight, glow: 6, opacity: 0.55 },
+      fireflies: { size: [5, 8], color: '#e9f59a', glow: 14, opacity: 0.9 },
+      snow: { size: [4, 9], color: C.white, glow: 0, opacity: 0.85 },
+      rain: { size: [2, 2], color: '#b9cde6', glow: 0, opacity: 0.4 },
+      bubbles: { size: [7, 16], color: 'transparent', glow: 0, opacity: 0.7 },
+      embers: { size: [3, 6], color: C.orange, glow: 10, opacity: 0.85 },
+      stars: { size: [3, 6], color: C.cream, glow: 8, opacity: 0.8 },
+    }[kind];
+    const n = o.count ?? { dust: 26, fireflies: 14, snow: 40, rain: 60, bubbles: 18, embers: 22, stars: 30 }[kind];
+    const d = (lo: number, hi: number) => lo + Math.random() * (hi - lo);
+    for (let i = 0; i < n; i++) {
+      const sz = d(look.size[0], look.size[1]);
+      const x = ax + Math.random() * aw;
+      const y = ay + Math.random() * ah;
+      const style =
+        kind === 'rain'
+          ? `width:2px;height:24px;background:${look.color};transform:rotate(12deg)`
+          : kind === 'bubbles'
+            ? `width:${sz}px;height:${sz}px;border:2px solid rgba(255,255,255,0.75);border-radius:50%`
+            : `width:${sz}px;height:${sz}px;border-radius:50%;background:${look.color};box-shadow:0 0 ${look.glow}px ${look.color}`;
+      const p = place(h('div', { class: 'story-mote', style }), x, y);
+      p.style.zIndex = String(o.z ?? 30);
+      p.style.opacity = String(look.opacity * d(0.5, 1));
+      this.root.append(p);
+      if (kind === 'dust') {
+        gsap.to(p, { x: d(-60, 60), y: d(-120, -40), duration: d(6, 11), yoyo: true, repeat: -1, ease: stepped(8, 'sine.inOut'), delay: -d(0, 8) });
+      } else if (kind === 'fireflies') {
+        gsap.to(p, { x: d(-90, 90), y: d(-70, 70), duration: d(4, 7), yoyo: true, repeat: -1, ease: stepped(6, 'sine.inOut') });
+        gsap.to(p, { opacity: 0.15, duration: d(1.2, 2.2), yoyo: true, repeat: -1, ease: 'sine.inOut', delay: d(0, 2) });
+      } else if (kind === 'stars') {
+        gsap.to(p, { opacity: 0.15, scale: 0.6, duration: d(1.5, 3), yoyo: true, repeat: -1, ease: 'sine.inOut', delay: d(0, 3) });
+      } else {
+        // Falling or rising things wrap round from one edge of the area to the other.
+        const up = kind === 'bubbles' || kind === 'embers';
+        const dur = kind === 'rain' ? d(0.6, 0.9) : kind === 'snow' ? d(7, 12) : d(5, 9);
+        const startY = up ? ay + ah - y + 20 : ay - y - 30;
+        const endY = up ? ay - y - 30 : ay + ah - y + 20;
+        gsap.fromTo(
+          p,
+          { y: startY, x: 0 },
+          { y: endY, x: kind === 'rain' ? -40 : d(-50, 50), duration: dur, repeat: -1, ease: stepped(dur, 'none'), delay: -d(0, dur) },
+        );
+        if (kind === 'embers') gsap.to(p, { opacity: 0, duration: dur, repeat: -1, ease: 'none', delay: -d(0, dur) });
+      }
+    }
+  }
+
+  /**
+   * A soft pool of light (a candle, a lamp, the moon, a glowing Horcrux).
+   * `flicker` makes it breathe gently, never flash. Returns the light.
+   */
+  light(x: number, y: number, radius: number, o: { color?: string; strength?: number; flicker?: boolean; z?: number } = {}): HTMLElement {
+    const color = o.color ?? C.candle;
+    const strength = o.strength ?? 0.45;
+    const el = place(
+      h('div', { class: 'story-light', style: `background:radial-gradient(circle, ${color} 0%, transparent 70%)` }),
+      x - radius,
+      y - radius,
+      radius * 2,
+      radius * 2,
+    );
+    el.style.zIndex = String(o.z ?? 35);
+    el.style.opacity = String(strength);
+    this.root.append(el);
+    if (o.flicker && !this.calm) {
+      gsap.to(el, { opacity: strength * 0.7, scale: 0.96, duration: 0.9 + Math.random() * 0.6, yoyo: true, repeat: -1, ease: stepped(1, 'sine.inOut') });
+    }
+    return el;
+  }
+
+  /**
+   * Darkens the scene for night or a gloomy place: a tinted veil over the
+   * backdrop and actors, under any lights. Returns it (fade it to change the mood).
+   */
+  dim(amount = 0.35, color = '#0b1030'): HTMLElement {
+    const el = place(h('div', { class: 'story-dim', style: `background:${color}` }), 0, 0, 1180, 820);
+    el.style.zIndex = '33';
+    el.style.opacity = String(amount);
+    this.root.append(el);
+    return el;
+  }
+
+  // ----------------------------------------------------------------- camera
+
+  /**
+   * Moves the camera: zooms in on a point of the world (zoom 1 = the whole
+   * stage, 1.4 = a close-up), as a slow stop-motion push-in or pan. Edges
+   * never show. `camera({})` goes back to the wide shot.
+   */
+  camera(o: { zoom?: number; x?: number; y?: number }, seconds = 1.4): Promise<void> {
+    const z = Math.max(1, o.zoom ?? 1);
+    const tx = Math.min(0, Math.max(1180 - 1180 * z, 590 - (o.x ?? 590) * z));
+    const ty = Math.min(0, Math.max(820 - 820 * z, 410 - (o.y ?? 410) * z));
+    const to = { x: tx, y: ty, scale: z, transformOrigin: '0 0' };
+    if (this.calm) {
+      this.set(this.root, to);
+      return Promise.resolve();
+    }
+    return this.to(this.root, seconds, { ...to, ease: 'sine.inOut' });
+  }
+
+  // ------------------------------------------------------------------- cuts
+
+  /** Removes every actor, light and particle and the backdrop, and resets the camera. */
+  clear(): void {
+    gsap.killTweensOf(this.root.querySelectorAll('*'));
+    this.root.replaceChildren();
+    this.set(this.root, { x: 0, y: 0, scale: 1 });
+  }
+
+  /**
+   * Cuts to a new scene: a torn paper sheet sweeps across, the world is
+   * cleared, `build` sets up the new scene underneath, and the sheet sweeps away.
+   */
+  async cut(build: () => void | Promise<void>): Promise<void> {
+    if (!this.alive()) return never();
+    this.caption('');
+    const sheet = h('div', { class: 'story-wipe', html: parchment(1500, 1000, 'story-wipe', C.sand, 3) });
+    this.stage.insertBefore(sheet, this.captionEl);
+    sfx.page();
+    this.set(sheet, { x: 1240, rotation: 3 });
+    await this.to(sheet, 0.42, { x: -160, rotation: -1, ease: 'power2.in' });
+    this.clear();
+    await build();
+    await this.to(sheet, 0.42, { x: -1700, rotation: -4, ease: 'power2.out' });
+    sheet.remove();
   }
 }
 

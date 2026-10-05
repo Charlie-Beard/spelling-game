@@ -46,6 +46,7 @@ export class StoryScene extends Scene {
   private title!: HTMLElement;
   private skip!: HTMLButtonElement;
   private finished = false;
+  private kit: Kit | null = null;
   private story: Promise<Story | null>;
 
   constructor(app: App, o: StoryOptions) {
@@ -82,7 +83,7 @@ export class StoryScene extends Scene {
     if (!this.alive) return;
     if (!story || !Object.keys(story.lines).length) return this.done();
 
-    const kit = new Kit({
+    const kit = (this.kit = new Kit({
       root: this.stage,
       book: this.o.book,
       chapter: this.o.chapter,
@@ -90,7 +91,7 @@ export class StoryScene extends Scene {
       name: this.app.progress.name,
       lines: story.lines,
       alive: () => this.alive && !this.finished,
-    });
+    }));
     void voice.preload({ lines: Object.values(story.lines).map((l) => l.text) });
 
     // Curtain up.
@@ -108,6 +109,7 @@ export class StoryScene extends Scene {
     if (!this.alive || this.finished) return;
     await this.sleep(600);
     kit.caption('');
+    kit.dispose();
 
     // Curtain down, then one big Next.
     sfx.whoosh();
@@ -128,6 +130,7 @@ export class StoryScene extends Scene {
   }
 
   destroy(): void {
+    this.kit?.dispose();
     gsap.killTweensOf(this.stage.querySelectorAll('*'));
     super.destroy();
   }
@@ -136,6 +139,7 @@ export class StoryScene extends Scene {
     if (this.finished) return;
     this.finished = true;
     voice.stop();
+    this.kit?.dispose();
     this.o.onDone();
   }
 }

@@ -40,6 +40,8 @@ export interface ToneOpts {
   vibrato?: [number, number];
   /** Low-pass filter cutoff, to round off bright waves. */
   lowpass?: number;
+  /** Where to send it (default: the sfx bus). */
+  out?: AudioNode;
 }
 
 /** One note. */
@@ -71,16 +73,16 @@ export function tone(freq: number, t: number, o: ToneOpts = {}): void {
     lp.frequency.value = o.lowpass;
     node = osc.connect(lp);
   }
-  node.connect(g).connect(buses.sfx);
+  node.connect(g).connect(o.out ?? buses.sfx);
   osc.start(t);
   osc.stop(t + attack + decay + 0.05);
 }
 
 /** A bell / celesta note: the game's "magic" sound. */
-export function bell(freq: number, t: number, peak = 0.16, decay = 1.1): void {
-  tone(freq, t, { peak, attack: 0.004, decay });
-  tone(freq * 2.01, t, { peak: peak * 0.35, attack: 0.004, decay: decay * 0.5 });
-  tone(freq * 3.98, t, { peak: peak * 0.12, attack: 0.002, decay: decay * 0.25 });
+export function bell(freq: number, t: number, peak = 0.16, decay = 1.1, out?: AudioNode): void {
+  tone(freq, t, { peak, attack: 0.004, decay, out });
+  tone(freq * 2.01, t, { peak: peak * 0.35, attack: 0.004, decay: decay * 0.5, out });
+  tone(freq * 3.98, t, { peak: peak * 0.12, attack: 0.002, decay: decay * 0.25, out });
 }
 
 export interface NoiseOpts {
@@ -253,3 +255,150 @@ export const fx = {
     [NOTE.G6, NOTE.C7].forEach((n, i) => bell(n, t + 0.08 + i * 0.05, 0.05, 0.4));
   },
 };
+
+// ---------------------------------------------------------------------------
+// Music beds: quiet, looping background music for the stories
+// ---------------------------------------------------------------------------
+
+/** The feel of a story's background music. */
+export type Mood = 'cosy' | 'magic' | 'spooky' | 'adventure' | 'sneaky' | 'triumph' | 'dreamy';
+
+/** MIDI note number to frequency. */
+const mtof = (m: number): number => 440 * 2 ** ((m - 69) / 12);
+
+interface MoodDef {
+  bpm: number;
+  /** Beats per step. */
+  step: number;
+  /** Plays step `i` at time `t` into `out` (`beat` = seconds per beat). */
+  play(i: number, t: number, beat: number, out: AudioNode): void;
+}
+
+const pick = <T>(xs: T[], i: number): T => xs[((i % xs.length) + xs.length) % xs.length];
+
+const MOODS: Record<Mood, MoodDef> = {
+  // A music-box waltz in F: bass on the downbeat, a bell arpeggio over it.
+  cosy: {
+    bpm: 100,
+    step: 1,
+    play(i, t, beat, out) {
+      const chord = pick([[53, 57, 60], [50, 53, 57], [46, 50, 53], [48, 52, 55]], Math.floor(i / 3));
+      const b = i % 3;
+      if (b === 0) tone(mtof(chord[0] - 12), t, { wave: 'triangle', peak: 0.05, attack: 0.02, decay: beat * 2.6, lowpass: 700, out });
+      bell(mtof(chord[[2, 1, 0][b]] + 12 + (b === 2 ? 12 : 0)), t, 0.03, beat * 2, out);
+    },
+  },
+  // Celesta arpeggios over a soft pad: wonder and sparkle.
+  magic: {
+    bpm: 84,
+    step: 0.5,
+    play(i, t, beat, out) {
+      const chord = pick([[60, 64, 67, 71], [57, 60, 64, 67], [53, 57, 60, 64], [55, 59, 62, 64]], Math.floor(i / 8));
+      const notes = [...chord, chord[0] + 12];
+      bell(mtof(pick(notes, [0, 1, 2, 3, 4, 3, 2, 1][i % 8]) + 12), t, 0.026, beat * 2.2, out);
+      if (i % 8 === 0) {
+        tone(mtof(chord[0] - 12), t, { peak: 0.03, attack: beat * 1.5, decay: beat * 3.5, out });
+        tone(mtof(chord[2] - 12), t, { peak: 0.022, attack: beat * 1.5, decay: beat * 3.5, out });
+      }
+    },
+  },
+  // A low wobbly drone and slow, sparse bells in A minor: spooky but friendly.
+  spooky: {
+    bpm: 64,
+    step: 1,
+    play(i, t, beat, out) {
+      if (i % 8 === 0) {
+        tone(mtof(45), t, { wave: 'triangle', peak: 0.045, attack: beat * 2, decay: beat * 6, lowpass: 500, vibrato: [3.5, 1.5], out });
+        tone(mtof(52), t, { peak: 0.025, attack: beat * 2.5, decay: beat * 5.5, out });
+      }
+      const n = pick([69, 0, 72, 0, 0, 71, 0, 64, 69, 0, 67, 0, 0, 64, 0, 0], i);
+      if (n) bell(mtof(n), t, 0.022, beat * 3, out);
+    },
+  },
+  // A bouncy, hopping bass and a bright tune in D: off on an adventure.
+  adventure: {
+    bpm: 118,
+    step: 0.5,
+    play(i, t, beat, out) {
+      const root = pick([50, 50, 55, 57], Math.floor(i / 8));
+      if (i % 2 === 0) tone(mtof(root - 12 + (i % 4 === 2 ? 7 : 0)), t, { wave: 'triangle', peak: 0.055, attack: 0.01, decay: beat * 0.45, lowpass: 900, out });
+      const n = pick([74, 0, 76, 78, 0, 76, 74, 0, 81, 0, 78, 76, 0, 74, 73, 0, 71, 0, 74, 76, 0, 78, 79, 0, 81, 0, 78, 0, 76, 0, 0, 0], i);
+      if (n) bell(mtof(n), t, 0.026, beat, out);
+    },
+  },
+  // Tiptoeing plucked notes in E minor: creeping about.
+  sneaky: {
+    bpm: 104,
+    step: 0.5,
+    play(i, t, beat, out) {
+      const n = pick([52, 0, 55, 57, 0, 58, 57, 55, 52, 0, 55, 57, 0, 55, 52, 0], i);
+      if (n) tone(mtof(n), t, { wave: 'triangle', peak: 0.05, attack: 0.005, decay: beat * 0.3, lowpass: 1300, out });
+      if (i % 4 === 0) tone(mtof(40), t, { wave: 'triangle', peak: 0.05, attack: 0.005, decay: beat * 0.35, lowpass: 400, out });
+    },
+  },
+  // A bright marching fanfare in C: victory.
+  triumph: {
+    bpm: 108,
+    step: 1,
+    play(i, t, beat, out) {
+      const chord = pick([[60, 64, 67], [65, 69, 72], [67, 71, 74], [60, 64, 67]], Math.floor(i / 4));
+      if (i % 4 === 0 || i % 4 === 2) for (const n of chord) tone(mtof(n - 12), t, { wave: 'sawtooth', peak: 0.014, attack: 0.02, decay: beat * 0.9, lowpass: 1500, out });
+      bell(mtof(chord[i % 3] + 12), t, 0.026, beat * 1.2, out);
+      tone(mtof(chord[0] - 24), t, { wave: 'triangle', peak: 0.04, attack: 0.01, decay: beat * 0.6, lowpass: 600, out });
+    },
+  },
+  // Slow, floating notes with a gentle wobble: dreamy, underwater, moonlit.
+  dreamy: {
+    bpm: 70,
+    step: 0.5,
+    play(i, t, beat, out) {
+      const n = pick([65, 69, 72, 76, 71, 76, 72, 69, 67, 71, 74, 79, 76, 74, 71, 67], i);
+      tone(mtof(n + 12), t, { peak: 0.024, attack: 0.04, decay: beat * 2.5, vibrato: [5, 3], out });
+      if (i % 4 === 0) bell(mtof(n), t, 0.018, beat * 3, out);
+      if (i % 16 === 0) tone(mtof(53 - 12), t, { peak: 0.03, attack: beat * 3, decay: beat * 8, out });
+    },
+  },
+};
+
+export interface MusicBed {
+  /** Fades the music out and stops it. */
+  stop(): void;
+  /** Turns the music down while someone is talking (true), and back up. */
+  duck(on: boolean): void;
+}
+
+/** Starts a quiet looping bed of music in the given mood. */
+export function musicBed(mood: Mood): MusicBed {
+  const ac = audio();
+  const def = MOODS[mood];
+  const out = ac.createGain();
+  out.gain.value = 0.0001;
+  out.connect(buses.sfx);
+  out.gain.setTargetAtTime(1, ac.currentTime, 0.6);
+  const beat = 60 / def.bpm;
+  let next = ac.currentTime + 0.15;
+  let i = 0;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  // Schedule a little ahead of time, so the beat stays steady.
+  const tick = () => {
+    while (next < ac.currentTime + 0.5) {
+      def.play(i++, next, beat, out);
+      next += beat * def.step;
+    }
+    timer = setTimeout(tick, 120);
+  };
+  tick();
+  let stopped = false;
+  return {
+    stop() {
+      if (stopped) return;
+      stopped = true;
+      clearTimeout(timer);
+      out.gain.setTargetAtTime(0.0001, ac.currentTime, 0.35);
+      setTimeout(() => out.disconnect(), 2500);
+    },
+    duck(on) {
+      if (!stopped) out.gain.setTargetAtTime(on ? 0.4 : 1, ac.currentTime, 0.25);
+    },
+  };
+}

@@ -58,7 +58,7 @@ const captions = [];
 const start = Date.now();
 while (Date.now() - start < 120_000) {
   await page.waitForTimeout(+every);
-  const cap = (await page.locator('.story-caption.on .story-caption-text').textContent().catch(() => null)) ?? '';
+  const cap = (await page.locator('.story-caption.on .story-caption-text > span:last-child').textContent().catch(() => null)) ?? '';
   if (cap && captions.at(-1) !== cap) captions.push(cap);
   const shot = await page.screenshot({ type: 'jpeg', quality: 55 });
   frames.push({ t: ((Date.now() - start) / 1000).toFixed(0), cap, src: 'data:image/jpeg;base64,' + shot.toString('base64') });

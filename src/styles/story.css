@@ -98,3 +98,76 @@
 .story .seal-btn {
   z-index: 85;
 }
+
+/* The world the camera moves; captions and the cut sheet stay put above it. */
+.story-world {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+}
+
+/* Who is speaking: a name tag with their face, on the caption. */
+.story-caption-text {
+  position: relative;
+}
+.story-tag {
+  position: absolute;
+  left: 18px;
+  top: -30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 16px 3px 3px;
+  border-radius: 999px;
+  color: var(--parchment-100, #f6ecd4);
+  font-size: 22px;
+  line-height: 1;
+  box-shadow: 0 3px 0 rgba(20, 12, 4, 0.3);
+}
+.story-tag[hidden] {
+  display: none;
+}
+.story-chip {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--parchment-200, #efe0bd);
+  flex: none;
+}
+.story-chip svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.story-caption.narrator .story-caption-text {
+  font-style: italic;
+}
+
+.story-mote,
+.story-light,
+.story-dim {
+  position: absolute;
+  pointer-events: none;
+}
+.story-light {
+  mix-blend-mode: screen;
+  border-radius: 50%;
+}
+.story-dim {
+  mix-blend-mode: multiply;
+}
+
+.story-wipe {
+  position: absolute;
+  left: 0;
+  top: -90px;
+  width: 1500px;
+  height: 1000px;
+  z-index: 75;
+  pointer-events: none;
+}
+.story-wipe svg {
+  width: 100%;
+  height: 100%;
+}
