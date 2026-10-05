@@ -312,17 +312,19 @@ async function breathe(k: Kit, tilt: number, seconds = 1.1): Promise<void> {
 
 export default defineStory({
   lines: {
-    night: { who: 'narrator', text: 'It’s night at the dragon task. Listen… the crowd is cheering for you!' },
-    egg: { who: 'horntail', text: 'Roar! That’s better, a bit of light. Now… nobody gets my golden egg!' },
-    accio: { who: 'narrator', text: 'You lift your wand and call out, ‘Accio broom!’' },
-    tail: { who: 'horntail', text: 'Hold still! Where did you go? Oh… is that my tail?' },
-    grab: { who: 'narrator', text: 'Round and round goes the dragon… and you swoop down and grab the egg!' },
-    win: { who: 'horntail', text: 'Ha! You win, {name}! Even the goat in a coat is cheering!' },
-    clue: { who: 'narrator', text: 'The egg opens… a boat! Your next task is at the lake.' },
+    night: { who: 'narrator', text: 'It’s night at the dragon task… and listen! The crowd is cheering for you!' },
+    egg: { who: 'horntail', text: 'Rooaar! Ahh, that’s better… a bit of light. Now, nobody touches my golden egg!' },
+    accio: { who: 'narrator', text: 'You lift your wand and call out, ‘Accio broom!’ Whoosh!' },
+    tail: { who: 'horntail', text: 'Hold still! Where did you go? Ooh… is that my own tail?' },
+    grab: { who: 'narrator', text: 'Round and round she spins… and you swoop down and grab the egg!' },
+    win: { who: 'horntail', text: 'Ha ha! You win, {name}! Even the goat in a coat is cheering!' },
+    clue: { who: 'horntail', text: 'Ooh, look! The egg opens… a boat! Your next task is at the lake.' },
   },
 
   async play(k) {
     k.backdrop(arena());
+    k.music('adventure');
+    const night = k.dim(0.5);
 
     // ---- The set: the moon, the torches (unlit), the egg in its nest.
     const moon = clip(k.picture('night', { x: 120, y: 6, w: 130, crop: '205 50 140 140', z: 1, still: true }));
@@ -334,30 +336,40 @@ export default defineStory({
     });
     const egg = k.add(goldenEgg(), { ...EGG, z: 12 });
     k.add(nestFront(), { x: 440, y: 560, w: 260, z: 13 });
+    k.light(570, 520, 120, { color: C.goldLight, strength: 0.4 });
+    k.light(185, 70, 110, { color: C.cream, strength: 0.3 });
+
+    // ---- The Horntail stomps in to guard her egg, 2 s into the narration.
+    const dragon = k.add(dragonBody(), { ...DRAGON, z: 15 });
+    const head = clip(k.character('horntail', { x: 0, y: 0, w: HEAD.w, crop: HEAD_CROP }));
+    nest(dragon, head, HEAD.x, HEAD.y);
+    k.set(dragon, { opacity: 0 });
+    const wing = dragon.querySelector('[data-part="wing"]');
+    const tailPart = dragon.querySelector('[data-part="tail"]');
+    const enterDragon = async (): Promise<void> => {
+      k.set(dragon, { opacity: 1 });
+      k.fx.stomp(3, 0.4);
+      await k.enter(dragon, 'right', 1.3);
+      void k.quake(5);
+      if (!k.calm && wing) {
+        gsap.set(wing, { svgOrigin: '330 254' });
+        gsap.to(wing, { rotation: -7, duration: 0.9, yoyo: true, repeat: -1, ease: stepped(0.9, 'sine.inOut') });
+      }
+      if (!k.calm && tailPart) {
+        gsap.set(tailPart, { svgOrigin: '410 330' });
+        gsap.to(tailPart, { rotation: 5, duration: 0.7, yoyo: true, repeat: -1, ease: stepped(0.7, 'sine.inOut') });
+      }
+    };
 
     // ---- Curtains up: night falls and the crowd cheers.
     crowdCheer(2.6, 0.08);
     void k.fade(moon, 1, 1.2);
     k.fx.twinkle();
-    await k.all(k.say('night'), k.to(egg, 0.6, { rotation: 4, yoyo: true, repeat: 3, ease: 'sine.inOut' }));
-
-    // ---- The Horntail stomps in to guard her egg.
-    const dragon = k.add(dragonBody(), { ...DRAGON, z: 15 });
-    const head = clip(k.character('horntail', { x: 0, y: 0, w: HEAD.w, crop: HEAD_CROP }));
-    nest(dragon, head, HEAD.x, HEAD.y);
-    const wing = dragon.querySelector('[data-part="wing"]');
-    const tailPart = dragon.querySelector('[data-part="tail"]');
-    k.fx.stomp(3, 0.4);
-    await k.enter(dragon, 'right', 1.3);
-    void k.quake(5);
-    if (!k.calm && wing) {
-      gsap.set(wing, { svgOrigin: '330 254' });
-      gsap.to(wing, { rotation: -7, duration: 0.9, yoyo: true, repeat: -1, ease: stepped(0.9, 'sine.inOut') });
-    }
-    if (!k.calm && tailPart) {
-      gsap.set(tailPart, { svgOrigin: '410 330' });
-      gsap.to(tailPart, { rotation: 5, duration: 0.7, yoyo: true, repeat: -1, ease: stepped(0.7, 'sine.inOut') });
-    }
+    await k.all(
+      k.say('night'),
+      k.to(egg, 0.6, { rotation: 4, yoyo: true, repeat: 3, ease: 'sine.inOut' }),
+      k.wait(2000).then(enterDragon),
+    );
 
     // She roars and lights the torches with a puff of fire.
     roar(1.3, 0.18);
@@ -367,11 +379,16 @@ export default defineStory({
     await k.wait(500);
     for (const t of torches) {
       void k.appear(t, 0.35);
-      k.fx.pop();
-      await k.wait(260);
+      fireWhoosh(0.3);
+      k.light(t.offsetLeft + 75, 300, 140, { color: C.candle, strength: 0.6, flicker: true });
+      await k.wait(200);
     }
+    k.ambient('embers', { count: 12, area: [0, 220, 1180, 260], z: 4 });
+    void k.to(night, 0.8, { opacity: 0.2 });
     k.fx.twinkle();
+    void k.camera({ zoom: 1.4, x: 820, y: 360 }, 1);
     await k.say('egg', head);
+    void k.camera({}, 0.8);
 
     // ---- You run in and summon your broom.
     const hero = k.character('hero', { x: 40, y: 340, w: 210, z: 20 });
@@ -405,9 +422,9 @@ export default defineStory({
       await k.to(rider, 0.7, { x: 160, y: -260, rotation: -10 });
       rider.style.zIndex = '8';
       void k.to(dragon, 0.4, { scaleX: -1, ease: 'power1.inOut' });
-      await k.to(rider, 0.8, { x: 980, y: -280, rotation: 8, ease: 'none' });
+      await k.to(rider, 0.8, { x: 780, y: -150, rotation: 8, ease: 'none' });
       broomWhoosh();
-      await k.to(rider, 0.5, { x: 1000, y: 20, rotation: 14 });
+      await k.to(rider, 0.5, { x: 800, y: 110, rotation: 14 });
       rider.style.zIndex = '30';
       void k.to(dragon, 0.4, { scaleX: 1, ease: 'power1.inOut' });
       await k.to(rider, 0.8, { x: 620, y: 90, rotation: -4, ease: 'none' });
@@ -415,6 +432,7 @@ export default defineStory({
       await k.to(rider, 0.6, { x: 220, y: -80, rotation: -12 });
       // She roars after you, and her flame misses by a mile.
       roar(1, 0.15);
+      crowdCheer(1.2, 0.06);
       await breathe(k, 18, 0.9);
       await k.to(rider, 0.4, { x: 120, y: -290, rotation: -4 });
     };
@@ -446,6 +464,8 @@ export default defineStory({
       k.sparkle(EGG.x + EGG.w / 2, EGG.y + 60, 14, 120);
       k.set(egg, { opacity: 0 });
       k.set(prize, { opacity: 1 });
+      k.sfx.gem();
+      k.music('triumph');
       void k.pop(prize, 1.3);
       broomWhoosh();
       await k.to(rider, 0.8, { x: 150, y: -170, rotation: -8, ease: 'power2.out' });
@@ -456,15 +476,15 @@ export default defineStory({
     crowdCheer(3, 0.12);
     k.fx.twinkle();
     k.confetti(34);
-    const goat = k.picture('goat', { x: 170, y: 168, w: 110, z: 4 });
-    nest(goat, k.picture('coat', { x: 0, y: 0, w: 58 }), 27, 34);
+    const goat = k.picture('goat', { x: 930, y: 175, w: 130, z: 4 });
+    nest(goat, k.picture('coat', { x: 0, y: 0, w: 68 }), 32, 40);
+    k.light(995, 240, 90, { color: C.candle, strength: 0.4 });
     await k.appear(goat, 0.35);
     bleat();
     void k.hop(goat, 22, 3);
     void k.hop(rider, 30, 2);
 
     // The Horntail huffs a smoke ring… and grins.
-    await k.wait(250);
     const ring = k.add(smokeRing(), { x: MOUTH[0] - 60, y: MOUTH[1] - 50, w: 110, z: 19 });
     k.set(ring, { scale: 0.3, opacity: 1 });
     k.fx.poof();
@@ -476,7 +496,6 @@ export default defineStory({
     void k.fade(smile, 1, 0.3);
     chuckle();
     await k.say('win', head);
-    k.fx.jingle();
 
     // ---- The egg opens on a clue: a boat. Next stop, the lake!
     const at: Pt = [rider.offsetLeft + Number(gsap.getProperty(rider, 'x')) + 200, rider.offsetTop + Number(gsap.getProperty(rider, 'y')) + 150];
@@ -484,17 +503,21 @@ export default defineStory({
     const big = k.add(goldenEgg(), { x: at[0], y: at[1], w: 56, z: 32 });
     await k.to(big, 0.7, { x: 560 - (at[0] + 28), y: 330 - (at[1] + 35), scale: 2.3, ease: 'power2.inOut' });
     const lid = big.querySelector('[data-part="lid"]');
-    const boat = k.picture('boat', { x: 440, y: 40, w: 240, z: 31 });
+    const boat = k.picture('boat', { x: 450, y: 260, w: 220, z: 31 });
     k.set(boat, { scale: 0, opacity: 1 });
+    void k.camera({ zoom: 1.35, x: 560, y: 300 }, 0.9);
     eggSong();
     if (lid) await k.to(lid, 0.4, { y: -40, rotation: -24, svgOrigin: '20 80', ease: 'back.out(2)' });
     k.fx.splash();
-    void k.to(boat, 0.6, { scale: 1, y: -60, ease: 'back.out(1.6)' });
+    k.sfx.reveal();
+    void k.to(boat, 0.6, { scale: 1, y: -170, ease: 'back.out(1.6)' }).then(() => { void k.float(boat, 6, 2); });
     k.sparkle(560, 160, 16, 180);
     void k.glow(C.goldLight, 0.25, 1.2);
-    await k.say('clue');
+    await k.say('clue', head);
+    void k.camera({}, 1.2);
+    void k.float(rider, 5, 2.2);
     void k.hop(goat, 18, 1);
-    void k.hop(rider, 26, 1);
-    await k.wait(500);
+    k.fx.jingle();
+    await k.wait(1500);
   },
 });

@@ -231,15 +231,15 @@ async function flyTo(k: Kit, el: HTMLElement, cx: number, cy: number, rot: numbe
 
 /** Where the copies land when they pop out of the cup: x, y, width, tilt, depth. */
 const COPIES: Array<[number, number, number, number, number]> = [
-  [380, 5, 80, 8, 4], // on the tree painting
-  [820, 4, 80, -8, 4], // on the sail painting
-  [396, 518, 86, -14, 12], // on the floor
-  [950, 500, 100, -8, 9], // the pile…
-  [1045, 505, 100, 10, 9],
+  [380, 5, 100, 8, 4], // on the tree painting
+  [820, 4, 100, -8, 4], // on the sail painting
+  [396, 518, 106, -14, 12], // on the floor
+  [950, 500, 120, -8, 9], // the pile…
+  [1045, 505, 120, 10, 9],
   [470, 334, 140, 0, 9], // on the pedestal, where the real one was
-  [1080, 440, 90, -14, 9],
-  [905, 455, 85, 18, 9],
-  [1035, 380, 85, -5, 9],
+  [1080, 440, 110, -14, 9],
+  [905, 455, 105, 18, 9],
+  [1035, 380, 105, -5, 9],
 ];
 /** Copies in the pile that get thrown about when Bellatrix crashes in, with where they land. */
 const SCATTER: Array<[number, number, number, number]> = [
@@ -254,17 +254,24 @@ const SCATTER: Array<[number, number, number, number]> = [
 
 export default defineStory({
   lines: {
-    zap: { who: 'narrator', text: 'Zap! The chain drops off the vault door… and in you creep.' },
-    welcome: { who: 'bellatrix', text: 'Ha ha! The golden cup is mine! Touch it… if you dare!' },
+    zap: { who: 'narrator', text: 'Zap! The chain clanks off the vault door… and in you creep.' },
+    welcome: { who: 'bellatrix', text: 'Ha ha ha! The golden cup is mine! Touch it… if you dare!' },
     which: { who: 'narrator', text: 'Pop, pop, pop! Cups everywhere! Which one is the real one?' },
-    gloat: { who: 'bellatrix', text: 'Ha! You’ll never find it. Never, ever, ever!' },
-    oof: { who: 'bellatrix', text: 'Oof! Who left a bar of soap on my floor?' },
+    gloat: { who: 'bellatrix', text: 'Hee hee! You’ll never find it! Never, ever, ever!' },
+    oof: { who: 'bellatrix', text: 'Whoa… oof! Who left a bar of soap on my floor?' },
     glow: { who: 'narrator', text: 'Thank you, toad! Look… only the real cup is glowing!' },
-    cheer: { who: 'narrator', text: 'Hooray, {name}! You found the golden cup!' },
+    cheer: { who: 'narrator', text: 'Hooray, {name}! You found the real golden cup!' },
   },
 
   async play(k) {
     k.backdrop(vault());
+    k.music('sneaky');
+    k.ambient('dust', { count: 20, z: 30 });
+    const veil = k.dim(0.3, '#160f0a');
+    k.light(640, 130, 170, { color: C.candle, strength: 0.5, flicker: true });
+    k.light(1120, 180, 170, { color: C.candle, strength: 0.5, flicker: true });
+    k.light(1010, 500, 240, { color: C.goldLight, strength: 0.3 });
+    k.light(540, 400, 120, { color: C.goldLight, strength: 0.35 });
 
     // The magic paintings on the wall.
     const tree = k.add(painting('tree', '#e8dcb8'), { x: 330, y: 80, w: 180, z: 3 });
@@ -282,15 +289,15 @@ export default defineStory({
     k.set(bel, { opacity: 0 });
     const hero = k.character('hero', { x: 150, y: 305, z: 11 });
     k.set(hero, { opacity: 0 });
-    const toad = k.picture('toad', { x: 250, y: 518, w: 110, z: 22 });
-    const soap = k.picture('soap', { x: 360, y: 540, w: 80, z: 21 });
+    const toad = k.picture('toad', { x: 250, y: 500, w: 150, z: 22 });
+    const soap = k.picture('soap', { x: 360, y: 540, w: 100, z: 21 });
     k.set([toad, soap], { opacity: 0 });
-    const mound = k.add(coinMound(), { x: 870, y: 488, w: 320, z: 13, still: true });
+    const mound = k.add(coinMound(), { x: 850, y: 488, w: 320, z: 13, still: true });
     k.set(mound, { opacity: 0 });
 
     // A quiet vault… a few coins trickle down the heap.
     coins(8, 1.2, 0.035);
-    await k.wait(1300);
+    await k.wait(900);
 
     // Zap! The chain clanks off the door, and in you creep.
     await k.all(
@@ -309,8 +316,11 @@ export default defineStory({
     k.fx.poof();
     k.puff(820, 440, 260, '#3d3640');
     await k.appear(bel, 0.35);
+    void k.camera({ zoom: 1.35, x: 800, y: 440 }, 0.9);
     cackle();
+    void k.to(bel, 0.5, { rotation: -4, yoyo: true, repeat: 3, ease: 'sine.inOut' });
     await k.say('welcome', bel);
+    void k.camera({}, 0.8);
 
     // You reach out and touch the cup…
     await k.walk(hero, 110, 0.9, 3);
@@ -342,9 +352,10 @@ export default defineStory({
     flights.push(k.appear(copies[5], 0.4));
     await k.all(...flights, k.shake(hero, 8, 2));
     coins(10, 0.6, 0.04);
-    await k.walk(hero, -60, 0.6, 2);
-
-    await k.say('which');
+    await k.all(k.walk(hero, -60, 0.6, 2), k.say('which'));
+    k.face(hero, true);
+    await k.wait(500);
+    k.face(hero, false);
 
     // Bellatrix dances about, gloating.
     cackle();
@@ -352,8 +363,9 @@ export default defineStory({
       k.say('gloat'),
       (async () => {
         k.face(bel, true);
-        await k.walk(bel, -100, 1.5, 3);
+        await k.walk(bel, -140, 1.5, 3);
         k.face(bel, false);
+        await k.spin(bel, 1, 0.6);
         await k.hop(bel, 30, 2);
       })(),
     );
@@ -366,18 +378,21 @@ export default defineStory({
     await k.to(toad, 0.18, { y: -36, ease: 'power2.out' });
     // …and squirts it right under Bellatrix's feet!
     k.fx.whizz();
+    noiseBurst(now(), { freq: 600, q: 3, peak: 0.08, decay: 0.15, sweepTo: 1400 });
+    void k.camera({ zoom: 1.3, x: 920, y: 430 }, 0.8);
     await k.all(k.to(toad, 0.18, { y: 0, ease: 'power2.in' }), k.to(soap, 0.6, { x: 322, rotation: 360, ease: 'power2.out' }));
     k.set(soap, { rotation: 0 });
 
     // She steps on it… wobble, wobble… wheee!
     await k.to(bel, 0.2, { y: -26, ease: 'power2.out' });
     await k.to(bel, 0.2, { y: 0, ease: 'power2.in' });
+    tone(1800, now(), { wave: 'triangle', peak: 0.07, decay: 0.12, glideTo: 2600 });
     k.fx.uhoh();
     await k.shake(bel, 10, 2);
     slideWhistle();
     await k.all(
-      k.to(bel, 1.0, { x: 230, rotation: -20, ease: 'power2.in' }),
-      k.to(soap, 1.0, { x: 652, ease: 'power2.in' }),
+      k.to(bel, 1.0, { x: 170, rotation: -20, ease: 'power2.in' }),
+      k.to(soap, 1.0, { x: 592, ease: 'power2.in' }),
     );
 
     // Crash! Right into the pile of cups.
@@ -394,7 +409,7 @@ export default defineStory({
       k.appear(mound, 0.35),
       ...SCATTER.map(([n, x, y, r]) => flyTo(k, copies[n], x, y, r)),
       flyTo(k, real, 1102, 548, 8),
-      k.to(soap, 0.35, { x: 612, y: -300, rotation: 400, ease: 'power1.out' }).then(() => k.to(soap, 0.3, { y: -250, rotation: 360, ease: 'power1.in' })),
+      k.to(soap, 0.35, { x: 590, y: -300, rotation: 400, ease: 'power1.out' }).then(() => k.to(soap, 0.3, { y: -250, rotation: 360, ease: 'power1.in' })),
     );
     k.fx.pop();
 
@@ -404,6 +419,10 @@ export default defineStory({
 
     // Only the real cup glows!
     cupChime();
+    k.music('triumph');
+    void k.camera({}, 1.2);
+    k.light(1102, 548, 180, { color: C.goldLight, strength: 0.6 });
+    k.fade(veil, 0.1, 1.2);
     const glowEl = document.createElement('div');
     glowEl.style.cssText = 'position:absolute;inset:-35%;opacity:0;z-index:-1';
     glowEl.innerHTML = halo();
@@ -428,17 +447,20 @@ export default defineStory({
 
     // It floats over into your hands.
     k.fx.twinkle();
-    await k.to(real, 1.1, { ...offsetTo(real, 470, 360), scale: 1.05, rotation: 0, ease: 'sine.inOut' });
+    real.style.zIndex = '23';
+    await k.to(real, 1.1, { ...offsetTo(real, 330, 520), scale: 0.9, rotation: 0, ease: 'sine.inOut' });
+    k.sfx.gem();
     k.float(real, 6, 2.4);
 
     // Hooray!
     k.fx.jingle();
     coins(12, 0.8, 0.035);
     k.confetti(36);
-    k.sparkle(470, 360, 14, 150);
+    k.sparkle(330, 520, 14, 150);
+    tone(300, now() + 0.3, { wave: 'triangle', peak: 0.06, decay: 0.2, glideTo: 200 });
     void k.shake(bel, 5, 2);
     void k.hop(toad, 30, 2).then(croak);
     await k.all(k.say('cheer'), k.hop(hero, 50, 2));
-    await k.wait(1200);
+    await k.wait(1500);
   },
 });

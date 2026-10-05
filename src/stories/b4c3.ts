@@ -361,25 +361,29 @@ const FRIEND = { harry: 'ron', ron: 'hermione', hermione: 'harry' } as const;
 export default defineStory({
   lines: {
     gulp: { who: 'narrator', text: 'Gulp! You eat the gillyweed… and grow flippers! Down into the Black Lake!' },
-    hello: { who: 'myrtle', text: 'Oooh, a visitor! Hee hee! Your friend is down here. Follow me!' },
-    tug: { who: 'narrator', text: 'Uh-oh! A cheeky grindylow tugs your flipper! Here… have a boot and a book!' },
-    song: { who: 'myrtle', text: 'Listen! The merpeople are singing. And look… your friend is tied to that statue!' },
-    free: { who: 'narrator', text: 'You lift the weedy rope off the hook. Your friend is free!' },
-    zoom: { who: 'narrator', text: 'Grab the broom… and zoom up to the moon!' },
-    cheer: { who: 'myrtle', text: 'Oooh, you did it, {name}! Everyone’s cheering… even me!' },
+    hello: { who: 'myrtle', text: 'Oooh, a visitor! Hee hee! Your friend is down here somewhere. Follow me!' },
+    tug: { who: 'myrtle', text: 'Uh-oh! A grindylow’s tugging your flipper! Quick… give it a boot and a book!' },
+    song: { who: 'myrtle', text: 'Shh… listen! The merpeople are singing. And look… your friend’s tied to that statue!' },
+    free: { who: 'myrtle', text: 'Lift the weedy rope off the hook… Hooray! Your friend is free!' },
+    zoom: { who: 'narrator', text: 'Grab the broom… and zoom all the way up to the moon!' },
+    cheer: { who: 'myrtle', text: 'Oooh, you did it, {name}! Everyone’s cheering… even me! Hee hee!' },
   },
 
   async play(k) {
     // ---- Under the lake.
     k.backdrop(underwater());
+    k.music('dreamy');
+    k.ambient('bubbles', { count: 14, z: 40 });
+    k.dim(0.15, '#0b2a30');
+    k.light(990, 380, 200, { color: '#e9f4dc', strength: 0.35 });
 
     const friend = k.character(FRIEND[k.hero], { x: 850, y: 300, w: 200, z: 20 });
     const hook = k.picture('hook', { x: 1006, y: 300, w: 120, z: 22, still: true });
     const ropeEl = k.add(rope(), { x: 0, y: 0, w: 1180, h: 820, z: 25 });
 
-    const book = k.picture('book', { x: 20, y: 548, w: 150, z: 14 });
+    const book = k.picture('book', { x: 20, y: 520, w: 150, z: 14 });
     const boot = k.picture('boot', { x: 160, y: 540, w: 120, z: 15 });
-    const broom = k.picture('broom', { x: 250, y: 520, w: 200, z: 13 });
+    const broom = k.picture('broom', { x: 250, y: 490, w: 200, z: 13 });
     k.set(broom, { rotation: -8 });
 
     const weeds = [
@@ -391,8 +395,8 @@ export default defineStory({
 
     const grindy = k.add(grindylow(), { x: 300, y: 440, w: 150, z: 22 });
     k.set(grindy, { opacity: 0 });
-    const mer1 = k.add(merperson('b4c3-mer1', '#2c4a3a', C.teal, '#2f6a6a'), { x: 560, y: 40, w: 140, z: 16 });
-    const mer2 = k.add(merperson('b4c3-mer2', '#6a4a30', '#7a6a9a', C.plum), { x: 730, y: 70, w: 130, z: 16, flip: true });
+    const mer1 = k.add(merperson('b4c3-mer1', '#2c4a3a', C.teal, '#2f6a6a'), { x: 600, y: 30, w: 150, z: 16 });
+    const mer2 = k.add(merperson('b4c3-mer2', '#6a4a30', '#7a6a9a', C.plum), { x: 770, y: 60, w: 140, z: 16, flip: true });
     k.set([mer1, mer2], { opacity: 0 });
 
     const myrtle = k.character('myrtle', { x: 400, y: 120, w: 190, z: 24 });
@@ -409,9 +413,10 @@ export default defineStory({
     await k.enter(hero, 'top', 1.2);
     k.float(hero, 8, 2.4);
     gulp();
+    void k.to(hero, 0.12, { scaleY: 0.9, scaleX: 1.08 }).then(() => k.to(hero, 0.25, { scaleY: 1, scaleX: 1, ease: 'back.out(3)' }));
     await k.all(
       k.say('gulp', hero),
-      k.wait(1900).then(async () => {
+      k.wait(1500).then(async () => {
         k.fx.twinkle();
         k.sparkle(250, 450, 10, 100);
         await k.to(fl, 0.4, { scale: 1, ease: 'back.out(2)' });
@@ -431,10 +436,12 @@ export default defineStory({
     k.fx.boing();
     await k.appear(grindy, 0.35);
     snigger();
+    await k.camera({ zoom: 1.4, x: 330, y: 420 }, 0.9);
     await k.all(
-      k.say('tug', hero),
+      k.say('tug', myrtle),
       (async () => {
         // Tug, tug!
+        tone(1500, now(), { wave: 'triangle', peak: 0.06, decay: 0.1, glideTo: 2200 });
         k.fx.boing();
         await k.all(k.shake(grindy, 8, 2), k.shake(hero, 6, 2));
         await k.wait(100);
@@ -451,7 +458,7 @@ export default defineStory({
         await k.beam([318, 335], [95, 620], C.goldLight);
         k.set(book, { zIndex: 23 });
         k.fx.whizz();
-        await k.to(book, 0.7, { x: 378, y: -96, rotation: 12, scale: 0.55, ease: 'power2.out' });
+        await k.to(book, 0.7, { x: 378, y: -68, rotation: 12, scale: 0.55, ease: 'power2.out' });
         k.fx.pop();
         void k.pop(book, 1.1);
       })(),
@@ -460,11 +467,15 @@ export default defineStory({
     void k.hop(grindy, 24, 2);
     void k.shake(myrtle, 6, 3);
     k.fx.whizz();
+    k.fx.bubbles(3);
+    snigger();
     blub(3);
     await k.all(...[grindy, boot, book].map((el) => k.to(el, 0.9, { x: '-=640', ease: 'power2.in' })));
     [grindy, boot, book].forEach((el) => k.remove(el));
 
     // The merpeople sing.
+    void k.camera({ zoom: 1.2, x: 760, y: 340 }, 1.2);
+    void k.to(myrtle, 0.7, { x: -150, y: -30 });
     merSong();
     k.set([mer1, mer2], { y: 120 });
     void k.all(
@@ -480,16 +491,19 @@ export default defineStory({
 
     // Swim over and set your friend free.
     blub(4);
+    blub(2);
     await k.all(
       k.to(hero, 1, { x: 400, y: 70, ease: 'sine.inOut' }),
-      k.to(myrtle, 1, { x: -120, y: 40, ease: 'sine.inOut' }),
+      k.to(myrtle, 1, { x: -200, y: 30, ease: 'sine.inOut' }),
     );
+    void k.camera({ zoom: 1.4, x: 960, y: 420 }, 0.9);
     await k.all(
-      k.say('free', hero),
+      k.say('free', myrtle),
       (async () => {
         k.fx.spell();
         await k.beam([700, 470], [1050, 390], C.goldLight);
         // Lift the loop up off the hook, and the rope floats away.
+        k.sfx.reveal();
         k.fx.twinkle();
         void k.pop(hook, 1.3);
         await k.to(ropeEl, 0.5, { y: -36, ease: 'power2.out' });
@@ -501,13 +515,19 @@ export default defineStory({
     );
 
     // Here comes the broom!
+    void k.camera({}, 0.8);
     k.fx.whizz();
     k.set(broom, { zIndex: 26 });
-    await k.to(broom, 0.7, { x: 310, y: -80, rotation: -4, scale: 1.25, ease: 'power2.inOut' });
-    k.fx.boing();
-    await k.hop(hero, 16);
-    await k.say('zoom', hero);
+    const broomFlight = k.to(broom, 0.7, { x: 310, y: -50, rotation: -4, scale: 1.25, ease: 'power2.inOut' });
+    await k.all(
+      k.say('zoom', hero),
+      broomFlight.then(() => {
+        k.fx.boing();
+        return k.hop(hero, 16);
+      }),
+    );
     k.fx.whizz();
+    k.sfx.whoosh();
     blub(6);
     await k.all(
       k.to([hero, friend, broom], 1, { y: '-=900', ease: 'power2.in' }),
@@ -515,27 +535,33 @@ export default defineStory({
     );
 
     // ---- Up into the moonlight.
-    const cover = k.add(svg({ w: 10, h: 10, name: 'b4c3-cover', boil: false }, [piece(rect(-5, -5, 20, 20), '#2a4d68', { edge: 'clean', shadow: false })]), { x: 0, y: 0, w: 1180, h: 820, z: 60 });
-    k.set(cover, { opacity: 0 });
-    await k.fade(cover, 1, 0.35);
-    for (const el of [...k.root.querySelectorAll<HTMLElement>(':scope > .story-actor')]) if (el !== cover) k.remove(el);
-    k.backdrop(surface());
-
-    const moon = k.picture('moon', { x: 60, y: 20, w: 220, z: 5 });
-    k.add(frontWater(), { x: 0, y: 470, w: 1180, h: 360, z: 30 });
-    const hero2 = k.character('hero', { x: 290, y: 300, w: 220, z: 20 });
-    const friend2 = k.character(FRIEND[k.hero], { x: 540, y: 300, w: 220, z: 20 });
-    const broom2 = k.picture('broom', { x: 760, y: 420, w: 190, z: 32 });
-    const merL = k.add(merperson('b4c3-mer1', '#2c4a3a', C.teal, '#2f6a6a'), { x: 30, y: 400, w: 130, z: 28 });
-    const merR = k.add(merperson('b4c3-mer2', '#6a4a30', '#7a6a9a', C.plum), { x: 1000, y: 420, w: 120, z: 28, flip: true });
-    const myrtle2 = k.character('myrtle', { x: 790, y: 90, w: 180, z: 24 });
-    k.set([hero2, friend2, merL, merR, broom2], { y: 300 });
-    k.set(myrtle2, { opacity: 0 });
-    await k.fade(cover, 0, 0.4);
-    cover.remove();
+    let moon!: HTMLElement;
+    let hero2!: HTMLElement;
+    let friend2!: HTMLElement;
+    let broom2!: HTMLElement;
+    let merL!: HTMLElement;
+    let merR!: HTMLElement;
+    let myrtle2!: HTMLElement;
+    await k.cut(() => {
+      k.backdrop(surface());
+      k.ambient('stars', { count: 14, area: [0, 0, 1180, 360], z: 2 });
+      k.light(170, 130, 180, { color: C.goldLight, strength: 0.4 });
+      k.light(660, 370, 170, { color: C.candle, strength: 0.25, flicker: true });
+      moon = k.picture('moon', { x: 60, y: 20, w: 220, z: 5 });
+      k.add(frontWater(), { x: 0, y: 470, w: 1180, h: 360, z: 30 });
+      hero2 = k.character('hero', { x: 290, y: 300, w: 220, z: 20 });
+      friend2 = k.character(FRIEND[k.hero], { x: 540, y: 300, w: 220, z: 20 });
+      broom2 = k.picture('broom', { x: 760, y: 420, w: 190, z: 32 });
+      merL = k.add(merperson('b4c3-mer1', '#2c4a3a', C.teal, '#2f6a6a'), { x: 30, y: 400, w: 130, z: 28 });
+      merR = k.add(merperson('b4c3-mer2', '#6a4a30', '#7a6a9a', C.plum), { x: 1000, y: 420, w: 120, z: 28, flip: true });
+      myrtle2 = k.character('myrtle', { x: 790, y: 90, w: 180, z: 24 });
+      k.set([hero2, friend2, merL, merR, broom2], { y: 300 });
+      k.set(myrtle2, { opacity: 0 });
+    });
 
     // Splash!
     bigSplash();
+    k.music('triumph');
     k.puff(400, 500, 200, '#cfe6e8');
     k.puff(650, 500, 200, '#cfe6e8');
     await k.all(
@@ -547,27 +573,25 @@ export default defineStory({
     k.fx.twinkle();
     void k.pop(moon, 1.12);
     k.fx.bubbles(4);
-    await k.all(
+    const mersUp = k.all(
       k.to(merL, 0.7, { y: 0, ease: 'back.out(1.4)' }),
       k.wait(200).then(() => k.to(merR, 0.7, { y: 0, ease: 'back.out(1.4)' })),
-      k.wait(300).then(() => {
-        giggleWail();
-        return k.fade(myrtle2, 1, 0.8);
-      }),
     );
+    giggleWail();
     k.float(myrtle2, 12, 2);
 
-    // Everyone cheers.
+    // Everyone cheers, as Myrtle fades in.
     cheer();
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(400, 360, 14, 180);
     void k.hop(hero2, 40, 2).then(() => k.float(hero2, 6, 2.2));
     void k.wait(200).then(() => k.hop(friend2, 40, 2)).then(() => k.float(friend2, 6, 2.6));
-    await k.say('cheer', myrtle2);
+    void k.fade(myrtle2, 1, 0.8);
+    await k.all(k.say('cheer', myrtle2), mersUp);
     giggleWail();
     k.sparkle(880, 200, 12, 140);
     void k.spin(myrtle2, 1, 1);
-    await k.wait(900);
+    await k.wait(1500);
   },
 });
