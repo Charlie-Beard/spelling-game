@@ -302,9 +302,10 @@ function rockArt(): string {
 /** A patch of evening sky showing through the hole. */
 function skyArt(): string {
   return svg({ w: 560, h: 300, name: 'b7c2-sky', boil: false }, [
-    piece(rect(0, 0, 560, 300), '#6c5a8c', { edge: 'clean', shadow: false }),
-    piece(rect(0, 120, 560, 180), '#e8887a', { edge: 'clean', shadow: false, opacity: 0.8 }),
-    piece(circle(300, 190, 40), C.goldLight, { edge: 'cut', fibre: false, shadow: false, opacity: 0.8 }),
+    piece(curve([[20, 150], [60, 40], [170, 14], [290, 40], [400, 6], [510, 50], [540, 160], [450, 270], [260, 290], [110, 262]], 1.5), '#6c5a8c', { edge: 'torn', fibre: false }),
+    piece(curve([[70, 150], [110, 70], [230, 50], [350, 66], [470, 90], [492, 170], [400, 244], [250, 250], [120, 226]], 2), '#e8887a', { edge: 'cut', fibre: false, shadow: false }),
+    piece(curve([[130, 180], [170, 120], [300, 100], [420, 130], [440, 200], [330, 230], [190, 226]], 2), '#f4b07a', { edge: 'cut', fibre: false, shadow: false }),
+    piece(circle(300, 190, 40), C.goldLight, { edge: 'cut', fibre: false, shadow: false, opacity: 0.85 }),
   ]);
 }
 
@@ -331,62 +332,68 @@ const PICS: Array<[string, number, number]> = [['goblin', 70, 40], ['helmet', 25
 
 export default defineStory({
   lines: {
-    cart: { who: 'narrator', text: 'Griphook the goblin leads you to a tiny mine cart. Climb in!' },
+    cart: { who: 'griphook', text: 'Welcome to Gringotts! Your cart is waiting… climb in, quickly now!' },
     hold: { who: 'griphook', text: 'Hold on tight, {name}! This cart goes very, very fast!' },
-    zoom: { who: 'narrator', text: 'Down, down, down you zoom, round twisty bends under the bank!' },
-    vault: { who: 'griphook', text: 'Here is the vault! Gold and helmets as far as you can see!' },
-    dragon: { who: 'griphook', text: 'Look! A dragon! Don’t worry, he’s friendly, and he wants to be free!' },
-    burst: { who: 'narrator', text: 'You climb on his back… and he bursts up through the roof!' },
-    fly: { who: 'narrator', text: 'Over London you fly into the sunset. What a magic ride!' },
+    zoom: { who: 'narrator', text: 'Wheee! Down, down, down you zoom, round the twisty bends!' },
+    vault: { who: 'griphook', text: 'Here we are! Gold and helmets everywhere… and a coin for your pocket!' },
+    dragon: { who: 'griphook', text: 'Look… a dragon! Don’t worry, he’s friendly. He just wants to be free!' },
+    burst: { who: 'narrator', text: 'You climb onto his back… and whoosh! Up through the roof!' },
+    fly: { who: 'narrator', text: 'Over London you soar into the sunset. What a magic ride!' },
   },
 
   async play(k) {
-    let cast: HTMLElement[] = [];
-    const track = <T extends HTMLElement>(...els: T[]): T[] => {
-      cast.push(...els);
-      return els;
-    };
-    const clear = (): void => {
-      cast.forEach((e) => {
-        gsap.killTweensOf(e);
-        k.remove(e);
-      });
-      cast = [];
-    };
-
     // ------------------------------------------------ scene 1: the bank hall
+    k.music('sneaky');
     k.backdrop(bankHall());
     const griphook = k.character('griphook', { x: 120, y: 330, w: 240, z: 20 });
     const hero = k.character('hero', { x: 350, y: 345, w: 240, z: 20 });
     k.set([griphook, hero], { opacity: 0 });
-    track(griphook, hero);
-    const cart = k.add(cartArt(), { x: 760, y: 470, w: 280, z: 18 });
+    const cart = k.add(cartArt(), { x: 780, y: 450, w: 300, z: 22 });
     k.set(cart, { opacity: 0 });
-    track(cart);
 
     await k.wait(500);
     k.sfx.whoosh();
     await k.all(k.enter(griphook, 'left'), k.enter(hero, 'left'));
     k.fx.patter(6, 0.1);
+    clatter(0.8);
     void k.enter(cart, 'right', 0.7);
     await k.say('cart', griphook);
-    k.fx.knock(2);
-    await k.hop(griphook, 30, 2);
     await k.say('hold', griphook);
 
+    const squash = async (): Promise<void> => {
+      k.fx.thud();
+      await k.to(cart, 0.1, { scaleY: 0.92 });
+      await k.to(cart, 0.1, { scaleY: 1 });
+    };
+    await k.to(hero, 0.35, { x: 250, y: -130, ease: 'power2.out' });
+    await k.to(hero, 0.3, { x: 500, y: -40, ease: 'power2.in' });
+    await squash();
+    await k.to(griphook, 0.35, { x: 330, y: -130, ease: 'power2.out' });
+    await k.to(griphook, 0.3, { x: 580, y: -40, ease: 'power2.in' });
+    await squash();
+    await k.camera({ zoom: 1.3, x: 880, y: 450 }, 0.8);
+    clatter(0.6);
+    await together(k, [hero, griphook, cart], 0.6, { x: '+=420', ease: 'power2.in' });
+
     // ------------------------------------------------ scene 2: the ride
-    await k.all(k.glow(C.orange, 0.2, 0.6), k.to(hero, 0.5, { x: 400, y: -60, ease: 'power1.inOut' }));
     k.fx.whizz();
-    clear();
+    let crew1!: HTMLElement;
+    let crew2!: HTMLElement;
+    let cart2!: HTMLElement;
     const [sx, sy] = RAILS[0];
-    k.backdrop(tunnel(RAILS));
-    const crew1 = k.character('griphook', { x: sx - 118, y: sy - 148 - 12, w: 120, z: 20 });
-    const crew2 = k.character('hero', { x: sx + 8, y: sy - 148 - 12, w: 120, z: 20 });
-    const cart2 = k.add(cartArt(), { x: sx - 120, y: sy - 148, w: 240, z: 25 });
-    track(crew1, crew2, cart2);
+    await k.cut(() => {
+      k.backdrop(tunnel(RAILS));
+      k.dim(0.4);
+      k.ambient('dust', { count: 14, z: 5 });
+      for (const [x, y] of [[90, 120], [560, 150], [1000, 130], [760, 360], [260, 440]] as Pt[]) k.light(x, y, 110, { color: C.candle, flicker: true });
+      crew1 = k.character('griphook', { x: sx - 135, y: sy - 190, w: 150, z: 20 });
+      crew2 = k.character('hero', { x: sx - 15, y: sy - 190, w: 150, z: 20 });
+      cart2 = k.add(cartArt(), { x: sx - 150, y: sy - 185, w: 300, z: 25 });
+      k.set([crew1, crew2, cart2], { opacity: 0 });
+    });
     const all = [crew1, crew2, cart2];
-    k.set(all, { opacity: 0 });
-    await k.wait(300);
+    k.music('adventure');
+    await k.camera({ zoom: 1.3, x: sx, y: sy - 70 }, 0.4);
     await k.all(...all.map((e) => k.appear(e, 0.3)));
     clatter(8);
     const zoom = k.say('zoom');
@@ -400,6 +407,7 @@ export default defineStory({
         k.fx.whizz();
         k.quake(4);
       }
+      void k.camera({ zoom: 1.3, x: nx, y: ny - 70 }, 0.7);
       await k.all(
         k.to(cart2, 0.7, { x: dx, y: dy, rotation: angle, ease: 'sine.inOut' }),
         k.to(crew1, 0.7, { x: dx, y: dy, rotation: angle * 0.6, ease: 'sine.inOut' }),
@@ -410,19 +418,27 @@ export default defineStory({
     await zoom;
 
     // ------------------------------------------------ scene 3: the vault
-    clear();
-    k.backdrop(vault());
-    const sky = k.add(skyArt(), { x: 480, y: -10, w: 600, z: 3 });
-    const slabL = k.add(slabArt(true), { x: 420, y: -30, w: 380, z: 4 });
-    const slabR = k.add(slabArt(false), { x: 780, y: -30, w: 380, z: 4 });
-    k.set(sky, { opacity: 0 });
-    track(sky, slabL, slabR);
-    const g2 = k.character('griphook', { x: 60, y: 340, w: 240, z: 20 });
-    const h2 = k.character('hero', { x: 300, y: 355, w: 240, z: 20 });
-    track(g2, h2);
-    k.set([g2, h2], { opacity: 0 });
+    let sky!: HTMLElement;
+    let slabL!: HTMLElement;
+    let slabR!: HTMLElement;
+    let g2!: HTMLElement;
+    let h2!: HTMLElement;
+    let vdim!: HTMLElement;
+    await k.cut(() => {
+      k.backdrop(vault());
+      k.ambient('dust', { count: 14, z: 5 });
+      vdim = k.dim(0.3);
+      k.light(880, 580, 280, { color: C.gold, strength: 0.4 });
+      sky = k.add(skyArt(), { x: 480, y: -10, w: 600, z: 3 });
+      slabL = k.add(slabArt(true), { x: 420, y: -30, w: 380, z: 4 });
+      slabR = k.add(slabArt(false), { x: 780, y: -30, w: 380, z: 4 });
+      k.set(sky, { opacity: 0 });
+      g2 = k.character('griphook', { x: 60, y: 340, w: 240, z: 20 });
+      h2 = k.character('hero', { x: 300, y: 355, w: 240, z: 20 });
+      k.set([g2, h2], { opacity: 0 });
+    });
     vaultClunk();
-    await k.wait(900);
+    await k.wait(600);
     k.fx.creak();
     await k.all(k.appear(g2, 0.4), k.appear(h2, 0.4));
     coins();
@@ -433,29 +449,30 @@ export default defineStory({
       k.set(p, { opacity: 0 });
       return p;
     });
-    track(...pics);
     await k.wait(1200);
+    k.sfx.gem();
+    k.sparkle(450, 560, 8, 40);
     for (const [i, p] of pics.entries()) {
       k.fx.pop();
       await k.appear(p, 0.3);
       k.float(p, 6, 1.6 + i * 0.2);
       await k.wait(260);
     }
-    await k.wait(500);
     await k.all(...pics.map((p) => k.vanish(p, 0.3)));
 
     // The dragon pops up behind the gold.
     k.fx.rumble(1.5);
     k.quake(5);
     const dragon = k.add(dragonArt(), { x: 560, y: 330, w: 420, z: 8 });
-    track(dragon);
     flapWing(k, dragon);
     await k.enter(dragon, 'bottom', 0.9);
     roar();
+    void k.camera({ zoom: 1.3, x: 760, y: 440 }, 0.9);
     void k.shake(dragon, 5, 3);
     await k.all(k.say('dragon', g2), k.hop(h2, 30, 2));
 
     // You climb on, and up through the roof you go!
+    void k.camera({}, 0.8);
     k.fx.boing();
     await k.to(h2, 0.35, { x: 340, y: -150, ease: 'power2.out' });
     await k.to(h2, 0.3, { x: 385, y: -42, ease: 'power2.in' });
@@ -464,9 +481,11 @@ export default defineStory({
     await k.wait(800);
     k.fx.rumble(1.5);
     k.quake(8);
+    void k.fade(vdim, 0, 0.8);
+    k.light(780, 120, 320, { color: '#f4b07a', strength: 0.5 });
     void k.fade(sky, 1, 0.5);
-    const rocks = [0, 1, 2, 3, 4, 5].map((i) => k.add(rockArt(), { x: 520 + i * 90, y: 100, w: 50, z: 12 }));
-    track(...rocks);
+    // rocks fall well clear of everyone
+    const rocks = [330, 400, 460, 1010, 1070, 1120].map((x) => k.add(rockArt(), { x, y: 100, w: 50, z: 12 }));
     await k.all(
       k.to(slabL, 0.7, { x: -420, y: -260, rotation: -40, ease: 'power2.in' }),
       k.to(slabR, 0.7, { x: 420, y: -260, rotation: 40, ease: 'power2.in' }),
@@ -477,35 +496,40 @@ export default defineStory({
     k.puff(900, 180, 160, C.stone);
     roar();
     await together(k, rider, 1.1, { y: '-=640', ease: 'power2.in' });
-    await k.wait(500);
+    await k.wait(300);
 
     // ------------------------------------------------ scene 4: over London
-    await k.glow(C.goldLight, 0.3, 0.5);
-    clear();
-    k.backdrop(london());
-    const d2 = k.add(dragonArt(), { x: -460, y: 200, w: 420, z: 10 });
-    const h3 = k.character('hero', { x: -460 + 125, y: 190, w: 130, z: 20 });
-    track(d2, h3);
+    let d2!: HTMLElement;
+    let h3!: HTMLElement;
+    await k.cut(() => {
+      k.backdrop(london());
+      d2 = k.add(dragonArt(), { x: -460, y: 200, w: 420, z: 10 });
+      h3 = k.character('hero', { x: -460 + 125, y: 190, w: 130, z: 20 });
+    });
+    k.music('triumph');
     flapWing(k, d2);
     const both = [d2, h3];
     void k.say('fly');
     wingbeats(8);
+    void k.camera({ zoom: 1.2, x: 650, y: 330 }, 3.6);
     await together(k, both, 1.8, { x: 480, y: -40, ease: 'sine.inOut' });
     k.sparkle(700, 240, 10, 200);
     await together(k, both, 1.8, { x: 900, y: 40, ease: 'sine.inOut' });
     // Your five word friends wave from the sky.
     const dp = k.picture('dragon', { x: 330, y: 40, w: 140, z: 30 });
     const mp = k.picture('magic', { x: 700, y: 30, w: 140, z: 30 });
-    track(dp, mp);
     k.set([dp, mp], { opacity: 0 });
     k.fx.pop();
     void k.appear(dp, 0.3);
     void k.appear(mp, 0.3);
     k.float(dp, 6, 1.7);
     k.float(mp, 6, 1.9);
+    void k.camera({}, 1.4);
     k.fx.jingle();
     k.confetti(36);
-    await together(k, both, 1.8, { x: 1250, y: -30, ease: 'sine.inOut' });
-    await k.wait(900);
+    wingbeats(3);
+    await together(k, both, 0.9, { y: '-=24', ease: 'sine.inOut' });
+    await together(k, both, 0.9, { y: '+=24', ease: 'sine.inOut' });
+    await k.wait(1600);
   },
 });

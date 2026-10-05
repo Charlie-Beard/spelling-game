@@ -152,23 +152,38 @@ const POT = { x: 390, y: 420, w: 300 };
 const POT_C: [number, number] = [540, 470];
 
 /** One swirl of the ladle: swish, swing across, swing back. */
-async function stir(k: Kit, ladle: HTMLElement): Promise<void> {
+async function stir(k: Kit, ladle: HTMLElement, hero: HTMLElement): Promise<void> {
   swish();
-  await k.to(ladle, 0.28, { rotation: -16, x: -40, ease: 'sine.inOut' });
+  await k.all(
+    k.to(ladle, 0.28, { rotation: -16, x: -40, ease: 'sine.inOut' }),
+    k.to(hero, 0.28, { rotation: -4, ease: 'sine.inOut' }),
+  );
   swish();
-  await k.to(ladle, 0.28, { rotation: 16, x: 40, ease: 'sine.inOut' });
+  await k.all(
+    k.to(ladle, 0.28, { rotation: 16, x: 40, ease: 'sine.inOut' }),
+    k.to(hero, 0.28, { rotation: 4, ease: 'sine.inOut' }),
+  );
+}
+
+/** Three happy chomps. */
+function munch(): void {
+  const t = now();
+  for (let i = 0; i < 3; i++) {
+    noiseBurst(t + i * 0.12, { freq: 1800, q: 2, peak: 0.08, attack: 0.005, decay: 0.07, type: 'bandpass' });
+  }
 }
 
 // -------------------------------------------------------------------- story
 
 export default defineStory({
   lines: {
-    intro: { who: 'narrator', text: 'You are in Professor Slughorn’s steamy potions dungeon. Time to stir the cauldron!' },
-    gold: { who: 'slughorn', text: 'Golden and shining! My dear, that is Felix Felicis… liquid luck!' },
+    intro: { who: 'narrator', text: 'Welcome to Professor Slughorn’s steamy potions dungeon. Let’s stir the cauldron!' },
+    stir: { who: 'slughorn', text: 'Five stirs, my dear… gently now! Round and round she goes!' },
+    gold: { who: 'slughorn', text: 'Oh my! Golden and shining! That’s Felix Felicis… liquid luck!' },
     sip: { who: 'narrator', text: 'You take one tiny sip… and feel wonderfully, brilliantly lucky!' },
-    luck: { who: 'narrator', text: 'Plop! A cake lands on a plate. And look, a kite floats past!' },
-    treat: { who: 'slughorn', text: 'Splendid, {name}! Crystallised pineapple? My favourite treat!' },
-    end: { who: 'narrator', text: 'Five stirs, one golden potion, and a very lucky day!' },
+    luck: { who: 'slughorn', text: 'Ho ho! A cake, plop, on the plate! And look… a kite!' },
+    treat: { who: 'slughorn', text: 'Splendid, {name}! Crystallised pineapple? My very favourite!' },
+    end: { who: 'narrator', text: 'Five stirs, one golden potion… and a very lucky day!' },
   },
 
   async play(k) {
@@ -181,51 +196,64 @@ export default defineStory({
     const ladle = k.add(ladleArt(), { x: 510, y: 300, w: 60, z: 12 });
     k.set(ladle, { transformOrigin: '50% 90%' });
     k.add(plateArt(), { x: 712, y: 612, w: 150, z: 9 });
-    const hero = k.character('hero', { x: 60, y: 340, z: 20 });
+    const hero = k.character('hero', { x: 170, y: 340, z: 20 });
     const slug = k.character('slughorn', { x: 850, y: 320, z: 20 });
     k.set([hero, slug], { opacity: 0 });
 
+    k.music('cosy');
+    k.ambient('dust', { count: 14 });
+    const dim = k.dim(0.3);
+    const potLight = k.light(540, 470, 200, { color: C.green, strength: 0.35, flicker: true });
+    k.light(590, 170, 160, { color: C.sky, strength: 0.3 });
+
     // Steam and bubbles as the curtains open.
-    await k.wait(600);
+    await k.wait(300);
     bubbling();
     k.puff(540, 380, 120, C.white);
     k.sfx.whoosh();
-    await k.enter(hero, 'left');
-    k.sfx.whoosh();
-    await k.enter(slug, 'right');
-    await k.say('intro', slug);
+    await k.all(k.enter(hero, 'left'), k.enter(slug, 'right'));
+    void k.float(slug, 4, 2.2);
+    await k.say('intro');
 
     // Five stirs, counted out loud on the caption.
+    await k.say('stir', slug);
+    void k.camera({ zoom: 1.35, x: 520, y: 470 }, 1.2);
     const counts = ['One!', 'Two!', 'Three!', 'Four!', 'Five!'];
     for (let i = 0; i < counts.length; i++) {
       k.caption(counts[i]);
       k.fx.bubbles(2 + i);
       k.puff(POT_C[0] + (i % 2 ? 40 : -40), 395, 70 + i * 12, C.white);
-      await stir(k, ladle);
-      void k.hop(hero, 18, 1);
+      await stir(k, ladle, hero);
     }
+    k.set(hero, { rotation: 0 });
 
     // It turns shining gold.
+    k.music('magic');
     k.fx.rumble(0.6);
     await k.shake(plain, 4, 3);
     luckyChime();
     k.fx.twinkle();
+    void k.fade(potLight, 0, 0.8);
+    k.light(540, 470, 260, { color: C.goldLight, strength: 0.55, flicker: true });
+    void k.fade(dim, 0.15, 1);
     void k.fade(halo, 1, 0.8);
     void k.glow(C.goldLight, 0.4, 1.4);
     await k.fade(gold, 1, 0.8);
     k.sparkle(POT_C[0], 400, 20, 150);
-    await k.all(k.say('gold', slug), k.hop(slug, 30, 2));
+    await k.all(k.say('gold', slug), k.pop(slug, 1.06));
 
     // A sip of luck.
     k.fx.pop();
     await k.hop(hero, 30, 1);
-    await k.say('sip', hero);
+    await k.say('sip');
 
     // Lucky things: a cake lands on the plate; a kite floats past the window.
-    const kite = k.picture('kite', { x: 1180, y: 60, w: 170, z: 15 });
+    void k.camera({}, 1);
+    const kite = k.picture('kite', { x: 1180, y: 100, w: 170, z: 15 });
     const cake = k.picture('cake', { x: 696, y: -180, w: 170, z: 14 });
-    void k.to(kite, 3.4, { x: -760, y: 40, rotation: -10, ease: 'sine.inOut' });
-    const say = k.say('luck');
+    k.sfx.sparkle();
+    void k.to(kite, 3.4, { x: -760, y: 80, rotation: -10, ease: 'sine.inOut' });
+    const say = k.say('luck', slug);
     await k.wait(900);
     k.fx.whizz();
     await k.to(cake, 0.7, { y: 640, ease: 'power2.in' });
@@ -238,27 +266,35 @@ export default defineStory({
     k.remove(kite);
 
     // Slughorn offers a treat.
+    await k.camera({ zoom: 1.3, x: 760, y: 440 }, 1);
     const pine = k.add(pineappleArt(), { x: 780, y: 440, w: 90, z: 22 });
     await k.appear(pine, 0.3);
-    await k.all(k.say('treat', slug), k.hop(slug, 26, 2));
-    void k.vanish(pine, 0.3);
+    await k.all(k.say('treat', slug), k.pop(slug, 1.06));
+    await k.to(pine, 0.7, { x: -480, y: -10, rotation: 360, ease: 'sine.inOut' });
+    munch();
+    void k.vanish(pine, 0.2);
+    await k.hop(hero, 26, 1);
 
-    // The rest of the words pop up for a big finish.
-    const rest: Array<[string, number]> = [['snake', 120], ['cave', 500], ['five', 880]];
-    const pics = rest.map(([w, x]) => {
-      const p = k.picture(w, { x, y: 20, w: 170, z: 30 });
-      k.set(p, { opacity: 0 });
+    // The rest of the words rise from the potion for a big finish.
+    k.music('triumph');
+    void k.camera({}, 1.4);
+    const rest: Array<[string, number]> = [['snake', 70], ['cave', 280], ['five', 880]];
+    const pics = rest.map(([w]) => {
+      const p = k.picture(w, { x: 470, y: 380, w: 150, z: 30 });
+      k.set(p, { opacity: 0, scale: 0.3 });
       return p;
     });
     k.fx.jingle();
     k.confetti(40);
     k.sparkle(540, 300, 16, 220);
-    for (const p of pics) {
+    for (let i = 0; i < pics.length; i++) {
       k.fx.pop();
-      void k.appear(p, 0.3);
-      await k.wait(180);
+      bubbling();
+      void k.to(pics[i], 0.6, { x: rest[i][1] - 470, y: -340, scale: 1, opacity: 1, ease: 'back.out(1.6)' });
+      await k.wait(250);
     }
-    await k.all(k.say('end'), k.hop(hero, 44, 2), k.hop(slug, 22, 2));
-    await k.wait(900);
+    for (const p of pics) void k.float(p, 6, 2.4);
+    await k.all(k.say('end'), k.hop(hero, 44, 2));
+    await k.wait(1500);
   },
 });

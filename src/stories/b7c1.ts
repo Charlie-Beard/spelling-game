@@ -20,6 +20,13 @@ function sizzle(): void {
   for (let i = 0; i < 14; i++) noiseBurst(t + 0.05 + i * 0.09 + r() * 0.05, { freq: 3000 + r() * 3000, q: 3, peak: 0.04, decay: 0.03 });
 }
 
+/** A pan clanging softly. */
+function clang(): void {
+  const t = now();
+  bell(NOTE.A5, t, 0.07, 0.5);
+  tone(320, t, { wave: 'square', peak: 0.05, attack: 0.005, decay: 0.12, lowpass: 1800 });
+}
+
 /** The oven timer: a bright double ding. */
 function ding(): void {
   const t = now();
@@ -88,6 +95,12 @@ function kitchen(): string {
     piece(rect(940, 238, 240, 16, 4), C.wood),
     piece(rect(980, 575, 30, 16), IRON, { edge: 'cut' }),
     piece(rect(1110, 575, 30, 16), IRON, { edge: 'cut' }),
+    // ceiling beam and strings of onions
+    piece(rect(-20, 0, 1220, 46), C.brownDark),
+    ...[690, 760, 830].flatMap((x) => [
+      ink([[x, 40], [x, 120]], { width: 3, color: C.brown }),
+      ...[0, 1, 2].map((j) => piece(circle(x + (j % 2 ? 8 : -8), 70 + j * 24, 15), j % 2 ? C.tan : C.orange, { edge: 'cut', fibre: false })),
+    ]),
     // floor: flagstones
     piece(curve([[-40, 860], [-40, 590], [300, 580], [590, 576], [880, 580], [1220, 590], [1220, 860]], 2), '#9c8f80', { rough: 1.2 }),
     ...[0, 1, 2].flatMap((row) => [0, 1, 2, 3, 4, 5].map((col) => piece(rect(col * 210 - 30 + (row % 2) * 100, 600 + row * 62, 190, 50, 4), '#a89c8d', { edge: 'cut', fibre: false, shadow: false, opacity: 0.55 }))),
@@ -221,40 +234,50 @@ function swing(k: Kit, el: HTMLElement, i: number): void {
 const BASKET = { x: 650, y: 330, w: 200 };
 
 const WORDS: Array<[string, number, number]> = [
-  ['rabbit', 60, 40],
-  ['basket', 260, 110],
-  ['carpet', 515, 20],
-  ['kitten', 730, 110],
-  ['picnic', 930, 40],
+  ['rabbit', 90, 60],
+  ['basket', 285, 30],
+  ['carpet', 480, 20],
+  ['kitten', 675, 30],
+  ['picnic', 870, 60],
 ];
-const PIC_W = 150;
+const PIC_W = 140;
 
 export default defineStory({
   lines: {
-    peek: { who: 'narrator', text: 'You peek into the old basement kitchen. It’s sparkling clean now!' },
-    cook: { who: 'kreacher', text: 'Kreacher has been cooking all morning! Mind the flying pans!' },
-    pie: { who: 'narrator', text: 'Sizzle, sizzle… ding! A golden pie pops out of the oven.' },
-    pack: { who: 'kreacher', text: 'A pie for the picnic basket. Kreacher is very proud!' },
-    pop: { who: 'narrator', text: 'Wait… the basket is wiggling! A rabbit and a kitten pop out!' },
-    serve: { who: 'kreacher', text: 'Kreacher is happy to serve.' },
-    picnic: { who: 'narrator', text: 'You spread the carpet and share a yummy picnic. Hooray!' },
+    peek: { who: 'narrator', text: 'You tiptoe down to the old basement kitchen… and wow, it’s sparkling clean!' },
+    cook: { who: 'kreacher', text: 'Ah, Master {name}! Kreacher has cooked all morning. Mind the flying pans!' },
+    pie: { who: 'kreacher', text: 'Ding! Kreacher’s golden pie is ready… oh, it smells wonderful!' },
+    pack: { who: 'kreacher', text: 'Into the picnic basket it goes. Kreacher is very, very proud!' },
+    pop: { who: 'narrator', text: 'Wait… the basket is wiggling! Out pop a kitten and a rabbit!' },
+    serve: { who: 'kreacher', text: 'Oh! Little stowaways! Well… Kreacher supposes there is pie for everyone.' },
+    picnic: { who: 'narrator', text: 'You spread the carpet and share a cosy picnic. Hooray!' },
   },
 
   async play(k) {
     k.backdrop(kitchen());
+    k.music('cosy');
+    k.ambient('dust', { count: 18, area: [420, 60, 320, 520] });
+    k.dim(0.18, '#2a1d16');
+    k.light(565, 150, 220, { color: '#fff3d0', strength: 0.4 });
+    k.light(1060, 420, 170, { color: C.orange, strength: 0.5, flicker: true });
 
     const hero = k.character('hero', { x: 60, y: 330, z: 20 });
     const kreacher = k.character('kreacher', { x: 380, y: 322, w: 270, z: 20 });
     k.set([hero, kreacher], { opacity: 0 });
 
-    await k.wait(600);
+    await k.wait(400);
     k.sfx.whoosh();
     await k.enter(hero, 'left');
+    k.sparkle(180, 240, 6, 120);
+    k.sfx.sparkle();
     await k.say('peek');
 
     // Kreacher bustles in; the pans fly up and swing about.
     k.sfx.whoosh();
-    await k.enter(kreacher, 'bottom');
+    await k.enter(kreacher, 'right');
+    k.fx.thud();
+    await k.to(kreacher, 0.12, { scaleX: 1.06, scaleY: 0.94, transformOrigin: '50% 100%' });
+    await k.to(kreacher, 0.12, { scaleX: 1, scaleY: 1 });
     const pans = [
       k.add(panArt(C.gold), { x: 240, y: 70, w: 160, z: 15 }),
       k.add(panArt(C.orange), { x: 560, y: 40, w: 170, z: 15, flip: true }),
@@ -262,12 +285,13 @@ export default defineStory({
     ];
     pans.forEach((p) => k.set(p, { opacity: 0 }));
     sizzle();
-    await k.all(...pans.map((p, i) => k.wait(i * 160).then(() => { k.fx.pop(); return k.appear(p, 0.3); })));
+    await k.all(...pans.map((p, i) => k.wait(i * 160).then(() => { clang(); return k.appear(p, 0.3); })));
     pans.forEach((p, i) => swing(k, p, i));
     k.sparkle(640, 140, 8, 280);
     await k.all(k.say('cook', kreacher), k.hop(hero, 20, 2));
 
     // The oven dings and out comes a pie.
+    await k.camera({ zoom: 1.4, x: 960, y: 400 }, 1.0);
     ding();
     void k.glow(C.orange, 0.2, 1.2);
     const pie = k.add(pieArt(), { x: 1010, y: 360, w: 130, z: 18 });
@@ -275,31 +299,34 @@ export default defineStory({
     await k.appear(pie, 0.3);
     k.fx.pop();
     k.puff(1060, 360, 90, C.white);
-    const pieDone = k.say('pie');
-    await k.wait(900);
-    await k.to(pie, 1.2, { x: -325, y: -30, rotation: -8, ease: 'sine.inOut' });
-    await pieDone;
+    sizzle();
 
-    // The basket appears; the pie is packed in.
+    // The basket appears first; the pie flies in.
     const back = k.add(basketBack(), { ...BASKET, z: 12 });
     const front = k.add(basketFront(), { ...BASKET, z: 16 });
     k.set([back, front], { opacity: 0 });
     k.fx.pop();
     await k.all(k.appear(back, 0.3), k.appear(front, 0.3));
+    const pieDone = k.say('pie', kreacher);
+    await k.wait(700);
+    void k.camera({ zoom: 1.45, x: 720, y: 380 }, 1.0);
+    k.fx.whizz();
+    await k.to(pie, 0.6, { x: -170, y: -120, rotation: -12, ease: 'power2.out' });
+    await k.to(pie, 0.6, { x: -325, y: 30, scale: 0.6, ease: 'power2.in' });
+    k.remove(pie);
+    k.fx.thud();
+    await pieDone;
     pans.forEach((p) => gsap.killTweensOf(p));
-    await k.all(k.say('pack', kreacher), k.wait(200).then(async () => {
-      await k.to(pie, 0.7, { x: -325, y: 30, scale: 0.6, ease: 'power2.in' });
-      k.remove(pie);
-      k.fx.thud();
-    }));
+    void Promise.all(pans.map((p, i) => k.wait(i * 120).then(() => { clang(); return k.exit(p, 'top', 0.5); })));
+    await k.all(k.say('pack', kreacher), k.wait(200).then(() => k.shake(front, 3, 1)));
     await k.wait(300);
 
     // The basket wiggles. A rabbit and a kitten pop out!
     const popped = k.say('pop');
     await k.shake(front, 8, 3);
     mew();
-    const kit = k.add(kittenArt(), { x: 690, y: 330, w: 100, z: 14 });
-    const rab = k.add(rabbitArt(), { x: 760, y: 280, w: 100, z: 14 });
+    const kit = k.add(kittenArt(), { x: 690, y: 330, w: 120, z: 14 });
+    const rab = k.add(rabbitArt(), { x: 760, y: 280, w: 120, z: 14 });
     k.set([kit, rab], { opacity: 0 });
     await k.appear(kit, 0.2);
     await k.to(kit, 0.4, { y: -70, rotation: -10, ease: 'back.out(2)' });
@@ -313,29 +340,37 @@ export default defineStory({
 
     // Kreacher smiles and bows.
     await k.to(kreacher, 0.5, { rotation: 14, y: 20, transformOrigin: '50% 100%', ease: 'sine.inOut' });
+    k.fx.twinkle();
     await k.all(k.say('serve', kreacher), k.wait(0));
     await k.to(kreacher, 0.4, { rotation: 0, y: 0, ease: 'sine.inOut' });
     k.sfx.sparkle();
     k.sparkle(480, 400, 10, 100);
 
     // The picnic on the carpet.
-    const carpet = k.add(carpetArt(), { x: 40, y: 560, w: 600, z: 8 });
+    await k.camera({}, 1.3);
+    k.music('triumph');
+    const carpet = k.add(carpetArt(), { x: 40, y: 540, w: 600, z: 8 });
     k.set(carpet, { opacity: 0, x: -400 });
     k.sfx.whoosh();
     await k.to(carpet, 0.7, { opacity: 1, x: 0, ease: 'power2.out' });
+    k.fx.poof();
     const sayPicnic = k.say('picnic');
     k.fx.whizz();
     k.puff(750, 330, 120, C.white);
     k.remove(kit);
     k.remove(rab);
-    const kit2 = k.add(kittenArt(), { x: 290, y: 570, w: 90, z: 25 });
-    const rab2 = k.add(rabbitArt(), { x: 630, y: 515, w: 100, z: 25 });
+    const kit2 = k.add(kittenArt(), { x: 290, y: 550, w: 120, z: 25 });
+    const rab2 = k.add(rabbitArt(), { x: 630, y: 495, w: 120, z: 25 });
     k.set([kit2, rab2], { opacity: 0 });
     mew();
     await k.all(k.appear(kit2, 0.3), k.appear(rab2, 0.3));
     thump();
     void k.hop(kit2, 24, 2);
     await k.hop(rab2, 30, 2);
+    const cpie = k.add(pieArt(), { x: 330, y: 556, w: 110, z: 24 });
+    k.set(cpie, { opacity: 0 });
+    k.fx.pop();
+    await k.appear(cpie, 0.3);
     const pics = WORDS.map(([w, x, y]) => {
       const p = k.picture(w, { x, y, w: PIC_W, z: 30 });
       k.set(p, { opacity: 0 });
@@ -354,6 +389,6 @@ export default defineStory({
     k.confetti(36);
     k.sparkle(300, 560, 14, 260);
     await k.all(k.hop(hero, 50, 2), k.hop(kreacher, 24, 2), k.hop(kit2, 30, 2), k.hop(rab2, 30, 2));
-    await k.wait(900);
+    await k.wait(1600);
   },
 });

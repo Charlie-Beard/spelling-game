@@ -78,14 +78,6 @@ function lanternPost(): string {
   ]);
 }
 
-/** The warm glow behind a lantern. */
-function glowArt(): string {
-  return svg({ w: 200, h: 200, name: 'b7c3-glow', boil: false }, [
-    piece(circle(100, 100, 90), C.candle, { edge: 'clean', fibre: false, shadow: false, opacity: 0.28 }),
-    piece(circle(100, 100, 55), C.goldLight, { edge: 'clean', fibre: false, shadow: false, opacity: 0.35 }),
-  ]);
-}
-
 /** The shield over the castle: a big translucent dome with a few paper stars. */
 function shieldArt(): string {
   const r = rng(907);
@@ -96,8 +88,9 @@ function shieldArt(): string {
     stars.push(dot(500 + Math.cos(a) * 460 * d, 400 + Math.sin(a) * 380 * d, 2 + r() * 3, C.white, 0.7));
   }
   return svg({ w: 1000, h: 420, name: 'b7c3-shield', boil: false }, [
-    piece(ellipse(500, 420, 490, 410), C.sky, { edge: 'clean', fibre: false, shadow: false, opacity: 0.22 }),
-    piece(ellipse(500, 420, 440, 360), C.white, { edge: 'clean', fibre: false, shadow: false, opacity: 0.12 }),
+    piece(ellipse(500, 420, 490, 410), C.sky, { edge: 'clean', fibre: false, shadow: false, opacity: 0.08 }),
+    piece(ellipse(500, 420, 440, 360), C.white, { edge: 'clean', fibre: false, shadow: false, opacity: 0.05 }),
+    ink(Array.from({ length: 24 }, (_, i): [number, number] => { const a = Math.PI + (i / 23) * Math.PI; return [500 + Math.cos(a) * 490, 420 + Math.sin(a) * 410]; }), { width: 6, color: C.sky, opacity: 0.6 }),
     ...stars,
   ]);
 }
@@ -138,7 +131,7 @@ function courtyard(): string {
     piece(rect(-20, 500, 1220, 14), C.stone, { edge: 'cut', fibre: false }),
     ...cobbles,
     // empty plinths
-    ...[230, 450, 670, 890].map((x) => piece(rect(x, 540, 90, 36, 5), STONE_DARK, { edge: 'cut', fibre: false })),
+    ...[270, 450, 640, 820].map((x) => piece(rect(x, 540, 90, 36, 5), STONE_DARK, { edge: 'cut', fibre: false })),
   ]);
 }
 
@@ -146,10 +139,10 @@ function courtyard(): string {
 
 /** Knight start positions (left x) along the courtyard, and where they march to. */
 const KNIGHTS = [
-  { x: 230, to: -190 },
-  { x: 440, to: -130 },
-  { x: 660, to: 120 },
-  { x: 880, to: 160 },
+  { x: 250, to: 0 },
+  { x: 430, to: 0 },
+  { x: 620, to: 0 },
+  { x: 800, to: 0 },
 ];
 
 /** Flashes the lantern glows on, gently. */
@@ -159,42 +152,46 @@ async function lightLanterns(k: Kit, glows: HTMLElement[]): Promise<void> {
 
 export default defineStory({
   lines: {
-    thunder: { who: 'narrator', text: 'Back at Hogwarts, the sunset sky is dark. Thunder rolls over the courtyard!' },
-    spell: { who: 'mcgonagall', text: 'Piertotum Locomotor!' },
-    wake: { who: 'narrator', text: 'Stone knights creak awake! Stomp, stomp, stomp, they march out to guard the castle.' },
-    love: { who: 'mcgonagall', text: 'Oh, I’ve always wanted to use that spell!' },
-    shield: { who: 'narrator', text: 'A shimmering shield rises over the castle, and the lanterns glow.' },
-    ready: { who: 'narrator', text: 'Get ready, {name}… the battle is coming!' },
+    thunder: { who: 'mcgonagall', text: 'Ah, {name}, you’re back! Quickly now… a storm is coming to Hogwarts.' },
+    spell: { who: 'mcgonagall', text: 'Piertotum… Locomotor!' },
+    wake: { who: 'narrator', text: 'Creak! The stone knights wake up… stomp, stomp! They line up to guard the castle.' },
+    love: { who: 'mcgonagall', text: 'Oh! I’ve always wanted to use that spell!' },
+    shield: { who: 'narrator', text: 'You wave your wand… a shimmering shield rises, and every lantern glows!' },
+    ready: { who: 'mcgonagall', text: 'Stand tall, everyone! The great battle is coming… and we are ready!' },
   },
 
   async play(k) {
     k.backdrop(courtyard());
 
+    k.music('spooky');
+    k.ambient('stars', { z: 5, area: [0, 0, 1180, 330] });
+    const dim = k.dim(0.3);
+    k.light(590, 410, 260, { color: C.candle, strength: 0.25 });
+
     // Lanterns on posts, glowing later.
     const lampXs = [60, 1040];
-    const posts = lampXs.map((x) => k.add(lanternPost(), { x, y: 330, w: 80, z: 6, still: true }));
-    const glows = lampXs.map((x) => {
-      const g = k.add(glowArt(), { x: x - 60, y: 310, w: 200, z: 5, still: true });
+    lampXs.forEach((x) => k.add(lanternPost(), { x, y: 330, w: 80, z: 6, still: true }));
+    const glows = [100, 1080].map((x) => {
+      const g = k.light(x, 374, 150, { color: C.candle, flicker: true });
       k.set(g, { opacity: 0 });
       return g;
     });
-    void posts;
 
     // The knights stand still as statues.
     const knights = KNIGHTS.map((kn) => k.add(knightArt(), { x: kn.x, y: 300, w: 130, z: 8 }));
     knights.forEach((el, i) => k.set(el, { transformOrigin: '50% 100%', y: 0, rotation: i % 2 ? 1 : -1 }));
 
-    const hero = k.character('hero', { x: 40, y: 410, w: 240, z: 20 });
-    const mcg = k.character('mcgonagall', { x: 900, y: 410, w: 240, z: 20, flip: true });
+    const hero = k.character('hero', { x: 0, y: 410, w: 220, z: 20 });
+    const mcg = k.character('mcgonagall', { x: 960, y: 410, w: 220, z: 20, flip: true });
     k.set([hero, mcg], { opacity: 0 });
 
     // The five words, as scenery props.
-    const props: Array<[string, number, number, number]> = [
-      ['thunder', 470, 14, 170],
-      ['sunset', 150, 140, 150],
-      ['cobweb', 20, 30, 130],
-      ['lantern', 330, 440, 120],
-      ['pumpkin', 740, 480, 130],
+    const props: Array<[string, number, number, number, number]> = [
+      ['thunder', 470, 14, 170, 4],
+      ['sunset', 965, 215, 120, 4],
+      ['cobweb', -10, -10, 160, 4],
+      ['lantern', 250, 560, 100, 22],
+      ['pumpkin', 820, 570, 110, 22],
     ];
     const propEls: HTMLElement[] = [];
 
@@ -204,8 +201,8 @@ export default defineStory({
     await k.wait(500);
     k.sfx.whoosh();
     await k.all(k.enter(hero, 'left'), k.enter(mcg, 'right'));
-    for (const [w, x, y, pw] of props) {
-      const p = k.picture(w, { x, y, w: pw, z: w === 'pumpkin' || w === 'lantern' ? 9 : 4 });
+    for (const [w, x, y, pw, z] of props) {
+      const p = k.picture(w, { x, y, w: pw, z });
       k.set(p, { opacity: 0 });
       propEls.push(p);
     }
@@ -217,14 +214,19 @@ export default defineStory({
         await k.wait(180);
       }
     };
-    await k.all(k.say('thunder'), popProps());
+    await k.all(k.say('thunder', mcg), popProps());
 
     // McGonagall raises her wand.
     k.sfx.whoosh();
+    await k.camera({ zoom: 1.35, x: 900, y: 480 }, 1.0);
+    k.music('adventure');
+    await k.to(mcg, 0.2, { scale: 0.96 });
     await k.to(mcg, 0.4, { scale: 1.06, ease: 'sine.out' });
     await k.say('spell', mcg);
     k.fx.spell();
     await k.beam([930, 500], [560, 420], C.goldLight, 0.7);
+    void k.camera({ zoom: 1.2, x: 590, y: 420 }, 0.8);
+    void k.to(mcg, 0.4, { scale: 1 });
     k.sparkle(560, 420, 16, 360);
 
     // The stone knights wake: grinding and creaking.
@@ -236,12 +238,16 @@ export default defineStory({
     await k.all(...knights.map((el, i) => k.wait(i * 80).then(() => k.pop(el, 1.15))));
     await k.all(k.say('wake'), (async () => {
       await k.wait(1500);
-      // They march out, stomping in rhythm.
-      armourMarch(8, 0.5);
-      k.fx.stomp(8, 0.5);
+      // They march forward, stomping in rhythm, then halt in a line.
+      armourMarch(4, 0.5);
+      k.fx.stomp(4, 0.5);
+      await k.all(...knights.map((el) => k.to(el, 2, { y: 34, scale: 1.1, ease: 'steps(4)' })));
+      k.fx.thud();
+      void k.quake(3);
       await k.all(...knights.map((el, i) => {
-        if (KNIGHTS[i].to < KNIGHTS[i].x) k.face(el, true);
-        return k.walk(el, KNIGHTS[i].to < 0 ? -200 - i * 40 : 200 + i * 40, 4, 8);
+        if (i < 2) k.face(el, true);
+        void k.to(el, 0.3, { rotation: i % 2 ? 6 : -6 });
+        return k.hop(el, 10, 1);
       }));
     })());
 
@@ -252,11 +258,16 @@ export default defineStory({
     await k.say('love', mcg);
 
     // The shield rises, the lanterns glow.
+    k.fx.spell();
+    void k.hop(hero, 20, 1);
+    await k.camera({}, 1.4);
+    await k.beam([190, 560], [590, 160], C.sky, 0.8);
     shieldShimmer();
     k.sfx.shield();
     const shield = k.add(shieldArt(), { x: 90, y: 90, w: 1000, z: 7, still: true });
     k.set(shield, { opacity: 0, transformOrigin: '50% 100%', scale: 0.6 });
-    void k.glow(C.sky, 0.25, 1.6);
+    void k.fade(dim, 0.15, 1.6);
+    k.ambient('fireflies', { count: 14, area: [100, 250, 980, 300] });
     void k.to(shield, 1.6, { scale: 1, opacity: 1, ease: 'sine.out' });
     void lightLanterns(k, glows);
     k.sparkle(590, 220, 18, 380);
@@ -264,6 +275,7 @@ export default defineStory({
 
     // Thunder one more time, then the warning.
     k.fx.rumble(1.4);
+    void k.camera({ zoom: 1.15, x: 590, y: 380 }, 3);
     void k.shake(hero, 4, 2);
     await k.say('ready', mcg);
 
@@ -272,6 +284,6 @@ export default defineStory({
     k.confetti(30);
     k.sparkle(590, 300, 16, 300);
     await k.all(k.hop(hero, 46, 2), k.hop(mcg, 26, 1));
-    await k.wait(900);
+    await k.wait(1600);
   },
 });

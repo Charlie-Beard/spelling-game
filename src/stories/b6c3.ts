@@ -137,83 +137,122 @@ function snitchArt(): string {
 
 // -------------------------------------------------------------------- story
 
-const WORDS: Array<[string, number, number]> = [
-  ['tray', 70, 40],
-  ['mouth', 280, 6],
-  ['cloud', 520, 0],
-  ['pie', 750, 6],
-  ['leaf', 960, 40],
-];
+/** Munching: three soft crunches. */
+function munch(): void {
+  const t = now();
+  for (let i = 0; i < 3; i++) noiseBurst(t + i * 0.12, { freq: 1800, q: 1.2, peak: 0.08, decay: 0.07, type: 'bandpass' });
+}
 
-const HERO0: Pt = [400, 330];
+/** The crowd: rows of little heads on top of each stand, 1180 × 820. */
+function crowdArt(): string {
+  const heads: Node[] = [];
+  const cols = [C.red, C.gold, C.blue, C.green, C.cream];
+  let n = 0;
+  for (let i = 0; i < 7; i++) {
+    const x = 20 + i * 90;
+    const top = 520 - (90 + (i % 3) * 30);
+    for (let row = 0; row < 3; row++) {
+      for (let j = 0; j < 4; j++) {
+        heads.push(dot(x + 12 + j * 16 + (row % 2) * 6, top + 16 + row * 20, 9, cols[n++ % 5]));
+      }
+    }
+  }
+  return svg({ w: 1180, h: 820, name: 'b6c3-crowd', boil: false }, heads);
+}
+
+// -------------------------------------------------------------------- story
+
+const HERO0: Pt = [520, 170];
 const BROOM_DY = 232;
 
 export default defineStory({
   lines: {
-    zoom: { who: 'narrator', text: 'You zoom up on your broom, through the fluffy clouds. Ginny flies beside you!' },
-    score: { who: 'ginny', text: 'Watch this! Here goes the Quaffle…' },
-    goal: { who: 'narrator', text: 'Whoosh! Right through the hoop! The crowd cheers!' },
-    bludger: { who: 'narrator', text: 'But a cheeky Bludger bounces about. Boing! Boing! Hee hee!' },
-    snitch: { who: 'ginny', text: 'Look! The golden Snitch! Catch it, {name}!' },
-    catch: { who: 'narrator', text: 'You zig! You zag! Up, down, and… got it!' },
-    words: { who: 'narrator', text: 'A tray, a pie, a leaf… the whole crowd is cheering for you!' },
-    brill: { who: 'ginny', text: 'Brilliant!' },
+    zoom: { who: 'narrator', text: 'Whoosh! You zoom up on your broom, right through a fluffy cloud!' },
+    score: { who: 'ginny', text: 'Ready? Watch this… here goes the Quaffle!' },
+    goal: { who: 'ginny', text: 'Yes! Right through the hoop! Listen to that crowd!' },
+    bludger: { who: 'narrator', text: 'Uh-oh! A cheeky Bludger bounces about. Boing! Boing! Duck!' },
+    snitch: { who: 'ginny', text: 'Look, a flash of gold! The Snitch! Catch it, {name}!' },
+    catch: { who: 'narrator', text: 'You zig! You zag! Up, down… and got it!' },
+    words: { who: 'ginny', text: 'Brilliant! A pie on a tray for the winner… open wide!' },
   },
 
   async play(k: Kit) {
     k.backdrop(pitch());
+    k.music('adventure');
+    const crowd = k.add(crowdArt(), { x: 0, y: 0, w: 1180, h: 820, z: 3 });
 
     const hero = k.character('hero', { x: HERO0[0], y: HERO0[1], z: 20 });
     const broom = k.add(broomArt(), { x: HERO0[0] - 20, y: HERO0[1] + BROOM_DY, w: 300, z: 19 });
-    const gBroom = k.add(broomArt(), { x: 70, y: 530, w: 300, z: 17 });
-    const ginny = k.character('ginny', { x: 100, y: 295, w: 240, z: 18 });
+    const gBroom = k.add(broomArt(), { x: 90, y: 385, w: 300, z: 17 });
+    const ginny = k.character('ginny', { x: 120, y: 150, w: 240, z: 18 });
     k.set([hero, broom, gBroom, ginny], { opacity: 0 });
 
     const rig = [hero, broom];
     const flyTo = (x: number, y: number, secs: number, ease = 'sine.inOut') =>
       k.all(...rig.map((e) => k.to(e, secs, { x: x - HERO0[0], y: y - HERO0[1], ease })));
 
-    // Everyone zooms in through the clouds.
+    // Everyone zooms in, the hero bursting through a cloud.
+    const cloud = k.picture('cloud', { x: 560, y: 90, w: 220, z: 21 });
     broomZoom();
     k.sfx.whoosh();
     await k.all(k.enter(ginny, 'left', 0.9), k.enter(gBroom, 'left', 0.9), k.enter(hero, 'left', 1.1), k.enter(broom, 'left', 1.1));
-    k.float(ginny, 6, 1.4);
+    for (const e of [hero, broom, ginny, gBroom]) {
+      void k.to(e, 1.3, { rotation: 3, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    }
+    k.puff(660, 190, 90, C.white);
+    k.sfx.whoosh();
+    k.vanish(cloud, 0.3);
+    const cloud2 = k.picture('cloud', { x: 40, y: 30, w: 160, z: 8 });
+    k.set(cloud2, { opacity: 0 });
+    void k.appear(cloud2, 0.4);
     await k.say('zoom');
 
-    // Ginny throws the Quaffle through the hoop.
-    await k.say('score', ginny);
-    const q = k.add(quaffleArt(), { x: 300, y: 370, w: 54, z: 25 });
+    // Ginny winds back and throws the Quaffle through the hoop.
+    void k.say('score', ginny);
+    await k.to(ginny, 0.3, { rotation: -10 });
+    const q = k.add(quaffleArt(), { x: 330, y: 260, w: 54, z: 25 });
+    await k.to(ginny, 0.15, { rotation: 6 });
     k.fx.whizz();
+    void k.camera({ zoom: 1.4, x: 950, y: 300 }, 1);
     await k.all(
-      k.to(q, 1.0, { x: 1030 - 27 - 300, ease: 'none' }),
-      k.to(q, 1.0, { y: 250 - 27 - 370, ease: 'power1.out' }),
+      k.to(q, 1.4, { x: 1003 - 330, ease: 'none' }),
+      k.to(q, 1.4, { y: 223 - 260, ease: 'power1.out' }),
     );
     goalHorn();
     crowdCheer();
-    k.sparkle(1030, 252, 16, 120);
+    void k.hop(crowd, 10, 2);
+    k.sparkle(1030, 252, 20, 140);
     void k.to(q, 0.6, { y: 460, ease: 'power2.in' }).then(() => k.vanish(q, 0.2));
     void k.hop(hero, 30, 1);
-    await k.say('goal');
+    await k.say('goal', ginny);
+    await k.camera({}, 1);
 
-    // A cheeky Bludger bounces about.
+    // A cheeky Bludger bounces about; a leaf drifts down.
+    const leaf = k.picture('leaf', { x: 1180, y: 200, w: 90, z: 8 });
+    void k.to(leaf, 4, { x: 140 - 1180, y: 400, rotation: 540, ease: 'sine.inOut' });
     const bl = k.add(bludgerArt(), { x: 560, y: 80, w: 110, z: 26 });
     k.set(bl, { opacity: 0 });
     await k.appear(bl, 0.2);
+    k.fx.uhoh();
+    void k.say('bludger');
+    await k.pop(bl, 1.2);
     for (const [x, y] of [[250, 380], [600, 170], [880, 400], [420, 260]] as Pt[]) {
       k.fx.boing();
       await k.all(k.to(bl, 0.45, { x: x - 560, y: y - 80, rotation: x, ease: 'power1.inOut' }), k.wait(100));
       k.puff(x + 55, y + 100, 40, C.white);
-      if (x === 880) void k.hop(hero, 36, 1);
+      if (x === 880) {
+        await k.to(hero, 0.15, { rotation: -12 });
+        void k.to(hero, 0.3, { rotation: 0 });
+      }
     }
-    void k.say('bludger');
-    await k.wait(1400);
+    await k.wait(900);
     k.fx.pop();
     await k.to(bl, 0.5, { x: 1300, y: -200, ease: 'power2.in' });
     k.remove(bl);
 
     // The Snitch flutters by and you chase it, zig-zag.
     const S: Pt[] = [[800, 230], [560, 170], [820, 330], [520, 250], [700, 300]];
-    const sn = k.add(snitchArt(), { x: 1100, y: 60, w: 120, z: 22 });
+    const sn = k.add(snitchArt(), { x: 1100, y: 110, w: 120, z: 22 });
     k.set(sn, { opacity: 0 });
     snitchBuzz();
     await k.appear(sn, 0.3);
@@ -222,40 +261,48 @@ export default defineStory({
     await k.say('snitch', ginny);
 
     void k.say('catch');
+    void k.camera({ zoom: 1.3, x: 640, y: 300 }, 1.2);
     broomZoom();
     for (const [i, [sx, sy]] of S.entries()) {
       if (i % 2 === 0) snitchBuzz();
       await k.all(
-        k.to(sn, 0.7, { x: sx - 1100, y: sy - 60, ease: 'power1.inOut' }),
+        k.to(sn, 0.7, { x: sx - 1100, y: sy - 110, ease: 'power1.inOut' }),
         k.wait(180).then(() => flyTo(sx - 200, sy - 110, 0.62)),
       );
     }
     // Got it!
+    k.music('triumph');
     k.fx.pop();
+    k.fx.twinkle();
     await k.to(sn, 0.25, { scale: 0.7, ease: 'back.out(2)' });
     k.sparkle(S[4][0] + 60, S[4][1] + 40, 14, 110);
     await k.hop(hero, 34, 2);
 
-    // The crowd cheers, the words wave, Ginny: "Brilliant!"
+    // The tableau: a pie on a tray, open wide!
+    void k.camera({}, 1.4);
     crowdCheer();
-    k.fx.jingle();
+    void k.hop(crowd, 10, 2);
     k.confetti(32);
-    const pics = WORDS.map(([w, x, y]) => {
-      const p = k.picture(w, { x, y, w: 130, z: 30 });
-      k.set(p, { opacity: 0 });
-      return p;
-    });
-    const popWords = async () => {
-      for (const [i, p] of pics.entries()) {
-        k.fx.pop();
-        await k.appear(p, 0.25);
-        k.float(p, 6, 1.5 + i * 0.15);
-        await k.wait(260);
-      }
-    };
-    await k.all(k.say('words'), popWords());
-    await k.all(k.say('brill', ginny), k.hop(ginny, 40, 2));
+    const tray = k.picture('tray', { x: 440, y: 600, w: 170, z: 30 });
+    const pie = k.picture('pie', { x: 470, y: 560, w: 120, z: 31 });
+    const mouth = k.picture('mouth', { x: 590, y: 380, w: 110, z: 30 });
+    k.set([tray, pie, mouth], { opacity: 0 });
+    void k.say('words', ginny);
+    k.fx.pop();
+    void k.appear(tray, 0.3);
+    await k.appear(pie, 0.3);
+    await k.all(k.to(tray, 0.8, { y: 430 - 600, ease: 'power2.out' }), k.to(pie, 0.8, { y: 360 - 560, ease: 'power2.out' }));
+    k.fx.pop();
+    await k.appear(mouth, 0.25);
+    for (let i = 0; i < 2; i++) {
+      await k.to(mouth, 0.15, { scaleY: 0.6 });
+      await k.to(mouth, 0.15, { scaleY: 1 });
+    }
+    munch();
+    k.vanish(pie, 0.2);
+    k.fx.jingle();
+    void k.hop(ginny, 40, 2);
     k.sparkle(600, 250, 16, 240);
-    await k.wait(900);
+    await k.wait(1500);
   },
 });

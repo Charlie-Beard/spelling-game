@@ -108,8 +108,8 @@ function throneRoom(): string {
     // candles on the floor and ledges
     ...candle(150, 540, 60),
     ...candle(190, 556, 44),
-    ...candle(640, 470, 36),
     ...candle(1010, 596, 44),
+    ...candle(1105, 560, 40),
   ]);
 }
 
@@ -124,6 +124,16 @@ function coilArt(): string {
     bands.push(ink([[cx - rx * 0.6, cy - 4], [cx - rx * 0.2, cy + 2], [cx + rx * 0.2, cy - 3], [cx + rx * 0.6, cy + 2]], { width: 3, color: C.greenDeep }));
   });
   return svg({ w: 300, h: 160, name: 'b6c4-coil', label: 'a big coil of snake' }, bands);
+}
+
+/** A sleepy snake head with closed eyes, 120 × 80. */
+function sleepyHeadArt(): string {
+  return svg({ w: 120, h: 80, name: 'b6c4-head', label: 'a sleeping snake head' }, [
+    piece(ellipse(60, 44, 54, 32), C.green),
+    ink([[32, 38], [42, 44], [52, 38]], { width: 3, color: C.ink }),
+    ink([[68, 38], [78, 44], [88, 38]], { width: 3, color: C.ink }),
+    ink([[46, 58], [60, 64], [74, 58]], { width: 3, color: C.ink }),
+  ]);
 }
 
 /** A sleepy "z". */
@@ -154,37 +164,48 @@ function sway(k: Kit, el: HTMLElement, amount: number, period: number): void {
 // -------------------------------------------------------------------- story
 
 const NAG = { x: 480, y: 300, w: 300 };
-const PIC_W = 130;
-const WORDS: Array<[string, number, number]> = [
-  ['skull', 150, 40],
-  ['crow', 340, 20],
-  ['flame', 535, 40],
-  ['throne', 725, 20],
-  ['spike', 920, 40],
+const WORDS: Array<[string, number, number, number]> = [
+  ['skull', 390, 545, 90],
+  ['crow', 870, -10, 110],
+  ['flame', 340, 170, 90],
+  ['throne', 640, 30, 120],
+  ['spike', 800, 40, 120],
 ];
 
 export default defineStory({
   lines: {
-    enter: { who: 'narrator', text: 'You creep past a skull, a crow and a flame, into the spiky throne room.' },
-    hiss: { who: 'nagini', text: 'Well, well… a little visitor! Who dares creep in here?' },
+    enter: { who: 'narrator', text: 'Shh… You creep past a skull, a crow and a flame. Tiptoe, tiptoe…' },
+    hiss: { who: 'nagini', text: 'Sssso! A little visitor… who dares creep into my throne room?' },
     lull: { who: 'narrator', text: 'Hedwig hoots a soft, soft lullaby… and Nagini’s eyes go droopy.' },
-    sleepy: { who: 'nagini', text: 'Oh… so sleepy… so cosy… ahh…' },
-    snore: { who: 'narrator', text: 'She curls up in a big coil. Snore! Fast asleep, and not a bit hurt.' },
-    found: { who: 'narrator', text: 'Look! A Horcrux glows on her. You tiptoe away, quiet as a mouse.' },
+    sleepy: { who: 'nagini', text: 'Oh… sssso sleepy… sssso cosy… just a little nap… ahh…' },
+    snore: { who: 'narrator', text: 'She curls up in a big coil. Fast asleep, and not a bit hurt.' },
+    found: { who: 'narrator', text: 'Look! The Horcrux glows gold. Shh, {name}… tiptoe away, quiet as a mouse!' },
   },
 
   async play(k) {
     k.backdrop(throneRoom());
+    k.music('sneaky');
+    k.ambient('dust', { count: 10 });
+    const dim = k.dim(0.4);
+    k.light(150, 520, 90, { color: C.candle, flicker: true });
+    k.light(1010, 580, 90, { color: C.candle, flicker: true });
+    k.light(385, 215, 130, { color: C.orange, flicker: true });
+    void k.camera({ zoom: 1.35, x: 330, y: 400 }, 0);
     const hero = k.character('hero', { x: 80, y: 345, z: 20 });
-    const hedwig = k.character('hedwig', { x: 220, y: 90, w: 150, z: 22 });
+    const hedwig = k.character('hedwig', { x: 230, y: 110, w: 150, z: 22 });
     const nagini = k.character('nagini', { ...NAG, z: 12 });
     k.set([hero, hedwig, nagini], { opacity: 0 });
     k.set(nagini, { x: 400 });
     k.float(hedwig, 8, 1.8);
 
     // The five words hang over the room.
-    const pics = WORDS.map(([w, x, y]) => {
-      const p = k.picture(w, { x, y, w: PIC_W, z: 30 });
+    const pics = WORDS.slice(0, 3).map(([w, x, y, pw]) => {
+      const p = k.picture(w, { x, y, w: pw, z: 30 });
+      k.set(p, { opacity: 0 });
+      return p;
+    });
+    const lateWords = WORDS.slice(3).map(([w, x, y, pw]) => {
+      const p = k.picture(w, { x, y, w: pw, z: 30 });
       k.set(p, { opacity: 0 });
       return p;
     });
@@ -199,14 +220,16 @@ export default defineStory({
     };
 
     // You creep in.
-    await k.wait(500);
+    await k.wait(300);
     k.sfx.ominous();
     k.fx.sneak();
+    k.fx.patter(4, 0.25);
     await k.enter(hero, 'left', 1.2);
     await k.all(k.say('enter'), popWords());
 
     // Nagini slithers out, swaying and hissing.
     hiss(1.4);
+    void k.camera({}, 1.6);
     k.set(nagini, { opacity: 1 });
     await k.to(nagini, 1.4, { x: 0, ease: 'sine.out' });
     sway(k, nagini, 5, 0.7);
@@ -215,12 +238,15 @@ export default defineStory({
 
     // Hedwig hoots a lullaby; notes float from her.
     k.sfx.hoot();
+    k.light(300, 170, 120, { color: C.cream, strength: 0.3 });
     await k.enter(hedwig, 'top', 0.8);
     lullaby();
+    k.music('dreamy');
+    void k.wait(2000).then(() => k.sfx.hoot());
     const notes: HTMLElement[] = [];
     const lines = k.say('lull', hedwig);
     for (let i = 0; i < 4; i++) {
-      const n = k.add(noteArt(), { x: 300 + i * 20, y: 190, w: 38, z: 25 });
+      const n = k.add(noteArt(), { x: 300 + i * 20, y: 210, w: 38, z: 25 });
       notes.push(n);
       void k.to(n, 2.4, { x: 220 + i * 50, y: -40 + i * 30, rotation: i % 2 ? 14 : -14, ease: 'sine.inOut' });
       void k.fade(n, 0, 2.6);
@@ -232,6 +258,7 @@ export default defineStory({
     // Nagini yawns and gets sleepy.
     gsap.killTweensOf(nagini);
     yawn();
+    void k.camera({ zoom: 1.4, x: 620, y: 420 }, 1.2);
     await k.all(
       k.to(nagini, 1.2, { rotation: 6, scaleY: 0.92, ease: 'sine.inOut' }),
       k.say('sleepy', nagini),
@@ -241,10 +268,10 @@ export default defineStory({
     k.fx.poof();
     const coil = k.add(coilArt(), { x: 480, y: 470, w: 330, z: 13 });
     k.set(coil, { opacity: 0 });
-    await k.all(
-      k.to(nagini, 0.9, { y: 70, rotation: 14, scale: 0.85, ease: 'power2.inOut' }),
-      k.appear(coil, 0.6),
-    );
+    const head = k.add(sleepyHeadArt(), { x: 560, y: 450, w: 110, z: 14 });
+    k.set(head, { opacity: 0 });
+    await k.all(k.fade(nagini, 0, 0.8), k.appear(coil, 0.6), k.appear(head, 0.6));
+    k.float(head, 3, 2.4);
     k.puff(640, 560, 120, C.stoneLight);
 
     // Snore!
@@ -262,13 +289,20 @@ export default defineStory({
     zs.forEach((z) => k.remove(z));
 
     // The Horcrux glows on her coil.
+    k.music('magic');
     k.sfx.reveal();
+    k.sfx.shield();
     void k.glow(C.goldLight, 0.4, 1.6);
-    const horcrux = k.horcrux('nagini', { x: 830, y: 400, w: 190, z: 28 });
-    await k.appear(horcrux, 0.5);
+    k.light(600, 480, 240, { color: C.goldLight, strength: 0.55 });
+    void k.fade(dim, 0.25, 1.2);
+    const horcrux = k.horcrux('nagini', { x: 545, y: 330, w: 180, z: 28 });
+    k.set(horcrux, { opacity: 0 });
+    void k.to(horcrux, 0.8, { y: 230, ease: 'sine.out' });
+    await k.appear(horcrux, 0.8);
     k.float(horcrux, 8, 1.5);
-    k.sparkle(925, 480, 16, 160);
+    k.sparkle(635, 320, 16, 160);
     k.sfx.gem();
+    void k.camera({}, 1.5);
     await k.say('found');
 
     // Tiptoe off, happy ending.
@@ -276,7 +310,13 @@ export default defineStory({
     k.fx.jingle();
     k.confetti(30);
     k.sparkle(670, 400, 14, 200);
-    await k.all(k.pop(horcrux, 1.15), k.exit(hero, 'left', 2.2));
-    await k.wait(800);
+    for (const p of lateWords) {
+      k.fx.pop();
+      await k.appear(p, 0.3);
+      k.float(p, 6, 1.8);
+    }
+    await k.all(k.pop(horcrux, 1.15), k.walk(hero, -120, 1.4, 4));
+    await k.hop(hero, 30, 1);
+    await k.wait(1500);
   },
 });
