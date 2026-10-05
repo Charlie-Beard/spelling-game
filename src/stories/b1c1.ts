@@ -32,6 +32,18 @@ function squeak(count = 1, gap = 0.16, muffled = false): void {
   }
 }
 
+/** A low, sleepy cat purr. */
+function purr(): void {
+  tone(55, now(), { wave: 'sawtooth', peak: 0.035, attack: 0.4, decay: 1.8, lowpass: 250, vibrato: [22, 6] });
+}
+
+/** A little "mrrow" as the cat wakes. */
+function mrrow(): void {
+  const t = now();
+  tone(520, t, { wave: 'triangle', peak: 0.1, attack: 0.03, decay: 0.3, glideTo: 820, vibrato: [7, 20], lowpass: 2400 });
+  tone(800, t + 0.28, { wave: 'triangle', peak: 0.1, attack: 0.03, decay: 0.3, glideTo: 480, vibrato: [7, 20], lowpass: 2400 });
+}
+
 /** Soft, leathery bat-wing flaps. */
 function flaps(count = 4, gap = 0.18): void {
   const t = now();
@@ -259,17 +271,17 @@ interface Prop {
 /** The loop round the mat that the cat chases the rat along. */
 const LOOP = (a: number): Pt => [600 + 180 * Math.cos(a), 614 + 32 * Math.sin(a)];
 /** Where everyone ends up in a heap. */
-const HEAP = { cat: [680, 642], rat: [684, 548], bat: [676, 488], hat: [688, 452] } as const;
+const HEAP = { cat: [610, 642], rat: [614, 548], bat: [606, 488], hat: [618, 452] } as const;
 
 export default defineStory({
   lines: {
-    hello: { who: 'hagrid', text: 'Come in, come in! Sit by the fire. Mind the cat on the mat!' },
-    wiggle: { who: 'hagrid', text: 'Eh? What’s that? My hat’s gone all wiggly…' },
-    rat: { who: 'narrator', text: 'A rat pops out of Hagrid’s hat… and the cat wakes up!' },
-    chase: { who: 'narrator', text: 'The cat chases the rat round and round the mat!' },
-    heap: { who: 'hagrid', text: 'Blimey! A cat, a rat, a bat… and my hat! What a heap!' },
-    letter: { who: 'hagrid', text: 'Now then, {name}… this is for you. Your Hogwarts letter!' },
-    end: { who: 'narrator', text: 'You’re off to Hogwarts! But first… to Diagon Alley!' },
+    hello: { who: 'hagrid', text: 'Come in, come in! Sit by the fire… and mind the cat on the mat!' },
+    wiggle: { who: 'hagrid', text: 'Eh? What’s that? My hat’s gone all… wiggly!' },
+    rat: { who: 'narrator', text: 'Pop! A rat jumps out of Hagrid’s hat… and the cat wakes up!' },
+    chase: { who: 'narrator', text: 'Round and round the mat… the cat chases the rat!' },
+    heap: { who: 'hagrid', text: 'Ho ho! A cat, a rat, a bat… and my hat! What a heap!' },
+    letter: { who: 'hagrid', text: 'Now then… this is for you. Your very own Hogwarts letter!' },
+    end: { who: 'hagrid', text: 'You’re a wizard, {name}! Tomorrow, we’re off to Diagon Alley!' },
   },
 
   async play(k) {
@@ -277,6 +289,11 @@ export default defineStory({
 
     k.backdrop(hut());
     k.add(floorFront(), { x: 0, y: 660, w: 1180, h: 160, z: 30, still: true });
+    k.music('cosy');
+    k.dim(0.2);
+    k.light(520, 470, 380, { color: C.candle, strength: 0.5, flicker: true });
+    k.light(160, 230, 130, { color: C.sky, strength: 0.25 });
+    k.ambient('embers', { area: [400, 300, 240, 260], count: 12, z: 36 });
     const fire = k.add(fireArt(), { x: 430, y: 390, w: 180, h: 150, z: 4 });
     k.set(fire, { transformOrigin: '50% 100%' });
     k.picture('mat', { x: 400, y: 350, w: 400, z: 6, still: true });
@@ -332,7 +349,7 @@ export default defineStory({
     k.set([hagrid, hatEl, hero, ratEl], { opacity: 0 });
 
     let hatOn = true;
-    const hagridSays = async (key: 'hello' | 'wiggle' | 'heap' | 'letter'): Promise<void> => {
+    const hagridSays = async (key: 'hello' | 'wiggle' | 'heap' | 'letter' | 'end'): Promise<void> => {
       const stop = hatOn ? k.talk(hatEl) : () => {};
       await k.say(key, hagrid);
       stop();
@@ -353,7 +370,31 @@ export default defineStory({
         }
       })();
     }
-    await k.wait(700);
+    // Asleep: the cat breathes and purrs, the bat sways.
+    let asleep = true;
+    void (async () => {
+      while (asleep) {
+        await k.to(catEl, 1.1, { scaleY: 1.03, transformOrigin: '50% 88%', ease: 'sine.inOut' });
+        if (!asleep) break;
+        await k.to(catEl, 1.1, { scaleY: 1, ease: 'sine.inOut' });
+      }
+    })();
+    void (async () => {
+      while (asleep) {
+        purr();
+        await k.wait(2200);
+      }
+    })();
+    if (!k.calm) {
+      void (async () => {
+        while (asleep) {
+          await k.to(batEl, 1.4, { rotation: 176, ease: 'sine.inOut' });
+          if (!asleep) break;
+          await k.to(batEl, 1.4, { rotation: 184, ease: 'sine.inOut' });
+        }
+      })();
+    }
+    await k.wait(400);
 
     // ---- Hagrid stomps in, hat and all; you come in from the cold.
     k.fx.stomp(3, 0.3);
@@ -370,6 +411,7 @@ export default defineStory({
     await hagridSays('hello');
 
     // ---- Something is wriggling under the hat…
+    void k.camera({ zoom: 1.4, x: 920, y: 300 }, 1.0);
     k.set(hatEl, { transformOrigin: '50% 75%' });
     squeak(2, 0.3, true);
     for (const [rot, dy] of [[7, -8], [-6, 0], [6, -10], [-5, 0], [0, 0]]) await k.to(hatEl, 0.12, { rotation: rot, y: dy, ease: 'none' });
@@ -381,7 +423,7 @@ export default defineStory({
     k.set(ratEl, { opacity: 1, y: 34 });
     k.fx.pop();
     squeak(2);
-    await k.all(k.to(hatEl, 0.3, { y: -90, rotation: -14, ease: 'back.out(2)' }), k.to(ratEl, 0.3, { y: 0, ease: 'back.out(2)' }));
+    await k.all(k.to(hatEl, 0.3, { y: -60, rotation: -14, ease: 'back.out(2)' }), k.to(ratEl, 0.3, { y: 0, ease: 'back.out(2)' }));
     await k.pop(ratEl, 1.15);
 
     await k.all(
@@ -391,13 +433,17 @@ export default defineStory({
         // The rat leaps down onto the mat, and the hat drops back on.
         k.face(ratEl, true);
         k.fx.whizz();
+        k.music('adventure');
+        void k.camera({ zoom: 1.25, x: 620, y: 560 }, 0.9);
         ratEl.style.zIndex = '22';
         await k.all(arc(rat, LOOP(0)[0], LOOP(0)[1], 0.7, 120), k.wait(250).then(() => k.to(hatEl, 0.35, { y: 0, rotation: 0, ease: 'bounce.out' })));
         k.fx.thud();
         k.set(hatEl, { transformOrigin: ON_HEAD });
         await k.wait(300);
         // The cat wakes up with a start.
+        asleep = false;
         k.remove(lids);
+        mrrow();
         k.fx.boing();
         await k.all(k.pop(catEl, 1.18), k.hop(catEl, 30));
       })(),
@@ -408,9 +454,11 @@ export default defineStory({
       k.say('chase'),
       (async () => {
         k.fx.whizz();
+        await k.to(catEl, 0.12, { scaleY: 0.85, scaleX: 1.1, transformOrigin: '50% 88%' });
+        void k.to(catEl, 0.15, { scaleX: 1, scaleY: 1 });
         await arc(cat, LOOP(-1.3)[0], LOOP(-1.3)[1], 0.4, 40, { rotation: 10 });
         const STEP = Math.PI / 6;
-        for (let i = 1; i <= 18; i++) {
+        for (let i = 1; i <= 15; i++) {
           const ra = i * STEP;
           const ca = ra - 1.3;
           const [rx, ry] = LOOP(ra);
@@ -429,9 +477,11 @@ export default defineStory({
     );
 
     // ---- The bat wakes up and flaps down from the rafters…
+    void k.camera({}, 0.8);
+    await k.to(batEl, 0.1, { rotation: 180 });
     await k.shake(batEl, 4, 1);
     batEl.style.zIndex = '24';
-    await k.all(flap(5), go(bat, 640, 250, 1, { rotation: 360, ease: 'power1.inOut' }));
+    await k.all(flap(5), go(bat, 640, 250, 0.8, { rotation: 360, ease: 'power1.inOut' }));
     // … swoops at Hagrid's head…
     await k.all(flap(3), go(bat, 900, 210, 0.6, { rotation: 380, ease: 'power2.in' }));
     // … and knocks off his hat!
@@ -440,7 +490,7 @@ export default defineStory({
     hatEl.style.zIndex = '25';
     k.fx.boing();
     squeak(2);
-    await k.all(go(hat, 860, 190, 0.5, { rotation: -200, ease: 'power2.out' }), k.shake(hagrid, 6, 1), go(bat, 820, 300, 0.5, { rotation: 330 }));
+    await k.all(go(hat, 840, 300, 0.5, { rotation: -200, ease: 'power2.out' }), k.shake(hagrid, 6, 1), go(bat, 820, 300, 0.5, { rotation: 330 }));
 
     // Everyone tumbles into one big heap.
     k.fx.whizz();
@@ -453,11 +503,12 @@ export default defineStory({
       k.wait(700).then(() => go(hat, HEAP.hat[0], HEAP.hat[1], 0.6, { rotation: -374, ease: 'power2.in' }, 0.62)),
     );
     k.fx.thud();
-    k.puff(680, 600, 230);
+    void k.to(catEl, 0.12, { scaleY: 0.85, scaleX: 1.12, transformOrigin: '50% 88%' }).then(() => k.to(catEl, 0.15, { scaleX: 1, scaleY: 1, ease: 'back.out(3)' }));
+    k.puff(620, 600, 230);
     void wings(-18, 0.2);
     await k.quake(5);
-    k.sparkle(684, 420, 10, 110);
-    await k.wait(400);
+    k.sparkle(614, 420, 10, 110);
+    await k.wait(250);
 
     // ---- Hagrid laughs and laughs.
     bellyLaugh();
@@ -466,23 +517,25 @@ export default defineStory({
 
     // ---- Your Hogwarts letter!
     const letter = k.add(letterArt(), { x: 860, y: 520, w: 150, h: 105, z: 40, still: true });
+    k.music('magic');
     k.fx.twinkle();
     await k.appear(letter, 0.45);
     await hagridSays('letter');
-    k.fx.whizz();
+    await k.hop(letter, 20);
+    k.sfx.whoosh();
     await k.to(letter, 0.45, { x: -340, y: -130, rotation: -20, ease: 'power2.out' });
-    await k.to(letter, 0.45, { x: -680, y: 40, rotation: -6, scale: 1.25, ease: 'power2.in' });
+    await k.to(letter, 0.45, { x: -680, y: 0, rotation: -6, scale: 1.25, ease: 'power2.in' });
     letterChime();
-    k.sparkle(255, 612, 18, 180);
+    k.sparkle(255, 572, 18, 180);
     await k.all(k.glow(C.candle, 0.35, 1.4), k.all(k.hop(hero, 40), k.hop(letter, 40)));
-    await k.say('end');
+    await hagridSays('end');
 
     // ---- Hooray!
     k.fx.jingle();
     k.confetti(36);
     void k.pop(hatEl, 1.12);
     await k.all(k.all(k.hop(hero, 50, 2), k.hop(letter, 50, 2)), k.pop(hagrid, 1.06));
-    await k.wait(1400);
+    await k.wait(1600);
     done = true;
   },
 });

@@ -53,6 +53,25 @@ function toot(): void {
   }
 }
 
+/** The shop door bell: two bright little notes. */
+function shopBell(): void {
+  const t = now();
+  bell(NOTE.E6, t, 0.06, 0.8);
+  bell(NOTE.C6, t + 0.12, 0.05, 0.9);
+}
+
+/** A wand flick through the air. */
+function swish(): void {
+  noiseBurst(now(), { freq: 1800, q: 1.2, peak: 0.06, attack: 0.01, decay: 0.12, sweepTo: 600 });
+}
+
+/** A soft steam puff from the little engine. */
+function chuff(): void {
+  const t = now();
+  noiseBurst(t, { freq: 650, q: 0.8, peak: 0.1, decay: 0.17, sweepTo: 280 });
+  noiseBurst(t + 0.24, { freq: 650, q: 0.8, peak: 0.05, decay: 0.14, sweepTo: 280 });
+}
+
 // --------------------------------------------------------------------- art
 
 const WALL = '#4e3a2e';
@@ -211,19 +230,25 @@ const MOUTH: Pt = [490, 530];
 
 export default defineStory({
   lines: {
-    hello: { who: 'ollivander', text: 'Welcome, {name}! Let’s find your wand.' },
-    tryOne: { who: 'ollivander', text: 'Try this one. Give it a wave!' },
-    oops: { who: 'narrator', text: 'Oh no! Boxes tumble, the pan clangs, and a cap lands on Mr Ollivander!' },
-    notThat: { who: 'ollivander', text: 'Hmm… not that one. Try this!' },
-    glow: { who: 'narrator', text: 'A warm golden glow! Your map, cap, pan and fan hop back in the bag.' },
-    chooses: { who: 'ollivander', text: 'Curious! The wand chooses the wizard!' },
-    end: { who: 'narrator', text: 'Your bag is packed. Follow the map… to the Hogwarts Express!' },
+    hello: { who: 'ollivander', text: 'Ah… {name}! I wondered when I’d be seeing you. Let’s find your wand!' },
+    tryOne: { who: 'ollivander', text: 'Try this one. Go on… give it a wave!' },
+    oops: { who: 'narrator', text: 'Crash! The pan clangs, the fan spins… and the cap lands on Mr Ollivander!' },
+    notThat: { who: 'ollivander', text: 'Oh dear, oh dear… not that one! Try this!' },
+    glow: { who: 'narrator', text: 'A warm golden glow! The map, cap, pan and fan hop back in the bag.' },
+    chooses: { who: 'ollivander', text: 'Curious… very curious! The wand has chosen you!' },
+    end: { who: 'narrator', text: 'Your bag is packed! Follow the map… to the Hogwarts Express!' },
   },
 
   async play(k) {
     k.backdrop(shop());
     k.add(floorFront(), { x: 0, y: 660, w: 1180, h: 160, z: 30, still: true });
     k.add(counter(), { x: 690, y: 390, w: 500, h: 300, z: 20, still: true });
+
+    k.dim(0.18);
+    k.light(470, 140, 200, { color: C.candle, strength: 0.45, flicker: true });
+    k.light(240, 235, 220, { color: C.cream, strength: 0.3 });
+    k.ambient('dust', { area: [360, 90, 300, 420], count: 16, z: 34 });
+    k.music('cosy');
 
     // A stack of wand boxes on the end of the counter.
     const boxes = Array.from({ length: 6 }, (_, i) => {
@@ -280,6 +305,7 @@ export default defineStory({
 
     // ---- Into the shop.
     k.fx.creak();
+    shopBell();
     await k.all(k.enter(olli, 'right', 0.8), k.wait(200).then(() => k.enter(hero, 'left', 0.8)));
     k.fx.patter(4);
     await k.hop(hero, 30);
@@ -290,9 +316,24 @@ export default defineStory({
     await k.say('tryOne', olli);
 
     // A wild wave!
+    k.music('adventure');
     k.fx.spell();
-    for (const rot of [-14, 46, -6, 34, 18]) await k.to(wild, 0.12, { rotation: rot, ease: 'none' });
-    await k.beam(TIP, [MOUTH[0], MOUTH[1] - 10], C.orange, 0.3);
+    await k.to(wild, 0.25, { rotation: -34, ease: 'power2.out' });
+    await k.wait(150);
+    for (const rot of [-14, 46, -6, 34, 18]) {
+      swish();
+      await k.to(wild, 0.12, { rotation: rot, ease: 'none' });
+    }
+    await k.all(k.beam(TIP, [MOUTH[0], MOUTH[1] - 10], C.orange, 0.3), k.beam(TIP, [740, 300], C.orange, 0.3));
+    let hover = true;
+    const bob = async (): Promise<void> => {
+      while (hover) {
+        await k.to([map, fan], 0.9, { y: '-=8', ease: 'sine.inOut' });
+        if (!hover) break;
+        await k.to([map, fan], 0.9, { y: '+=8', ease: 'sine.inOut' });
+      }
+    };
+    void k.wait(1200).then(bob);
     await k.shake(bag, 8, 1);
     k.fx.poof();
     k.puff(MOUTH[0], MOUTH[1], 150);
@@ -325,12 +366,14 @@ export default defineStory({
       }),
       k.wait(800).then(async () => {
         k.fx.whizz();
-        await fling(cap, 943, 212, -10, 1);
+        await fling(cap, 943, 212, -10, 0.8);
         k.fx.boing();
         await k.pop(cap, 1.12);
+        void k.shake(olli, 3, 1);
       }),
     );
-    await k.shake(hero, 8, 2);
+    await k.shake(hero, 8, 1);
+    await k.camera({ zoom: 1.4, x: 900, y: 300 }, 0.9);
     await k.say('oops');
     // Mr Ollivander talks with the cap still on his head.
     const stopCap = k.talk(cap);
@@ -341,12 +384,17 @@ export default defineStory({
     k.fx.fizzle();
     k.puff(TIP[0] - 30, TIP[1] + 60, 130);
     await k.vanish(wild, 0.4);
+    hover = false;
+    k.music('magic');
+    void k.camera({ zoom: 1.3, x: 360, y: 470 }, 1.0);
     const good = await giveWand(true, boxes[4]);
-    await k.wait(300);
+    await k.wait(150);
 
     // It chooses you: a slow, warm wave.
     chosen();
-    void k.glow(C.goldLight, 0.4, 1.8);
+    const wl = k.light(TIP[0] - 20, TIP[1] - 60, 230, { color: C.goldLight, strength: 0 });
+    void k.fade(wl, 0.6, 0.6).then(() => k.fade(wl, 0.25, 1));
+    void k.glow(C.goldLight, 0.15, 1.2);
     await k.to(good, 0.6, { rotation: -4, ease: 'sine.inOut' });
     k.sparkle(TIP[0] - 50, TIP[1] - 20, 18, 200);
     await k.to(good, 0.4, { rotation: 18, ease: 'sine.inOut' });
@@ -369,6 +417,7 @@ export default defineStory({
     k.fx.pop();
     await k.pop(bag, 1.1);
     await k.say('glow');
+    await k.camera({}, 1.2);
 
     k.fx.boing();
     await k.all(k.hop(hero, 40), k.pop(olli, 1.06));
@@ -377,20 +426,27 @@ export default defineStory({
     // ---- The map shows the way.
     map.style.zIndex = '60';
     k.fx.whizz();
+    k.sfx.page();
     // Centred in the gap between the hero and the box stack (centre x 540).
     await k.to(map, 0.8, { x: 540 - MOUTH[0], y: 300 - MOUTH[1], scale: 2.2, rotation: 0, ease: 'back.out(1.4)' });
-    const train = k.add(engine(), { x: 570, y: 306, w: 84, h: 56, z: 61 });
+    const train = k.add(engine(), { x: 420, y: 306, w: 84, h: 56, z: 61 });
     toot();
     await k.appear(train, 0.35);
-    k.puff(602, 300, 70, C.white);
+    k.puff(452, 300, 70, C.white);
     await k.say('end');
 
     // ---- Hooray!
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(540, 300, 16, 220);
-    void k.walk(train, 24, 0.6, 2);
+    void k.walk(train, 150, 1.8, 6);
+    [0, 600, 1200].forEach((d, i) =>
+      void k.wait(d).then(() => {
+        chuff();
+        k.puff(450 + i * 50, 296, 50, C.white);
+      }),
+    );
     await k.all(k.hop(hero, 50, 2), k.pop(olli, 1.08));
-    await k.wait(700);
+    await k.wait(1500);
   },
 });

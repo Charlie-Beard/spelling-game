@@ -404,19 +404,25 @@ const BIRD = { x: 470, y: 70, w: 230 };
 
 export default defineStory({
   lines: {
-    creep: { who: 'narrator', text: 'Drip… drop… You creep into the Chamber of Secrets. Something is coming…' },
-    hello: { who: 'basilisk', text: 'Don’t be scared! My sunglasses keep my stare safe. Do you like my wig?' },
-    bird: { who: 'basilisk', text: 'A bird! Come back here, you noisy feather duster!' },
+    creep: { who: 'narrator', text: 'Drip… drop… You tiptoe into the Chamber of Secrets. Who lives down here?' },
+    hello: { who: 'basilisk', text: 'Hello! Don’t worry, my sunglasses keep my stare safe. Do you like my wig?' },
+    bird: { who: 'basilisk', text: 'Oi! A bird! Come back here, you noisy feather duster!' },
     knot: { who: 'narrator', text: 'Round and round the pillar… oh no! He’s tied himself in a knot!' },
-    dizzy: { who: 'basilisk', text: 'Ooh… everything is spinning… I feel all wobbly…' },
+    dizzy: { who: 'basilisk', text: 'Ooh… everything’s spinning… I feel all wibbly-wobbly…' },
     found: { who: 'narrator', text: 'Bang! Down he flops. And look, by the quill… the diary is glowing!' },
-    cheer: { who: 'fawkes', text: 'Hooray, {name}! You were so brave!' },
+    cheer: { who: 'fawkes', text: 'Hooray, {name}! You found the secret diary! You were so brave!' },
   },
 
   async play(k) {
     k.backdrop(chamber());
 
     // Props that are there from the start.
+    k.music('sneaky');
+    k.ambient('dust', { count: 10, area: [380, 40, 320, 500], z: 30 });
+    k.dim(0.3, '#0b1a14');
+    k.light(560, 180, 260, { color: '#cfe3cf', strength: 0.25 });
+    const dl = k.light(545, 430, 220, { color: C.goldLight, strength: 0.5 });
+    k.set(dl, { opacity: 0 });
     const halo = k.add(haloArt(), { x: 435, y: 330, w: 220, z: 7 });
     k.set(halo, { opacity: 0 });
     const diary = k.horcrux('diary', { x: 495, y: 400, w: 100, z: 8 });
@@ -447,28 +453,29 @@ export default defineStory({
 
     // You creep in.
     k.fx.sneak();
-    await k.enter(hero, 'left', 0.9);
-    await k.say('creep');
+    await k.all(k.enter(hero, 'left', 0.9), k.say('creep'));
 
     // The Basilisk slithers out… in sunglasses!
     k.set(snake, { opacity: 1, x: 900 });
-    await slither(k, snake, -900, 2.2, 'power1.out');
+    await slither(k, snake, -900, 1.6, 'power1.out');
     await flick(k, snake);
     void k.shake(hero, 6, 2);
-    await k.say('hello', snake);
+    void k.camera({ zoom: 1.4, x: 440, y: 470 }, 1.2);
+    await k.all(k.say('hello', snake), flick(k, snake).then(() => k.wait(900)).then(() => flick(k, snake)));
     k.fx.boing();
     await k.hop(snake, 20, 1);
 
     // Fawkes swoops in, singing.
     dripping = false;
+    k.music('adventure');
+    void k.camera({}, 0.8);
     k.set(fawkes, { opacity: 1, x: -760, y: -200, rotation: 12 });
     k.fx.whizz();
     await k.to(fawkes, 1.1, { x: 0, y: 0, rotation: 0, ease: 'power2.out' });
     fawkesSong();
     const head = snake.querySelector('[data-part="head"]');
     if (head) k.set(head, { svgOrigin: '600 150' });
-    await k.all(flap(k, fawkes, 4), head ? k.to(head, 0.4, { rotation: -14 }) : k.wait(0));
-    await k.all(k.say('bird', snake), flick(k, snake));
+    await k.all(flap(k, fawkes, 4), head ? k.to(head, 0.4, { rotation: -14 }) : k.wait(0), k.say('bird', snake), flick(k, snake));
 
     // The chase: round and round the pillar!
     // 1. Away to the left, behind you.
@@ -504,7 +511,7 @@ export default defineStory({
       snake.style.zIndex = '25';
       k.fx.whizz();
       await k.all(
-        k.to(fawkes, 1.0, { x: 500, y: -40, ease: 'power1.out' }),
+        k.to(fawkes, 1.0, { x: -40, y: -20, ease: 'power1.out' }),
         k.wait(150).then(() => slither(k, snake, 1240, 1.1, 'power1.out')),
       );
     };
@@ -524,6 +531,7 @@ export default defineStory({
       void flap(k, fawkes, 3);
     };
     await k.all(k.say('knot'), tie());
+    void k.camera({ zoom: 1.3, x: 820, y: 300 }, 1.0);
 
     // Dizzy…
     const stars = k.add(dizzyStars(), { x: COILS.x + 248, y: COILS.y + 4, w: 140, h: 140, z: 34 });
@@ -568,14 +576,19 @@ export default defineStory({
     k.fx.pop();
     void k.pop(chess, 1.08);
     void k.vanish(bang, 0.4);
-    await k.wait(200);
+    if (!k.calm) {
+      k.set([back, front], { transformOrigin: '50% 100%' });
+      gsap.to([back, front], { scaleY: 1.03, duration: 1.2, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    }
 
     // Zzz… and the diary glows.
     snore();
     const z = k.add(zzz(), { x: 960, y: 370, w: 34, z: 47 });
     void k.to(z, 2.2, { y: -90, x: 30, opacity: 0, ease: 'sine.out' });
     diaryChime();
+    k.music('triumph');
     void k.fade(halo, 1, 0.8);
+    void k.fade(dl, 1, 0.8);
     void k.glow(C.goldLight, 0.3, 1.4);
     k.sparkle(545, 440, 14, 140);
     const writing = async () => {
@@ -585,10 +598,12 @@ export default defineStory({
       }
       await k.to(quill, 0.2, { rotation: 0 });
     };
+    void k.camera({}, 1.3);
+    k.fx.patter(4, 0.3);
     await k.all(
       k.say('found'),
       k.walk(hero, 170, 1.4, 4),
-      k.wait(500).then(() => k.to(diary, 0.9, { y: -60, scale: 1.35, ease: 'sine.out' })).then(() => k.float(diary, 6, 2.4)),
+      k.wait(500).then(() => k.to(diary, 0.9, { y: -60, scale: 1.35, ease: 'sine.out' })).then(() => { k.sfx.gem(); k.float(diary, 6, 2.4); }),
       k.wait(800).then(writing),
       k.wait(400).then(() => k.to(halo, 0.9, { y: -60, ease: 'sine.out' })),
     );
@@ -596,13 +611,13 @@ export default defineStory({
     // Fawkes flies down to cheer.
     k.face(fawkes, true);
     k.fx.whizz();
-    await k.to(fawkes, 0.9, { x: 210, y: 70, ease: 'power2.out' });
+    await k.to(fawkes, 0.9, { x: -200, y: 60, ease: 'power2.out' });
     fawkesSong();
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(545, 380, 14, 180);
     await k.all(k.say('cheer', fawkes), flap(k, fawkes, 4), k.hop(hero, 50, 2));
     snore();
-    await k.wait(400);
+    await k.wait(1500);
   },
 });

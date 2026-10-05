@@ -268,17 +268,22 @@ const SOCK = { x: 724, y: 470, w: 70 };
 
 export default defineStory({
   lines: {
-    night: { who: 'narrator', text: 'Night-time at Privet Drive. Your little room is very quiet… until…' },
-    hello: { who: 'dobby', text: 'Dobby has come to warn {name}! But first… a bouncy bed!' },
-    boing: { who: 'narrator', text: 'Boing! Boing! Dobby’s big ears flap up and down!' },
+    night: { who: 'narrator', text: 'Night-time at Privet Drive. Your room is very quiet… until…' },
+    hello: { who: 'dobby', text: 'Oh! {name}! Dobby has come with a warning! But first… a bouncy bed!' },
+    boing: { who: 'dobby', text: 'Wheee! Boing! Boing! Dobby’s ears go flap, flap, flap!' },
     sock: { who: 'narrator', text: 'You click open the lock on your trunk… and pull out a sock!' },
-    free: { who: 'dobby', text: 'A sock! Master has given Dobby a sock… Dobby is free!' },
-    dance: { who: 'narrator', text: 'Dobby clicks his fingers. Pop! A chick and a duck join the happy dance!' },
-    end: { who: 'dobby', text: 'And chips for everyone! Dobby will never forget you!' },
+    free: { who: 'dobby', text: 'A sock? For Dobby? Oh… Dobby is free! Free!' },
+    dance: { who: 'dobby', text: 'Dobby clicks his fingers… pop! A chick! A duck! Everybody dance!' },
+    end: { who: 'dobby', text: 'Chips for everyone! And Dobby’s warning… be very careful this year!' },
   },
 
   async play(k) {
     k.backdrop(bedroom());
+    k.music('sneaky');
+    k.ambient('dust', { count: 16, z: 30, area: [380, 120, 460, 380] });
+    const dark = k.dim(0.3);
+    k.light(600, 150, 380, { color: C.candle, strength: 0.4, flicker: true });
+    k.light(1000, 190, 170, { color: '#cfd8ff', strength: 0.3 });
 
     const hedwig = k.character('hedwig', { x: 932, y: 210, w: 120, z: 8 });
     const hero = k.character('hero', { x: 640, y: 268, w: 270, z: 10 });
@@ -288,8 +293,8 @@ export default defineStory({
     // He has no sock yet: you give him one.
     dobby.querySelectorAll<SVGElement>('[data-part="sock"]').forEach((g) => (g.style.opacity = '0'));
     k.set(dobby, { opacity: 0, transformOrigin: '50% 100%' });
-    const chick = k.picture('chick', { x: 74, y: 382, w: 128, z: 16 });
-    const duck = k.picture('duck', { x: 432, y: 408, w: 140, z: 16, crop: '20 90 340 250' });
+    const chick = k.picture('chick', { x: 64, y: 366, w: 150, z: 16 });
+    const duck = k.picture('duck', { x: 424, y: 396, w: 160, z: 16, crop: '20 90 340 250' });
     k.set([chick, duck], { opacity: 0, transformOrigin: '50% 100%' });
 
     const bedEl = k.add(bed(), { x: 40, y: 400, w: 560, z: 20, still: true });
@@ -312,9 +317,12 @@ export default defineStory({
 
     // ---- 2. Crack! Dobby appears on the bed.
     crack();
+    k.fx.poof();
     k.puff(314, 400, 240, C.stoneLight);
     k.set(dobby, { opacity: 1, scale: 0.6 });
     await k.to(dobby, 0.25, { scale: 1, ease: 'back.out(2.4)' });
+    void k.camera({ zoom: 1.35, x: 330, y: 400 }, 1.2);
+    void k.hop(hero, 20);
     void k.shake(hero, 8, 2);
     void k.shake(hedwig, 6, 2);
     k.sparkle(314, 420, 10, 130);
@@ -322,15 +330,17 @@ export default defineStory({
     await k.say('hello', dobby);
 
     // ---- 3. Boing! Boing! Bouncing on the bed, ears flapping.
-    const told = k.say('boing');
+    const told = k.say('boing', dobby);
     for (let i = 0; i < 4; i++) await bounce(k, dobby, bedEl, 64, i % 2 ? 7 : -7);
     await told;
     await bounce(k, dobby, bedEl, 46, -5);
 
     // ---- 4. Click! Open the trunk and pull out a sock.
+    void k.camera({ zoom: 1.3, x: 740, y: 440 }, 1.0);
     const said = k.say('sock');
-    await k.wait(1100);
+    await k.wait(700);
     lockClick();
+    void k.hop(hero, 18);
     await k.shake(lock, 4, 2);
     k.fx.pop();
     // The lock falls open and drops away.
@@ -345,7 +355,9 @@ export default defineStory({
 
     // Up it flies… and lands on Dobby’s head like a hat.
     sock.style.zIndex = '30';
+    void k.camera({}, 1.0);
     k.fx.whizz();
+    void k.to(hero, 0.3, { rotation: -6 }).then(() => k.to(hero, 0.4, { rotation: 0 }));
     await arc(k, sock, DOBBY.x + HAT[0] - SOCK.x, DOBBY.y + HAT[1] - SOCK.y, 120, 0.9, 340);
     attach(dobby, sock, HAT[0], HAT[1]);
     k.set(sock, { x: 0, y: 0, rotation: -18 });
@@ -356,6 +368,9 @@ export default defineStory({
     // ---- 5. Dobby is free!
     await k.shake(dobby, 6, 2);
     await k.say('free', dobby);
+    k.music('triumph');
+    k.sfx.success();
+    void k.fade(dark, 0.12, 1.2);
     k.fx.twinkle();
     k.sparkle(314, 420, 18, 180);
     // A twirl on the spot (a flat paper turn, so he never tips over the duvet).
@@ -363,6 +378,7 @@ export default defineStory({
       k.glow(C.goldLight, 0.35, 1.2),
       (async () => {
         for (let i = 0; i < 2; i++) {
+          k.fx.twinkle();
           await k.to(dobby, 0.18, { scaleX: -1, ease: 'sine.inOut' });
           await k.to(dobby, 0.18, { scaleX: 1, ease: 'sine.inOut' });
         }
@@ -371,7 +387,7 @@ export default defineStory({
 
     // ---- 6. Snap! A chick and a duck join the happy dance.
     const danced = k.say('dance', dobby);
-    await k.wait(900);
+    await k.wait(600);
     snap();
     await k.wait(500);
     k.fx.pop();
@@ -400,13 +416,19 @@ export default defineStory({
     k.fx.pop();
     k.puff(899, 450, 120, C.goldLight);
     await k.appear(chips, 0.35);
+    k.float(chips, 4, 1.6);
+    k.sparkle(899, 430, 8, 60);
+    await k.all(k.hop(dobby, 36, 2), jig(k, chick, 24, 3), jig(k, duck, 20, 3), k.hop(hero, 30, 2));
+    // Dobby leans in with his warning.
+    void k.to(dobby, 0.3, { rotation: -8 });
+    k.fx.uhoh();
+    await k.say('end', dobby);
+    await k.to(dobby, 0.3, { rotation: 0 });
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(314, 400, 16, 170);
-    const thanks = k.say('end', dobby);
-    await k.all(k.hop(dobby, 36, 2), jig(k, chick, 24, 3), jig(k, duck, 20, 3), k.hop(hero, 30, 2));
     k.sfx.hoot();
-    await thanks;
-    await k.wait(700);
+    await k.all(k.hop(dobby, 30, 2), k.hop(hero, 30, 2), jig(k, chick, 24, 3), jig(k, duck, 20, 3));
+    await k.wait(1500);
   },
 });

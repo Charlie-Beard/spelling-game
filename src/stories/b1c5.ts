@@ -172,17 +172,23 @@ function tangle(): string {
 
 export default defineStory({
   lines: {
-    gloat: { who: 'voldemort', text: 'Ha! My ring is hidden under that rock. Nobody will ever find it!' },
+    gloat: { who: 'voldemort', text: 'Ha ha! My ring is hidden under that rock… nobody will ever find it!' },
     trap: { who: 'voldemort', text: 'And if anyone comes near, my web will catch them… and ring my bell!' },
-    tiptoe: { who: 'narrator', text: 'You tiptoe up to the old shack, as quiet as a mouse…' },
-    eek: { who: 'voldemort', text: 'Eek! A bug! Get it off! Get it off!' },
-    lift: { who: 'narrator', text: 'He’s stuck in his own web! Quick, wave your wand… up goes the rock!' },
-    cross: { who: 'voldemort', text: 'No, no, no! I’m stuck… and my silly bell will not stop jingling!' },
+    tiptoe: { who: 'narrator', text: 'Shh… you tiptoe up to the old shack, as quiet as a mouse…' },
+    eek: { who: 'voldemort', text: 'Eeek! A bug! A bug! Get it off! Get it off!' },
+    lift: { who: 'narrator', text: 'Ha! He’s stuck in his own web! Quick, wave your wand… up goes the rock!' },
+    cross: { who: 'voldemort', text: 'No, no, no! I’m stuck… and my silly bell won’t stop jingling!' },
     cheer: { who: 'narrator', text: 'Hooray, {name}! You found the hidden ring!' },
   },
 
   async play(k) {
     k.backdrop(shackNight());
+    k.dim(0.3);
+    k.light(600, 100, 170, { color: C.cream, strength: 0.35 });
+    k.light(340, 415, 100, { color: C.candle, strength: 0.45, flicker: true });
+    const ringLight = k.light(517, 520, 200, { color: C.goldLight, strength: 0 });
+    k.ambient('fireflies', { area: [0, 240, 1180, 380], count: 12, z: 34 });
+    k.music('sneaky');
 
     // Props that are there from the start.
     const web = k.picture('web', { x: 680, y: 110, w: 380, z: 6, still: true });
@@ -206,12 +212,12 @@ export default defineStory({
     const hero = k.character('hero', { x: 110, y: 330, z: 11 });
     const net = k.picture('net', { x: 280, y: 390, w: 170, z: 12 });
     k.set([hero, net], { x: -460 });
-    const bug = k.picture('bug', { x: 560, y: 572, w: 76, z: 20 });
+    const bug = k.picture('bug', { x: 548, y: 556, w: 100, z: 20 });
     k.set(bug, { opacity: 0 });
 
     // A quiet night… hoo, hoo.
     nightAir();
-    await k.wait(1000);
+    await k.wait(700);
 
     // Voldemort pops up beside his rock.
     k.fx.poof();
@@ -240,20 +246,26 @@ export default defineStory({
       k.say('tiptoe'),
       k.walk(hero, 460, 2.6, 7),
       k.walk(net, 460, 2.6, 7),
+      k.camera({ zoom: 1.15, x: 500, y: 430 }, 2.6),
       k.wait(1300).then(() => k.fx.sneak()),
     );
 
     // A ladybird scuttles out from under the rock…
+    await k.camera({ zoom: 1.4, x: 660, y: 470 }, 0.8);
     k.fx.pop();
     await k.appear(bug, 0.3);
-    k.fx.patter(8, 0.07);
-    await k.to(bug, 0.6, { x: 120, rotation: 90, ease: 'none' });
+    for (let i = 0; i < 3; i++) {
+      k.fx.patter(3, 0.06);
+      await k.to(bug, 0.2, { x: '+=40', rotation: 90, ease: 'none' });
+    }
+    await k.pop(bug, 1.15);
     k.face(vold, false);
     await k.all(k.say('eek', vold), k.shake(vold, 12, 3));
 
     // …and he leaps backwards, right into his own sticky web!
+    await k.to(vold, 0.15, { scaleY: 0.9, transformOrigin: '50% 100%' });
     k.fx.boing();
-    await k.to(vold, 0.4, { x: 150, y: -54, rotation: -7, ease: 'power2.out' });
+    await k.to(vold, 0.4, { x: 150, y: -54, rotation: -7, scaleY: 1, ease: 'power2.out' });
     webBoing();
     const strands = document.createElement('div');
     strands.style.cssText = 'position:absolute;inset:0;opacity:0';
@@ -267,6 +279,15 @@ export default defineStory({
       k.shake(vold, 6, 2),
     );
 
+    let stuck = true;
+    void (async () => {
+      while (stuck) {
+        await k.to(vold, 0.6, { rotation: -4, ease: 'sine.inOut' });
+        if (!stuck) break;
+        await k.to(vold, 0.6, { rotation: -10, ease: 'sine.inOut' });
+      }
+    })();
+
     // The ladybird hurries home into your net.
     k.fx.patter(8, 0.06);
     await k.to(bug, 0.2, { rotation: -70 });
@@ -279,7 +300,7 @@ export default defineStory({
     // You lift the rock with your wand.
     await k.say('lift');
     k.fx.spell();
-    await k.beam([380, 560], [515, 560]);
+    await k.beam([380, 560], [515, 560], C.goldLight);
     levitate();
     await k.to(rock, 0.9, { y: -170, rotation: 8, ease: 'sine.inOut' });
     await k.to(rock, 0.7, { x: 140, y: -40, rotation: -4, ease: 'sine.inOut' });
@@ -287,10 +308,13 @@ export default defineStory({
     k.fx.thud();
 
     // There it is: the ring, glowing!
+    k.music('triumph');
     ringChime();
     k.sparkle(515, 590, 18, 170);
-    await k.all(k.appear(ring, 0.5), k.glow(C.goldLight, 0.35, 1.4));
+    await k.all(k.appear(ring, 0.5), k.fade(ringLight, 0.7, 0.8));
     await k.to(ring, 0.8, { y: -90, scale: 1.4, ease: 'sine.out' });
+    k.sfx.gem();
+    k.sparkle(517, 470, 10, 120);
     k.float(ring, 6, 2.4);
 
     // Voldemort wriggles; his bell just keeps on jingling.
@@ -304,18 +328,20 @@ export default defineStory({
             k.shake(vold, 8, 2),
             k.to(bellEl, 0.2, { rotation: 16 }).then(() => k.to(bellEl, 0.3, { rotation: -12 })).then(() => k.to(bellEl, 0.25, { rotation: 0 })),
           );
-          await k.wait(900);
+          await k.wait(600);
         }
       })(),
     );
 
     // Hooray!
+    stuck = false;
+    await k.camera({}, 1.3);
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(515, 500, 14, 140);
     hoot(now() + 0.6);
     void k.hop(owl, 24, 2);
     await k.all(k.say('cheer'), k.hop(hero, 50, 2), k.hop(net, 50, 2));
-    await k.wait(800);
+    await k.wait(1500);
   },
 });

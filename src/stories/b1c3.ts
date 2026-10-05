@@ -55,6 +55,13 @@ function whistle(): void {
   blast(t + 0.42, 0.9);
 }
 
+/** The wheels clacking over the rails. */
+function clack(): void {
+  const t = now();
+  noiseBurst(t, { freq: 1800, q: 4, peak: 0.03, decay: 0.04 });
+  noiseBurst(t + 0.12, { freq: 1800, q: 4, peak: 0.03, decay: 0.04 });
+}
+
 /** Trevor's croaky "rib-bit". */
 function ribbit(): void {
   const t = now();
@@ -334,9 +341,6 @@ function toyPig(): string {
   ]);
 }
 
-/** A full-stage dark cover for changing scenes. */
-const cover = `<div style="width:100%;height:100%;background:${C.night}"></div>`;
-
 // ---------------------------------------------------------------- helpers
 
 /** Where an actor really is now (its placed corner plus its tween offset). */
@@ -391,12 +395,12 @@ function rimClip(el: HTMLElement): (rimY: number | null) => void {
 
 export default defineStory({
   lines: {
-    train: { who: 'narrator', text: 'All aboard! The red train chuffs over the hills… all the way to Hogwarts.' },
-    lost: { who: 'neville', text: 'Oh no… has anyone seen my toad? Trevor’s gone again!' },
+    train: { who: 'narrator', text: 'All aboard! The red train chuffs over the hills… all the way to Hogwarts!' },
+    lost: { who: 'neville', text: 'Oh no… not again! Has anyone seen my toad? Trevor!' },
     catch: { who: 'trevor', text: 'Ribbit! Catch me if you can!' },
     chase: { who: 'narrator', text: 'Out of the tin… into the bin… over the pin… under the lid!' },
-    pig: { who: 'narrator', text: 'Wheee! Now he’s riding a toy pig! You wave your wand…' },
-    thanks: { who: 'neville', text: 'Trevor! You found him, {name}! Thank you!' },
+    pig: { who: 'neville', text: 'Oh no, now he’s riding a toy pig! Quick… wave your wand!' },
+    thanks: { who: 'neville', text: 'Trevor! You found him, {name}! Oh, thank you!' },
     hogwarts: { who: 'trevor', text: 'Ribbit! Look out of the window… it’s Hogwarts!' },
   },
 
@@ -421,53 +425,94 @@ export default defineStory({
     await k.to(engine, 0.9, { x: 1400, ease: 'power1.in' });
     steaming = false;
 
-    // ---- Change scene behind a quick dark cover.
-    const curtain = k.add(cover, { x: 0, y: 0, w: 1180, h: 820, z: 60 });
-    k.set(curtain, { opacity: 0 });
-    await k.fade(curtain, 1, 0.4);
+    // ---- Change scene with a paper wipe.
+    steaming = false;
     wheels?.kill();
-    k.remove(engine);
-    k.caption('');
-    k.backdrop(compartment());
-
-    const view = k.add(windowView(), { x: 390, y: 110, w: 400, h: 270, z: 2, still: true });
-    view.style.overflow = 'hidden';
-    const scroll = view.querySelector<SVGGElement>('[data-part="scroll"]');
-    const night = view.querySelector<SVGGElement>('[data-part="night"]');
-    if (scroll && !k.calm) gsap.to(scroll, { x: -400, duration: 3, repeat: -1, ease: 'steps(36)' });
-    k.add(windowFrame(), { x: 310, y: 70, w: 560, h: 340, z: 3 });
-
-    const neville = k.character('neville', { x: 40, y: 318, z: 20 });
-    const hero = k.character('hero', { x: 890, y: 318, z: 20, flip: true });
-    k.set(hero, { opacity: 0 });
-    k.add(cushion('b1c3-seat-l'), { x: -30, y: 586, z: 25 });
-    k.add(cushion('b1c3-seat-r'), { x: 860, y: 586, z: 25 });
-
-    // The five words, around the compartment. Rim lines (stage y) are where
-    // Trevor disappears into the tin, the bin and the pot.
-    const tin = k.picture('tin', { x: 430, y: 330, w: 130, z: 14 });
+    let view!: HTMLElement;
+    let night: SVGGElement | null = null;
+    let neville!: HTMLElement;
+    let hero!: HTMLElement;
+    let tin!: HTMLElement;
+    let lid!: HTMLElement;
+    let lidTop: SVGGElement | null = null;
+    let bin!: HTMLElement;
+    let pin!: HTMLElement;
+    let pig!: HTMLElement;
+    let trevor!: HTMLElement;
+    let veil!: HTMLElement;
+    let moon!: HTMLElement;
+    let sinkBelow!: (rimY: number | null) => void;
     const TIN_RIM = 370;
-    const lid = k.picture('lid', { x: 590, y: 262, w: 200, z: 14 });
     const POT_RIM = 390;
-    const lidTop = lid.querySelector<SVGGElement>('[data-part="lid"]');
+    const BIN_RIM = 552;
     // The picture shows the lid lifted; it starts shut on the pot.
     const LID_SHUT = { y: 66, rotation: 10 };
-    if (lidTop) k.set(lidTop, { ...LID_SHUT, transformOrigin: '50% 50%' });
-    const bin = k.picture('bin', { x: 300, y: 486, w: 190, z: 14 });
-    const BIN_RIM = 552;
-    const pin = k.picture('pin', { x: 470, y: 560, w: 110, z: 13 });
-    const pig = k.add(toyPig(), { x: 690, y: 509, w: 160, z: 15 });
+
+    await k.cut(() => {
+      k.backdrop(compartment());
+      view = k.add(windowView(), { x: 390, y: 110, w: 400, h: 270, z: 2, still: true });
+      view.style.overflow = 'hidden';
+      const scroll = view.querySelector<SVGGElement>('[data-part="scroll"]');
+      night = view.querySelector<SVGGElement>('[data-part="night"]');
+      if (scroll && !k.calm) gsap.to(scroll, { x: -400, duration: 3, repeat: -1, ease: 'steps(36)' });
+      k.add(windowFrame(), { x: 310, y: 70, w: 560, h: 340, z: 3 });
+
+      neville = k.character('neville', { x: 40, y: 318, z: 20 });
+      hero = k.character('hero', { x: 890, y: 318, z: 20, flip: true });
+      k.set(hero, { opacity: 0 });
+      k.add(cushion('b1c3-seat-l'), { x: -30, y: 586, z: 25 });
+      k.add(cushion('b1c3-seat-r'), { x: 860, y: 586, z: 25 });
+
+      // The five words, around the compartment.
+      tin = k.picture('tin', { x: 430, y: 330, w: 130, z: 14 });
+      lid = k.picture('lid', { x: 590, y: 262, w: 200, z: 14 });
+      lidTop = lid.querySelector<SVGGElement>('[data-part="lid"]');
+      if (lidTop) k.set(lidTop, { ...LID_SHUT, transformOrigin: '50% 50%' });
+      bin = k.picture('bin', { x: 300, y: 486, w: 190, z: 14 });
+      pin = k.picture('pin', { x: 470, y: 540, w: 110, z: 13 });
+      pig = k.add(toyPig(), { x: 690, y: 509, w: 160, z: 15 });
+
+      // Trevor starts hidden in the tin.
+      trevor = k.character('trevor', { x: 445, y: 330, w: 100, z: 12 });
+      sinkBelow = rimClip(trevor);
+      sinkBelow(TIN_RIM);
+      k.set(trevor, { opacity: 0 });
+
+      // Lighting and dust.
+      veil = k.dim(0.15, '#2a1830');
+      k.light(335, 160, 110, { flicker: true, strength: 0.5 });
+      k.light(845, 160, 110, { flicker: true, strength: 0.5 });
+      moon = k.light(590, 245, 230, { color: C.sky, strength: 0 });
+      k.ambient('dust', { count: 14, z: 34 });
+    });
     const lidTo = (seconds: number, vars: gsap.TweenVars & { ease?: string }) => (lidTop ? k.to(lidTop, seconds, vars) : Promise.resolve());
 
-    // Trevor starts hidden in the tin.
-    const trevor = k.character('trevor', { x: 445, y: 330, w: 100, z: 12 });
-    const sinkBelow = rimClip(trevor);
-    sinkBelow(TIN_RIM);
-    k.set(trevor, { opacity: 0 });
+    // The carriage rocks gently along the rails.
+    let done = false;
+    void (async () => {
+      let dir = 1;
+      while (!done) {
+        const vars = { rotation: dir, transformOrigin: '50% 100%', ease: 'sine.inOut' };
+        await k.all(k.to(neville, 0.45, vars), k.to(hero, 0.45, vars));
+        dir = -dir;
+      }
+    })();
+    void (async () => {
+      while (!done) {
+        clack();
+        await k.wait(900);
+      }
+    })();
+
+    // Anticipation: Trevor squashes before a big leap.
+    const leap = async (x: number, y: number, h: number, s: number) => {
+      await k.to(trevor, 0.1, { scaleY: 0.8, scaleX: 1.15, transformOrigin: '50% 100%' });
+      void k.to(trevor, 0.15, { scaleX: 1, scaleY: 1 });
+      await jump(k, trevor, x, y, h, s);
+    };
 
     chuff(4, 0.3);
-    await k.fade(curtain, 0, 0.5);
-    k.remove(curtain);
+    k.music('adventure');
     k.fx.whizz();
     await k.enter(hero, 'right');
 
@@ -482,6 +527,8 @@ export default defineStory({
     k.set(trevor, { opacity: 1 });
     ribbit();
     await k.to(trevor, 0.35, { y: -28, ease: 'back.out(2)' });
+    k.music('sneaky');
+    await k.camera({ zoom: 1.3, x: 580, y: 440 }, 1.0);
     await k.say('catch', trevor);
 
     // ---- The chase: tin, bin, pin, lid.
@@ -492,12 +539,12 @@ export default defineStory({
       await k.wait(250);
       sinkBelow(BIN_RIM);
       // …into the bin…
-      await jump(k, trevor, 345, 520, 70, 0.9);
+      await leap(345, 520, 70, 0.9);
       clang();
       await k.shake(bin, 5, 2);
       // (peeking out of the bin)
       await k.to(trevor, 0.25, { y: BIN_RIM - 68 - 330, ease: 'back.out(2)' });
-      await k.wait(350);
+      await k.wait(250);
       // …over the pin…
       k.fx.boing();
       await k.to(trevor, 0.3, { y: '-=110', ease: 'power2.out' });
@@ -505,9 +552,9 @@ export default defineStory({
       z(trevor, 30);
       void k.shake(pin, 4, 2);
       ping();
-      await jump(k, trevor, 570, 545, 60, 0.8);
+      await leap(570, 525, 60, 0.8);
       k.fx.thud();
-      await k.wait(300);
+      await k.wait(200);
       // …under the lid!
       k.fx.boing();
       void lidTo(0.35, { y: -70, rotation: -20, ease: 'power2.out' });
@@ -532,8 +579,9 @@ export default defineStory({
     await k.to(trevor, 0.25, { y: '-=90', ease: 'power2.out' });
     sinkBelow(null);
     z(trevor, 30);
-    await jump(k, trevor, 738, 478, 60, 0.6);
+    await leap(738, 478, 60, 0.6);
     squeak();
+    void k.pop(trevor, 1.1);
     await k.pop(pig, 1.08);
     const pigWheels = spinWheels(k, pig, 0.4);
     k.fx.patter(12, 0.13);
@@ -545,18 +593,20 @@ export default defineStory({
       k.set(trevor, { x: '-=16' });
       await k.all(k.to(pig, 1.1, { x: -40, ease: 'sine.inOut' }), k.to(trevor, 1.1, { x: '+=110', ease: 'sine.inOut' }));
     };
-    await k.all(k.say('pig'), ride());
+    await k.all(k.say('pig', neville), ride());
     pigWheels?.kill();
+    await k.camera({}, 0.9);
 
     // ---- The spell: Trevor floats gently home to Neville.
     const [hx, hy] = at(hero);
     const [tx, ty] = at(trevor);
+    k.music('magic');
     k.fx.spell();
     await k.beam([hx + 45, hy + 172], [tx + 50, ty + 50], C.goldLight, 0.45);
     k.fx.twinkle();
     k.sparkle(tx + 50, ty + 40, 12, 110);
-    await k.to(trevor, 1.0, { y: '-=150', rotation: -10, ease: 'sine.inOut' });
-    await jump(k, trevor, 170, 470, 20, 1.4);
+    await k.to(trevor, 0.8, { y: '-=150', rotation: -10, ease: 'sine.inOut' });
+    await leap(170, 470, 20, 1.4);
     k.set(trevor, { rotation: 0 });
     ribbit();
     await k.all(k.hop(neville, 20, 2), k.hop(trevor, 20, 2));
@@ -564,17 +614,22 @@ export default defineStory({
 
     // ---- The whistle blows: Hogwarts across the lake!
     whistle();
+    void k.camera({ zoom: 1.25, x: 590, y: 300 }, 1.8);
     if (night) void k.to(night, 1.6, { opacity: 1, ease: 'sine.inOut' });
-    void k.glow(C.candle, 0.25, 1.6);
-    await k.wait(500);
+    void k.fade(veil, 0.32, 1.6);
+    void k.fade(moon, 0.35, 1.6);
+    k.sfx.sparkle();
+    await k.wait(300);
     await k.say('hogwarts', trevor);
 
+    await k.camera({}, 1.0);
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(590, 240, 16, 220);
     // Seated puppets only bounce a little, so the seat still hides their edge.
     await k.all(k.hop(hero, 20, 2), k.hop(neville, 20, 2), k.hop(trevor, 40, 2));
     ribbit();
-    await k.wait(700);
+    await k.wait(1500);
+    done = true;
   },
 });

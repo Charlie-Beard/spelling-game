@@ -289,16 +289,19 @@ const GNOME = { x: 382, y: 206, w: 160 };
 
 export default defineStory({
   lines: {
-    intro: { who: 'narrator', text: 'This is the Burrow, the Weasleys’ wonky house. Even the dishes wash themselves!' },
-    oi: { who: 'gnome', text: 'Oi! This is my garden! Bet you can’t catch me!' },
-    spin: { who: 'narrator', text: 'Time to de-gnome the garden! Grab him… and spin him round and round!' },
-    splash: { who: 'narrator', text: 'Bonk, off the shed roof… and splash! Right into the fish pond!' },
+    intro: { who: 'narrator', text: 'Welcome to the Burrow! Look… the dishes are washing themselves!' },
+    oi: { who: 'gnome', text: 'Oi! This is my garden! Bet you can’t catch me! Hee hee!' },
+    spin: { who: 'narrator', text: 'Got him! Now spin him round… and round… and round!' },
+    splash: { who: 'narrator', text: 'Whee! Bonk, off the shed roof… and splash! Into the fish pond!' },
     hat: { who: 'gnome', text: 'Ooh, I’m all dizzy! But look, a shell hat! Do it again, {name}!' },
-    end: { who: 'narrator', text: 'What a throw! The garden is gnome-free… well, nearly!' },
+    end: { who: 'gnome', text: 'That was fun! I’ll be back in the hedge by teatime! Hee hee!' },
   },
 
   async play(k) {
     k.backdrop(burrow());
+    k.music('cosy');
+    k.ambient('bubbles', { count: 6, area: [100, 380, 170, 120], z: 6 });
+    k.light(1010, 90, 320, { color: C.goldLight, strength: 0.25 });
 
     // The kitchen window: two dishes and a sponge, washing themselves.
     const dishA = k.picture('dish', { x: 106, y: 418, w: 74, z: 4, still: true });
@@ -326,7 +329,7 @@ export default defineStory({
 
     // ---- 1. The Burrow, and its magic washing-up.
     await k.wait(500);
-    k.sfx.whoosh();
+    k.fx.patter(6, 0.12);
     await k.enter(hero, 'left', 0.8);
     if (!k.calm) {
       gsap.to(dishA, { rotation: -8, y: -6, duration: 0.42, yoyo: true, repeat: -1, ease: 'steps(3)' });
@@ -336,6 +339,7 @@ export default defineStory({
     clink();
     k.fx.bubbles(5);
     scatter(k, bubble('#e6f0f6', 'b2c2-soap'), 170, 450, 6, 120, 120);
+    void k.camera({ zoom: 1.5, x: 200, y: 440 }, 1.4);
     const said = k.say('intro');
     await k.wait(1400);
     clink();
@@ -343,17 +347,22 @@ export default defineStory({
     await said;
 
     // ---- 2. A cheeky gnome pops up out of the hedge.
+    void k.camera({}, 0.9);
     k.sfx.rustle();
     await k.shake(hedgeEl, 5, 2);
     k.fx.boing();
-    await k.to(gnome, 0.4, { y: 58, ease: 'back.out(1.6)' });
+    k.set(gnome, { transformOrigin: '50% 100%', scaleY: 0.8 });
+    await k.to(gnome, 0.4, { y: 58, scaleY: 1.12, ease: 'back.out(1.6)' });
+    await k.to(gnome, 0.15, { scaleY: 1 });
     giggle();
     await k.say('oi', gnome);
     k.fx.boing();
     await k.hop(gnome, 36);
     giggle();
 
+    k.set(gnome, { transformOrigin: '50% 50%' });
     // ---- 3. Grab him, and spin him round and round!
+    k.music('adventure');
     const told = k.say('spin');
     await k.wait(1200);
     gnome.style.zIndex = '20';
@@ -367,11 +376,19 @@ export default defineStory({
     // Round and round above your head, held by the ankles.
     k.set(gnome, { transformOrigin: '50% 118%' });
     whirr(2.1, turns);
-    await k.all(k.to(gnome, 2.1, { rotation: 360 * turns, ease: 'power1.in' }), k.shake(hero, 4, 4));
+    await k.all(
+      k.to(gnome, 2.1, { rotation: 360 * turns, ease: 'power1.in' }),
+      k.shake(hero, 4, 4),
+      k.to(hero, 2.1, { keyframes: [{ rotation: -4 }, { rotation: 4 }, { rotation: -3 }, { rotation: 0 }] }),
+    );
     k.set(gnome, { transformOrigin: '50% 50%', rotation: 0 });
 
     // ---- 4. Let go! Over the hedge, bonk off the shed, splash in the pond.
+    await k.all(k.to(gnome, 0.2, { rotation: -35 }), k.to(hero, 0.2, { rotation: -6 }));
+    const told2 = k.say('splash');
     k.fx.whizz();
+    k.sfx.whoosh();
+    void k.to(hero, 0.15, { rotation: 8 }).then(() => k.to(hero, 0.3, { rotation: 0 }));
     await arc(k, gnome, 528, -76, 110, 1.0, 720);
     bonk();
     void k.shake(shed, 5, 2);
@@ -390,7 +407,7 @@ export default defineStory({
     await k.to(fish, 0.4, { y: 40, rotation: -70, ease: 'power2.in' });
     k.fx.bubbles(4);
     k.set(fish, { opacity: 0, rotation: 0 });
-    await k.say('splash');
+    await told2;
 
     // ---- 5. Up he pops, with a shell for a hat.
     const shell = k.picture('shell', { x: 0, y: 0, w: 84, crop: '50 100 300 255', z: 1 });
@@ -400,8 +417,12 @@ export default defineStory({
     attach(gnome, stars, 20, -78);
     k.set(gnome, { y: 310, opacity: 1 });
     k.fx.pop();
-    await k.to(gnome, 0.4, { y: 244, ease: 'back.out(2)' });
+    void k.camera({ zoom: 1.4, x: 940, y: 450 }, 1.0);
+    k.set(gnome, { transformOrigin: '50% 100%' });
+    await k.to(gnome, 0.4, { y: 244, scaleY: 1.1, ease: 'back.out(2)' });
+    void k.to(gnome, 0.2, { scaleY: 1 });
     k.fx.twinkle();
+    k.sfx.reveal();
     giggle();
     if (!k.calm) gsap.to(stars, { rotation: 360, duration: 1.6, repeat: 2, ease: 'steps(16)', onComplete: () => void k.fade(stars, 0, 0.4) });
     else stars.remove();
@@ -410,20 +431,22 @@ export default defineStory({
     await k.say('hat', gnome);
 
     // ---- 6. Hooray!
+    k.music('triumph');
+    void k.camera({}, 1.5);
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(940, 470, 14, 150);
-    const cheer = k.say('end');
+    const cheer = k.say('end', gnome);
     k.set(fish, { opacity: 1, y: 40, rotation: 30 });
     await k.all(
       k.hop(hero, 40, 2),
-      k.to(fish, 0.4, { y: -100, rotation: -20, ease: 'power2.out' }).then(() => k.to(fish, 0.4, { y: 40, rotation: -70, ease: 'power2.in' })),
+      k.to(fish, 0.4, { y: -100, rotation: -20, ease: 'power2.out' }).then(() => k.to(fish, 0.4, { y: -10, rotation: 0, ease: 'power2.in' })),
     );
-    k.set(fish, { opacity: 0 });
+    k.float(fish, 4, 1.4);
     k.fx.boing();
     giggle();
     await k.hop(gnome, 26);
     await cheer;
-    await k.wait(600);
+    await k.wait(1500);
   },
 });

@@ -344,11 +344,11 @@ function flap(k: Kit, fawkes: HTMLElement, beats: number): Promise<void> {
 /** Where Fawkes and his perch stand. */
 const PERCH = { x: 440, y: 200, w: 300 };
 /** Where the chick sits on the perch, and its centre. */
-const CHICK = { x: 535, y: 360, w: 110 };
-const CHICK_C: Pt = [590, 415];
+const CHICK = { x: 520, y: 335, w: 140 };
+const CHICK_C: Pt = [590, 405];
 
 /** The five word pictures, in an arc over the perch (top-left corners). */
-const PIC_W = 150;
+const PIC_W = 170;
 const WORDS: Array<[string, number, number]> = [
   ['box', 120, 140],
   ['fox', 300, 46],
@@ -360,17 +360,21 @@ const GROW_NOTES = [NOTE.G5, NOTE.A5, NOTE.B5, NOTE.D6, NOTE.G6];
 
 export default defineStory({
   lines: {
-    droopy: { who: 'narrator', text: 'You visit Dumbledore’s office. Oh dear… Fawkes looks old and droopy.' },
-    watch: { who: 'dumbledore', text: 'Don’t worry. Fawkes is a phoenix. Just watch…' },
-    flames: { who: 'narrator', text: 'Fawkes glows gold… and bursts into warm, magic flames!' },
-    chick: { who: 'narrator', text: 'Out of the ash pops a tiny, fluffy baby phoenix!' },
-    words: { who: 'narrator', text: 'Your magic words will help him grow. Box, fox, jam, van, zip!' },
+    droopy: { who: 'narrator', text: 'You visit Dumbledore’s office. Oh dear… poor Fawkes looks old and droopy.' },
+    watch: { who: 'dumbledore', text: 'Ah, don’t worry! Fawkes is a phoenix. Just watch…' },
+    flames: { who: 'narrator', text: 'Fawkes glows gold… and whoosh! Warm, magic flames!' },
+    chick: { who: 'dumbledore', text: 'Look! Out of the ash pops a tiny, fluffy baby phoenix!' },
+    words: { who: 'dumbledore', text: 'Now, your magic words will help him grow. Box, fox, jam, van, zip!' },
     thanks: { who: 'fawkes', text: 'I feel brand new! Thank you, {name}!' },
-    diary: { who: 'dumbledore', text: 'Splendid! Now Fawkes can help you find the secret diary.' },
+    diary: { who: 'dumbledore', text: 'Splendid! Now Fawkes can help you find the secret diary…' },
   },
 
   async play(k) {
     k.backdrop(office());
+    k.music('dreamy');
+    k.ambient('dust', { count: 14, area: [380, 60, 420, 420] });
+    const dark = k.dim(0.28);
+    k.light(590, 140, 200, { color: '#cfd8ff', strength: 0.25 });
     const orrery = k.add(orreryArt(), { x: 870, y: 155, w: 120, z: 5, still: true });
     const pin = k.add(pinwheelArt(), { x: 1074, y: 180, w: 70, z: 5, still: true });
     whirl(k, orrery, 7);
@@ -387,7 +391,7 @@ export default defineStory({
     k.set([hero, dumbledore], { opacity: 0 });
 
     // The gadgets whirr and puff as the curtains open.
-    await k.wait(700);
+    await k.wait(400);
     whirr();
     k.puff(1030, 186, 70, C.white);
 
@@ -401,13 +405,14 @@ export default defineStory({
 
     // Dumbledore steps in.
     k.sfx.whoosh();
-    await k.enter(dumbledore, 'right');
     k.puff(1030, 186, 60, C.white);
-    await k.say('watch', dumbledore);
+    await k.all(k.enter(dumbledore, 'right'), k.say('watch', dumbledore));
 
     // Fawkes glows… and bursts into soft paper flames.
     void k.fade(halo, 1, 1.2);
-    await k.wait(700);
+    void k.camera({ zoom: 1.35, x: 590, y: 330 }, 1.2);
+    k.music('magic');
+    await k.wait(400);
     fireWhoosh();
     const flames = [
       k.add(flameArt('l', C.orange, C.gold), { x: 452, y: 268, w: 132, z: 11 }),
@@ -418,6 +423,7 @@ export default defineStory({
     ];
     flames.forEach((f) => k.set(f, { opacity: 0, transformOrigin: '50% 100%' }));
     void k.glow(C.orange, 0.3, 1.8);
+    const fire = k.light(590, 330, 330, { color: C.orange, strength: 0.5, flicker: true });
     void k.fade(old, 0, 0.9);
     await k.all(...flames.map((f, i) => k.wait(i * 130).then(() => k.appear(f, 0.5))));
     flames.forEach((f, i) => flicker(k, f, i));
@@ -434,11 +440,12 @@ export default defineStory({
         return k.to(f, 0.7, { scale: 0, opacity: 0, ease: 'power2.in' });
       }),
       k.fade(halo, 0, 0.8),
+      k.fade(fire, 0, 0.8),
       k.wait(300).then(() => k.fade(ash, 1, 0.4)),
     );
     flames.forEach((f) => k.remove(f));
     k.remove(old);
-    await k.wait(600);
+    await k.wait(250);
 
     // Something wriggles in the ash… a baby phoenix!
     await k.shake(ash, 4, 2);
@@ -447,7 +454,8 @@ export default defineStory({
     k.set(chick, { transformOrigin: '50% 94%' });
     await k.appear(chick, 0.45);
     k.sparkle(CHICK_C[0], CHICK_C[1] - 20, 10, 110);
-    await k.say('chick');
+    const said = k.say('chick', dumbledore);
+    await k.wait(1600);
 
     // Ah… choo! The sneeze blows the ash away.
     sneeze();
@@ -457,6 +465,8 @@ export default defineStory({
     await k.to(chick, 0.2, { scaleY: 1, scaleX: 1, rotation: 0, ease: 'back.out(2)' });
     k.fx.boing();
     await k.all(k.hop(chick, 24), k.hop(hero, 36, 2));
+    k.float(chick, 4, 1.4);
+    await said;
 
     // Your five words fly in and the chick grows with each one.
     const pics = WORDS.map(([w, x, y]) => {
@@ -465,7 +475,7 @@ export default defineStory({
       return p;
     });
     const popWords = async () => {
-      await k.wait(1900);
+      await k.wait(2600);
       for (const [i, p] of pics.entries()) {
         k.fx.pop();
         await k.appear(p, 0.3);
@@ -473,7 +483,9 @@ export default defineStory({
         await k.wait(220);
       }
     };
-    await k.all(k.say('words'), popWords());
+    void k.camera({}, 1.0);
+    await k.all(k.say('words', dumbledore), popWords());
+    gsap.killTweensOf(chick);
     let size = 1;
     for (let i = 0; i < pics.length; i++) {
       const [, x, y] = WORDS[i];
@@ -481,6 +493,7 @@ export default defineStory({
       k.fx.whizz();
       await k.to(pics[i], 0.35, { x: CHICK_C[0] - (x + PIC_W / 2), y: CHICK_C[1] - 30 * size - (y + PIC_W / 2), scale: 0.2, ease: 'power2.in' });
       k.remove(pics[i]);
+      k.fx.twinkle();
       bell(GROW_NOTES[i], now(), 0.12, 0.9);
       size += 0.2;
       k.sparkle(CHICK_C[0], CHICK_C[1] - 30 * size, 8, 90);
@@ -493,17 +506,20 @@ export default defineStory({
     void k.fade(halo, 0.9, 0.8);
     void k.glow(C.goldLight, 0.45, 1.4);
     await k.wait(550);
+    void k.camera({ zoom: 1.25, x: 590, y: 330 }, 1.0);
+    k.light(590, 330, 300, { color: C.goldLight, strength: 0.45 });
+    void k.fade(dark, 0.12, 1);
+    k.music('triumph');
     k.puff(CHICK_C[0], CHICK_C[1] - 60, 300, C.goldLight);
     k.remove(chick);
     const fawkes = k.character('fawkes', { ...PERCH, z: 12 });
     await k.appear(fawkes, 0.5);
     k.sparkle(590, 300, 18, 240);
+    k.sfx.reveal();
     phoenixSong();
     void k.hop(hero, 40, 1);
-    await flap(k, fawkes, 4);
-    await k.wait(300);
-
-    await k.all(k.say('thanks'), flap(k, fawkes, 3));
+    await k.all(k.say('thanks', fawkes), flap(k, fawkes, 4));
+    void k.camera({}, 1.2);
     await k.say('diary', dumbledore);
 
     // A happy ending.
@@ -511,6 +527,6 @@ export default defineStory({
     k.confetti(36);
     k.sparkle(590, 300, 14, 200);
     await k.all(k.hop(hero, 50, 2), flap(k, fawkes, 2), k.hop(dumbledore, 20, 1));
-    await k.wait(1000);
+    await k.wait(1500);
   },
 });

@@ -219,6 +219,20 @@ function candle(): string {
   return svg({ w: 60, h: 110, name: 'b1c4-candle', boil: false }, candleNodes(30, 40, 1.5));
 }
 
+/** A crowd of dark student silhouettes filling the hall behind the table. */
+function crowd(): string {
+  const col = '#3a3850';
+  const nodes: Node[] = [];
+  for (let i = 0; i < 16; i++) {
+    const x = 300 + (i / 15) * 580;
+    const y = 40 + (i % 3) * 3;
+    nodes.push(piece(ellipse(x, y + 46, 26, 22), col, { edge: 'cut', fibre: false, shadow: false }));
+    nodes.push(piece(circle(x, y, 17), col, { edge: 'cut', fibre: false, shadow: false }));
+    if (i % 3 === 0) nodes.push(piece(poly([[x - 17, y - 8], [x + 17, y - 8], [x + 3, y - 52]]), col, { edge: 'cut', fibre: false, shadow: false }));
+  }
+  return svg({ w: 1180, h: 120, name: 'b1c4-crowd', boil: false }, nodes);
+}
+
 /** A cheering Gryffindor student, arms up (pops up from behind the table). */
 function student(i: number): string {
   const skins = [C.skin, C.skinShade, '#b98260', C.skin, '#8a5a3b', C.skinShade];
@@ -247,22 +261,28 @@ function student(i: number): string {
 export default defineStory({
   lines: {
     hall: { who: 'narrator', text: 'The Great Hall! Your tummy rumbles… but the gold plates are empty.' },
-    hello: { who: 'nick', text: 'Good evening, {name}! Welcome to Hogwarts!' },
-    wobbly: { who: 'nick', text: 'Oops! My head is a bit wobbly…' },
-    feast: { who: 'nick', text: 'There! Now… let the feast begin!' },
-    food: { who: 'narrator', text: 'A pot, a cup, a mug, a bun and a nut. Yum!' },
-    through: { who: 'nick', text: 'Ha! Ghosts can’t eat buns. They go right through me!' },
+    hello: { who: 'nick', text: 'Good evening, {name}! Welcome… to Hogwarts!' },
+    wobbly: { who: 'nick', text: 'Whoops! My head’s gone all floppy… hold on!' },
+    feast: { who: 'nick', text: 'There we are! Now then… let the feast begin!' },
+    food: { who: 'narrator', text: 'Pop, pop, pop! A pot, a cup, a mug, a bun… and a nut!' },
+    through: { who: 'nick', text: 'Ha ha! Ghosts can’t eat buns… they go right through me!' },
     cheer: { who: 'nick', text: 'Hip, hip, hooray for Gryffindor!' },
   },
 
   async play(k) {
     k.backdrop(greatHall());
+    k.music('dreamy');
+    k.dim(0.22);
+    k.ambient('stars', { area: [0, 0, 1180, 290], count: 24, z: 2 });
 
     // Floating candles that bob in front of the wall.
     for (const [x, y, p] of [[150, 150, 2.2], [420, 90, 2.6], [760, 120, 2.4], [310, 210, 2]] as const) {
       const c = k.add(candle(), { x, y, w: 50, z: 3, still: true });
       k.float(c, 10, p);
+      k.light(x + 25, y + 20, 80, { flicker: true, strength: 0.5 });
     }
+    const feastLight = k.light(590, 600, 480, { color: C.candle, strength: 0 });
+    const crowdEl = k.add(crowd(), { x: 0, y: 430, w: 1180, h: 120, z: 4, still: true });
 
     // Cheering students hide behind the table until the end.
     const students = [380, 470, 560, 650, 740].map((x, i) => {
@@ -287,23 +307,29 @@ export default defineStory({
     });
     const bun = foods[3];
 
-    await k.wait(1100);
+    await k.camera({ zoom: 1.35, x: 590, y: 180 }, 0);
+    await k.wait(700);
 
-    // Empty plates and a rumbling tummy.
+    // Empty plates and a rumbling tummy; the shot tilts down from the ceiling.
     rumble();
     void k.shake(hero, 4, 2);
-    await k.say('hall');
+    await k.all(k.say('hall'), k.camera({}, 2.4));
 
     // Nick floats up through the table.
     woo();
+    k.sfx.whoosh();
+    k.puff(1020, 520, 160, C.white);
     k.set(nick, { y: 220 });
     await k.all(k.to(nick, 1.4, { y: 0, opacity: 1, ease: 'power1.out' }));
     k.float(nick, 6, 2.4);
+    k.light(1020, 400, 170, { color: C.sky, strength: 0.25 });
     k.sparkle(MOUTH.x, MOUTH.y, 8, 120);
+    void k.camera({ zoom: 1.4, x: 960, y: 380 }, 0.9);
     await k.say('hello', nick);
 
     // A polite bow… and his head flops right over.
-    await k.to(nick, 0.35, { rotation: 8, ease: 'power1.inOut' });
+    await k.to(nick, 0.35, { rotation: 14, ease: 'power1.inOut' });
+    await k.wait(150);
     if (head) {
       flop();
       await k.to(head, 0.45, { rotation: -100, svgOrigin: '150 212', ease: 'power2.in' });
@@ -319,12 +345,16 @@ export default defineStory({
       plonk();
       await k.to(head, 0.35, { rotation: -14, ease: 'back.out(3)' });
     }
+    void k.pop(nick, 1.06);
     k.sparkle(MOUTH.x, MOUTH.y - 40, 8, 100);
-    await k.say('feast', nick);
+    k.music('magic');
+    await k.all(k.say('feast', nick), k.camera({}, 1.2));
 
     // The plates fill, one by one.
     k.sfx.sparkle();
-    void k.glow(C.candle, 0.3, 0.9);
+    k.sfx.reveal();
+    void k.fade(feastLight, 0.4, 0.9);
+    void k.to(hero, 0.4, { rotation: 4, transformOrigin: '50% 100%' });
     for (let i = 0; i < foods.length; i++) {
       platePop(i);
       k.puff(PLATES[i], TABLE_Y + PLATE_Y - 40, 120, C.goldLight);
@@ -332,6 +362,7 @@ export default defineStory({
       k.sparkle(PLATES[i], TABLE_Y + PLATE_Y - 60, 6, 80);
       await k.wait(220);
     }
+    void k.to(hero, 0.3, { rotation: 0 });
     void k.hop(hero, 30, 1);
     k.fx.boing();
     await k.say('food');
@@ -356,7 +387,8 @@ export default defineStory({
     void k.fade(nick, 1, 0.4);
     await k.to(bun, 0.25, { y: `+=${-toMouth.dy - chest}`, ease: 'power2.in' });
     k.fx.thud();
-    void k.pop(bun, 1.2);
+    await k.to(bun, 0.1, { scaleY: 0.8, scaleX: 1.2 });
+    void k.to(bun, 0.15, { scaleX: 1, scaleY: 1, ease: 'back.out(3)' });
     await k.shake(nick, 6, 2);
     await k.say('through', nick);
 
@@ -370,7 +402,9 @@ export default defineStory({
 
     // Everyone cheers for Gryffindor!
     hallCheer();
-    await k.all(...students.map((s, i) => k.wait(i * 90).then(() => k.to(s, 0.5, { y: 0, opacity: 1, ease: 'back.out(1.6)' }))));
+    k.music('triumph');
+    void k.hop(crowdEl, 10, 2);
+    await k.all(...students.map((s, i) => k.wait(i * 90).then(() => { k.fx.pop(); return k.to(s, 0.5, { y: 0, opacity: 1, ease: 'back.out(1.6)' }); })));
     const cheering = k.say('cheer', nick);
     k.fx.jingle();
     k.confetti(36);
@@ -383,13 +417,14 @@ export default defineStory({
     );
     // Everyone throws a bun in the air.
     hallCheer();
+    void k.hop(crowdEl, 10, 2);
     k.fx.boing();
     k.sparkle(590, 420, 16, 220);
     await k.all(
       ...students.map((s, i) => k.wait(i * 110).then(() => tossBun(k, s))),
       ...foods.map((f, i) => k.wait(i * 100).then(() => bounce(k, f, i === 3 ? 50 : 24))),
     );
-    await k.wait(900);
+    await k.wait(1500);
   },
 });
 

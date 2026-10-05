@@ -268,16 +268,21 @@ function branchArt(name: string): string {
 export default defineStory({
   lines: {
     fly: { who: 'narrator', text: 'Look! You’re flying a magic car all the way to Hogwarts!' },
-    wobble: { who: 'narrator', text: 'Uh-oh… the car is going wobbly. Look out for that tree!' },
-    ouch: { who: 'willow', text: 'Ouch! Who bumped into me? Shoo! Shoo!' },
-    honk: { who: 'narrator', text: 'Honk, honk! The car shakes itself off and zooms into the forest.' },
-    moth: { who: 'narrator', text: 'You wave your wand, and a little moth tickles the willow’s nose…' },
-    sneeze: { who: 'narrator', text: 'Achoo! Out pop a wing, a king, a ring… and a sink!' },
-    thanks: { who: 'willow', text: 'Hee hee! That tickled. I feel much better now. Thank you, {name}!' },
+    wobble: { who: 'narrator', text: 'Uh-oh… the engine’s coughing! Look out for that tree!' },
+    ouch: { who: 'willow', text: 'Ouch! Who bumped into me? Shoo! Shoo! Off my branches!' },
+    honk: { who: 'narrator', text: 'Honk, honk! The car shakes itself off… and zooms away!' },
+    moth: { who: 'narrator', text: 'You wave your wand… and a little moth tickles the willow’s nose.' },
+    sneeze: { who: 'willow', text: 'Achoo! Oh my… a wing, a king, a ring… and a sink?' },
+    thanks: { who: 'willow', text: 'Hee hee! That tickled! I feel much better now. Thank you, {name}!' },
   },
 
   async play(k) {
     k.backdrop(grounds());
+    k.music('adventure');
+    const dark = k.dim(0.22);
+    k.light(650, 430, 190, { color: C.candle, strength: 0.35, flicker: true });
+    k.light(1090, 84, 150, { color: '#dfe4ff', strength: 0.3 });
+    k.ambient('fireflies', { count: 12, z: 5, area: [0, 470, 1180, 200] });
 
     // The Whomping Willow, with two big branches tucked behind its trunk.
     const willow = k.character('willow', { x: 760, y: 200, w: 380, z: 14 });
@@ -314,6 +319,7 @@ export default defineStory({
 
     // Sputter, wobble … bump!
     sputter();
+    void k.camera({ zoom: 1.3, x: 700, y: 300 }, 2.2);
     // A little grey puff from the exhaust pipe at the back of the car.
     const exhaust = (): void => {
       const x = 250 + Number(gsap.getProperty(car, 'x'));
@@ -335,6 +341,8 @@ export default defineStory({
     k.sfx.whoosh();
     await k.to(car, 0.7, { x: '+=290', y: '+=150', rotation: 12, ease: 'power2.in' });
     k.fx.thud();
+    k.fx.boing();
+    void k.to(car, 0.1, { scaleX: 0.88, scaleY: 1.1 }).then(() => k.to(car, 0.25, { scaleX: 1, scaleY: 1, ease: 'back.out(3)' }));
     k.puff(840, 360, 150, C.green);
     void k.quake(6);
     await k.all(k.to(car, 0.3, { x: '-=40', rotation: -4, ease: 'power2.out' }), k.shake(willow, 8, 2));
@@ -359,6 +367,7 @@ export default defineStory({
     }
 
     // You tumble out onto the soft grass.
+    await k.camera({}, 0.8);
     const hero = k.character('hero', { x: 300, y: 380, w: 250, z: 20 });
     const carBox = car.getBoundingClientRect();
     const stageBox = k.root.getBoundingClientRect();
@@ -371,7 +380,10 @@ export default defineStory({
     k.set(hero, { x: cx - 425, y: cy - 521, scale: 0.4, rotation: -360, opacity: 1 });
     await k.to(hero, 0.8, { x: 0, y: 0, scale: 1, rotation: 0, ease: 'power1.in' });
     k.fx.thud();
-    await k.pop(hero, 1.08);
+    k.set(hero, { transformOrigin: '50% 100%' });
+    void k.to(hero, 0.1, { scaleY: 0.88, scaleX: 1.1 });
+    await k.wait(100);
+    await k.to(hero, 0.3, { scaleY: 1, scaleX: 1, ease: 'back.out(3)' });
 
     // The car shakes itself off, honks and zooms away into the forest.
     await k.to(car, 0.3, { rotation: 0 });
@@ -382,7 +394,6 @@ export default defineStory({
     await k.all(
       k.say('honk'),
       (async () => {
-        await k.wait(500);
         k.fx.whizz();
         await k.to(car, 1.6, { x: -480 + 250 - 250, y: 270, scale: 0.2, rotation: -6, ease: 'power1.in' });
         await k.fade(car, 0, 0.3);
@@ -396,7 +407,7 @@ export default defineStory({
       await sway(branchR, 6);
       await sway(branchR, 0);
     })();
-    await k.shake(willow, 6, 2);
+    await k.shake(willow, 6, 1);
 
     // Your wand sends a moth to tickle its nose.
     // (It ends up on the willow's nose, between its eyes and mouth.)
@@ -405,6 +416,7 @@ export default defineStory({
     await k.all(
       k.say('moth', hero),
       (async () => {
+        k.fx.spell();
         await k.hop(hero, 30);
         k.fx.twinkle();
         k.sparkle(584, 580, 10, 90);
@@ -417,6 +429,8 @@ export default defineStory({
     );
 
     // Ah … ah … ACHOO!
+    k.music('magic');
+    void k.camera({ zoom: 1.4, x: 880, y: 330 }, 0.9);
     for (let i = 0; i < 2; i++) {
       inhale();
       await k.to(willow, 0.45, { scale: 1.04 + i * 0.03, y: '-=6', ease: 'sine.out' });
@@ -424,6 +438,7 @@ export default defineStory({
     }
     await k.wait(200);
     sneeze();
+    void k.camera({}, 0.6);
     k.puff(950, 410, 180, C.cream);
     void k.quake(7);
     void k.all(
@@ -435,8 +450,8 @@ export default defineStory({
 
     // Everything stuck in its branches pops out!
     const wing = k.picture('wing', { x: 420, y: 110, w: 150, z: 22 });
-    const king = k.picture('king', { x: 70, y: 460, w: 160, z: 22 });
-    const ring = k.picture('ring', { x: 190, y: 560, w: 110, z: 24 });
+    const king = k.picture('king', { x: 70, y: 450, w: 190, z: 22 });
+    const ring = k.picture('ring', { x: 190, y: 540, w: 140, z: 24 });
     const sink = k.picture('sink', { x: 580, y: 500, w: 160, z: 22 });
     const fling = async (el: HTMLElement, from: Pt, to: Pt, delay: number, land: () => void) => {
       k.set(el, { x: from[0] - to[0], y: from[1] - to[1], scale: 0.3, opacity: 1, rotation: -200 });
@@ -450,28 +465,32 @@ export default defineStory({
       land();
     };
     await k.all(
-      k.say('sneeze'),
+      k.say('sneeze', willow),
       fling(wing, [880, 240], [420, 110], 0, () => {
         flutter(10);
         k.float(wing, 10, 1.6);
       }),
-      fling(king, [860, 300], [70, 460], 350, () => {
+      fling(king, [860, 300], [70, 450], 350, () => {
         k.fx.thud();
         void k.hop(king, 30);
       }),
-      fling(ring, [1040, 300], [190, 560], 700, () => {
-        k.fx.twinkle();
-        k.sparkle(245, 610, 8, 70);
+      fling(ring, [1040, 300], [190, 540], 700, () => {
+        k.sfx.gem();
+        k.sparkle(255, 600, 8, 70);
+        k.float(ring, 5, 1.8);
       }),
       fling(sink, [960, 220], [580, 500], 1150, () => {
         clonk();
+        k.float(sink, 3, 2.2);
         void k.pop(sink, 1.12);
         void k.shake(hero, 6, 1);
       }),
     );
 
     // Calm at last. The willow smiles, giggles and waves a branch.
-    k.fx.twinkle();
+    k.music('triumph');
+    k.sfx.reveal();
+    void k.fade(dark, 0.1, 1);
     await k.fade(happy, 1, 0.5);
     await k.all(
       k.say('thanks', willow),
