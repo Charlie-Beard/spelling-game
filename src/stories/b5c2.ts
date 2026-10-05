@@ -366,12 +366,12 @@ async function buzzAbout(k: Kit<string>, el: HTMLElement, on: () => boolean): Pr
 
 export default defineStory({
   lines: {
-    hello: { who: 'luna', text: 'Hello. The meadow is full of invisible creatures tonight. Try my spectrespecs!' },
-    look: { who: 'luna', text: 'Floaty nargles… buzzy wrackspurts… and a crumple-horned snorkack! Isn’t he shy?' },
-    pinch: { who: 'narrator', text: 'Oh no! The cheeky nargles have pinched the crown and the coins!' },
-    ready: { who: 'luna', text: 'Don’t worry. My lion hat will scare them off.' },
-    oil: { who: 'narrator', text: 'Squeak! The hat has gone rusty. You drip on a little oil…' },
-    crown: { who: 'narrator', text: 'What a roar! Down drops the crown… right onto your head!' },
+    hello: { who: 'luna', text: 'Hello. The meadow’s full of invisible creatures tonight. Try my spectrespecs!' },
+    look: { who: 'luna', text: 'Ooh… floaty nargles, buzzy wrackspurts… and a crumple-horned snorkack! He’s shy.' },
+    pinch: { who: 'luna', text: 'Oh dear. Those cheeky nargles have pinched the crown and the coins!' },
+    ready: { who: 'luna', text: 'Don’t worry. My lion hat will scare them off. Ready?' },
+    oil: { who: 'narrator', text: 'Squeak! The hat’s gone rusty! You drip on a little oil…' },
+    crown: { who: 'narrator', text: 'What a roar! Off zoom the nargles… and the crown lands on your head!' },
     thanks: { who: 'luna', text: 'Thank you, {name}. You’re very good at seeing things. Shall we dance?' },
   },
 
@@ -423,6 +423,12 @@ export default defineStory({
     };
 
     // ------------------------------------------------- a dreamy beginning
+    k.music('dreamy');
+    k.ambient('fireflies', { count: 14, area: [200, 320, 900, 320], z: 5 });
+    k.dim(0.22);
+    k.light(700, 190, 180, { color: C.cream, strength: 0.35 });
+    const hatGlow = k.light(960, 330, 170, { color: C.gold, strength: 0.45 });
+    k.set(hatGlow, { opacity: 0 });
     await k.wait(150);
     chimes();
     void sway(2);
@@ -430,14 +436,15 @@ export default defineStory({
     await k.wait(250);
     hoot();
     k.fx.whizz();
-    await k.enter(luna, 'right', 0.9);
     k.fx.patter(5);
-    await k.enter(hero, 'left');
+    await k.all(k.enter(luna, 'right', 0.9), k.enter(hero, 'left'));
+    k.float(luna, 3, 2.8);
     moo();
     await k.shake(cow, 3, 1);
-    await k.say('hello', luna);
+    const helloSaid = k.say('hello', luna);
 
     // ------------------------------------------- on go the spectrespecs
+    await k.wait(1800);
     const specs = k.add(spectrespecs(), { x: 900, y: 520, w: 124, z: 30 });
     k.fx.twinkle();
     await k.appear(specs);
@@ -446,6 +453,8 @@ export default defineStory({
     await k.to(specs, 0.4, { x: land.x / 2, y: land.y / 2 - 170, rotation: -200, ease: 'power1.out' });
     await k.to(specs, 0.4, { x: land.x, y: land.y, rotation: -360, ease: 'power1.in' });
     attach(specs, hero, 68, 97);
+    k.float(hero, 3, 2.6);
+    await helloSaid;
     k.fx.pop();
     void k.pop(hero, 1.06);
     k.sparkle(170, 470, 12, 140);
@@ -468,7 +477,9 @@ export default defineStory({
     k.fx.boing();
     await k.to(snork, 0.5, { y: -110, ease: 'back.out(1.6)' });
     buzz(1.2);
+    void k.camera({ zoom: 1.4, x: 640, y: 470 }, 1.1);
     await k.say('look', luna);
+    await k.shake(snork, 3, 1);
     k.fx.fizzle();
     await k.to(snork, 0.35, { y: 0, ease: 'back.in(1.4)' });
 
@@ -500,23 +511,27 @@ export default defineStory({
       // a cheeky wiggle, treasure and all
       await k.all(...treasure.flatMap(([n, t]) => [k.shake(n, 6, 1), k.shake(t, 6, 1)]));
     };
-    await k.all(k.say('pinch'), pinch());
+    k.music('sneaky');
+    void k.camera({}, 1);
+    await k.all(k.say('pinch', luna), pinch());
 
     // -------------------------------------------- the lion hat … squeaks
+    void k.camera({ zoom: 1.4, x: 900, y: 400 }, 0.9);
     await k.say('ready', luna);
     squeak();
+    setTimeout(squeak, 500);
     await k.all(mouth ? k.to(mouth, 0.15, { scaleY: 0.35 }) : k.wait(150), jaw ? k.to(jaw, 0.15, { y: 4 }) : k.wait(150));
     await k.shake(hat, 4, 2);
     await k.all(mouth ? k.to(mouth, 0.15, { scaleY: 0.1 }) : k.wait(150), jaw ? k.to(jaw, 0.15, { y: 0 }) : k.wait(150));
     giggle();
 
     // A little oil does the trick.
-    const can = k.picture('oil', { x: 280, y: 520, w: 90, z: 32 });
+    const can = k.picture('oil', { x: 620, y: 430, w: 90, z: 32 });
     const fixHat = async (): Promise<void> => {
       k.fx.twinkle();
       await k.appear(can, 0.35);
       k.fx.whizz();
-      await k.to(can, 1.1, { ...at(can, 830, 320), ease: 'sine.inOut' });
+      await k.to(can, 0.8, { ...at(can, 830, 320), ease: 'sine.inOut' });
       await k.to(can, 0.35, { rotation: 35, ease: 'back.out(1.6)' });
       for (let i = 0; i < 1; i++) {
         const d = k.add(drop(), { x: 906, y: 360, w: 14, z: 33 });
@@ -531,9 +546,14 @@ export default defineStory({
     };
     await k.all(k.say('oil'), fixHat());
 
-    // ROAR!
+    // ROAR! (after a breath in)
+    if (mouth) void k.to(mouth, 0.25, { scaleY: 0.3 });
+    await k.to(hat, 0.25, { scaleY: 0.9, transformOrigin: '50% 100%' });
+    k.music('triumph');
     roar();
     void k.quake(4);
+    void k.to(hatGlow, 0.5, { opacity: 0.45 }).then(() => k.to(hatGlow, 0.7, { opacity: 0 }));
+    void k.to(hat, 0.4, { scaleY: 1, ease: 'back.out(2)' });
     await k.all(
       mouth ? k.to(mouth, 0.3, { scaleY: 1, ease: 'back.out(1.6)' }) : k.wait(300),
       jaw ? k.to(jaw, 0.3, { y: 14, ease: 'back.out(1.6)' }) : k.wait(300),
@@ -552,11 +572,15 @@ export default defineStory({
     );
     const heroHead = { x: 40 + 80, y: 370 - 22 };
     const crownFall = (async (): Promise<void> => {
+      void k.camera({}, 0.8);
       const end = at(crown, heroHead.x, heroHead.y);
       const cy = parseFloat(crown.style.top) || 0;
       await k.to(crown, 0.5, { x: end.x / 2, y: heroHead.y - cy - 120, rotation: -180, ease: 'power1.out' });
       await k.to(crown, 0.5, { x: end.x, y: end.y, rotation: -360, ease: 'power1.in' });
       attach(crown, hero, 80, -22);
+      k.sfx.sparkle();
+      await k.to(crown, 0.08, { scaleY: 0.85 });
+      void k.to(crown, 0.3, { scaleY: 1, ease: 'back.out(3)' });
       k.fx.twinkle();
       k.sparkle(170, 360, 14, 140);
       await k.pop(hero, 1.08);
@@ -582,6 +606,8 @@ export default defineStory({
     k.fx.jingle();
     k.confetti(34);
     k.sparkle(900, 420, 14, 180);
+    gsap.killTweensOf(luna, 'y');
+    gsap.killTweensOf(hero, 'y');
     const lunaDance = async (): Promise<void> => {
       for (let i = 0; i < 1; i++) {
         await k.to(luna, 0.55, { rotation: 7, y: -12, ease: 'sine.inOut' });
@@ -613,6 +639,6 @@ export default defineStory({
     };
     await k.all(lunaDance(), owlDance(), cowOverMoon(), snorkWave(), k.hop(hero, 40, 2), sway(1, 8));
     k.fx.twinkle();
-    await k.wait(600);
+    await k.wait(1500);
   },
 });

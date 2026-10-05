@@ -6,6 +6,7 @@
  * opposite sides, bonk into each other and tumble into the junk. You spot the
  * diadem sparkling on an old statue's head and take it.
  */
+import { gsap } from 'gsap';
 import { bell, C, circle, curve, defineStory, dot, ink, type Kit, noiseBurst, NOTE, now, piece, rect, rng, svg, tone, tune, type Node, type Pt } from './kit';
 
 // ------------------------------------------------------------------ sounds
@@ -118,6 +119,16 @@ function statueArt(): string {
   ]);
 }
 
+/** A tumbling chair, 90 × 100. */
+function chairArt(): string {
+  return svg({ w: 90, h: 100, name: 'b5c4-chair', label: 'an old chair' }, [
+    ...[[20, 62, 14, 98], [34, 62, 30, 98], [58, 62, 62, 98], [72, 62, 78, 98]].map(([x1, y1, x2, y2]) => ink([[x1, y1], [x2, y2]], { width: 5, color: C.brownDark })),
+    piece(rect(12, 52, 66, 14, 2), C.wood, { edge: 'cut' }),
+    piece(rect(14, 4, 12, 52, 2), C.brownDark, { edge: 'cut', fibre: false }),
+    piece(rect(26, 12, 44, 12, 2), C.wood, { edge: 'cut', fibre: false }),
+  ]);
+}
+
 /** A small soft glow behind the diadem, 240 × 240. */
 function haloArt(): string {
   return svg({ w: 240, h: 240, name: 'b5c4-halo', boil: false }, [
@@ -135,17 +146,21 @@ const DIADEM_C: Pt = [960, 295];
 
 export default defineStory({
   lines: {
-    room: { who: 'narrator', text: 'The Room of Hidden Things! Junk is piled up high. Look, a toy shark and a hammer!' },
-    hush: { who: 'deatheater', text: 'Shh… search quietly. That lost diadem must be in here somewhere…' },
-    tiptoe: { who: 'narrator', text: 'Two Death Eaters are searching! Tiptoe past them, nice and quietly…' },
-    round: { who: 'narrator', text: 'Uh-oh! They creep round the big pile from opposite sides…' },
+    room: { who: 'narrator', text: 'The Room of Hidden Things! Look at all this junk… a toy shark, a hammer!' },
+    hush: { who: 'deatheater', text: 'Shh! Search quietly. That lost diadem must be in here somewhere…' },
+    tiptoe: { who: 'narrator', text: 'Two Death Eaters! Tiptoe past them… nice and quietly…' },
+    round: { who: 'deatheater', text: 'You go round that way… I’ll go round this way. Hee hee!' },
     ow: { who: 'deatheater', text: 'Oof! Ow! Watch where you’re going, you big lump!' },
-    storm: { who: 'narrator', text: 'Bonk! They tumble into the junk, and a storm of old chairs falls down!' },
-    found: { who: 'narrator', text: 'Look! The lost diadem sparkles on the statue’s head. Hooray, {name}!' },
+    storm: { who: 'narrator', text: 'Crash! A storm of old chairs tumbles down… right on top of them!' },
+    found: { who: 'narrator', text: 'Look! The lost diadem, sparkling on the statue’s head! Hooray, {name}!' },
   },
 
   async play(k: Kit) {
     k.backdrop(room());
+    k.music('sneaky');
+    k.ambient('dust', { count: 18, z: 30 });
+    k.dim(0.3, '#1a1530');
+    k.light(590, 140, 220, { color: '#cfd0ff', strength: 0.35 });
 
     // The five words, as bits of junk in the piles.
     const junk = [
@@ -161,13 +176,14 @@ export default defineStory({
     k.set(halo, { opacity: 0 });
     const diadem = k.horcrux('diadem', { ...DIADEM, z: 9 });
     k.set(diadem, { opacity: 0 });
+    const gold = k.light(DIADEM_C[0], DIADEM_C[1], 160, { color: C.goldLight, strength: 0 });
 
     const hero = k.character('hero', { x: 40, y: 420, w: 230, z: 20 });
-    const de1 = k.character('deatheater', { x: 170, y: 330, w: 190, z: 8 });
-    const de2 = k.character('deatheater', { x: 700, y: 330, w: 190, z: 8, flip: true });
+    const de1 = k.character('deatheater', { x: 150, y: 360, w: 200, z: 8 });
+    const de2 = k.character('deatheater', { x: 690, y: 360, w: 200, z: 8, flip: true });
     k.set([hero, de1, de2], { opacity: 0 });
 
-    await k.wait(700);
+    await k.wait(200);
     k.fx.creak();
     await k.say('room');
 
@@ -176,17 +192,29 @@ export default defineStory({
     await k.all(k.appear(de1, 0.5), k.appear(de2, 0.5));
     await k.all(k.say('hush', de1), k.walk(de1, 40, 2, 4), k.walk(de2, -40, 2, 4));
 
-    // You tiptoe past.
+    // You tiptoe past... and freeze when one turns round.
     k.fx.whizz();
     await k.appear(hero, 0.4);
+    k.set(hero, { scaleY: 0.92, transformOrigin: 'bottom' });
     sneakTune();
-    await k.all(k.say('tiptoe'), k.walk(hero, 640, 3.4, 12));
-    await k.wait(200);
+    k.fx.patter(10, 0.3);
+    void k.camera({ zoom: 1.2, x: 380, y: 440 }, 0.8);
+    const tip = k.say('tiptoe');
+    await k.walk(hero, 260, 1.7, 6);
+    k.face(de2, false);
+    k.fx.uhoh();
+    await k.wait(500);
+    await k.shake(de2, 3, 1);
+    k.face(de2, true);
+    void k.camera({ zoom: 1.2, x: 700, y: 440 }, 1.8);
+    await k.all(tip, k.walk(hero, 260, 1.7, 6));
+    k.set(hero, { scaleY: 1 });
+    await k.wait(100);
 
     // They sneak round the pile from both sides.
     k.fx.sneak();
-    const round = k.say('round');
-    await k.all(round, k.walk(de1, 190, 2.2, 8), k.walk(de2, -150, 2.2, 8));
+    void k.camera({ zoom: 1.4, x: 480, y: 430 }, 0.8);
+    await k.all(k.say('round', de2), k.walk(de1, 190, 2.2, 8), k.walk(de2, -150, 2.2, 8));
 
     // Bonk!
     bonk();
@@ -204,29 +232,54 @@ export default defineStory({
     await k.all(k.say('ow', de1), ...tumbles);
     k.fx.thud();
     k.puff(450, 560, 200, C.grey);
-    await k.say('storm');
+
+    // The storm of chairs.
+    const rand = rng(77);
+    const chairs = [0, 1, 2, 3, 4].map((i) => {
+      const c = k.add(chairArt(), { x: 360 + i * 55, y: -140, w: 90, z: 12 });
+      void k.wait(i * 120).then(() => {
+        if (i < 2) k.fx.boing();
+        return k.to(c, 0.7, { y: 470 + rand() * 70, rotation: (i % 2 ? 1 : -1) * (120 + rand() * 100), ease: 'bounce.out' });
+      });
+      return c;
+    });
+    clatter();
+    k.fx.crash();
+    await k.all(k.say('storm'), k.wait(1200));
+    void chairs;
+    // Heads poke up, dizzy.
+    k.fx.pop();
+    await k.all(k.to(de1, 0.3, { y: '-=20' }), k.to(de2, 0.3, { y: '-=20' }));
+    for (const x of [380, 600]) k.sparkle(x, 450, 5, 40);
     await k.hop(hero, 30, 2);
 
     // The diadem sparkles on the statue.
+    void k.camera({ zoom: 1.35, x: 860, y: 380 }, 1.2);
     await k.walk(hero, 60, 0.8, 3);
+    k.music('triumph');
     glitter();
     k.sfx.reveal();
     k.set(diadem, { opacity: 0 });
-    await k.all(k.appear(diadem, 0.5), k.fade(halo, 1, 0.8));
+    await k.all(k.appear(diadem, 0.5), k.fade(halo, 1, 0.8), k.fade(gold, 0.5, 0.8));
     k.float(diadem, 6, 1.6);
     k.sparkle(DIADEM_C[0], DIADEM_C[1], 16, 130);
     await k.say('found');
 
     // You take it, and a big happy finish.
     k.sfx.gem();
+    gsap.killTweensOf(diadem);
+    void k.camera({}, 1.2);
     await k.all(
-      k.to(diadem, 0.9, { x: '-=170', y: '+=220', scale: 0.8, ease: 'power2.inOut' }),
+      k.to(diadem, 0.9, { x: '-=110', y: '+=230', scale: 0.8, ease: 'power2.inOut' }),
       k.fade(halo, 0, 0.9),
+      k.fade(gold, 0, 0.9),
     );
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(800, 520, 14, 160);
-    await k.all(k.hop(hero, 50, 2), k.shake(de1, 4, 2));
-    await k.wait(500);
+    await k.hop(hero, 50, 2);
+    await k.to(hero, 0.1, { scaleY: 0.9, transformOrigin: 'bottom' });
+    await k.to(hero, 0.1, { scaleY: 1 });
+    await k.wait(1500);
   },
 });

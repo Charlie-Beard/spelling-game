@@ -6,7 +6,8 @@
  * into his hair; second try works. Then everyone's Patronuses (stag, otter,
  * hare) gallop and swirl in glowing silvery blue, and Neville beams.
  */
-import { bell, C, circle, curve, defineStory, dot, ellipse, ink, type Kit, noiseBurst, NOTE, now, piece, poly, rect, rng, svg, tone, tune, type Node, type Pt } from './kit';
+import { gsap } from 'gsap';
+import { bell, C, circle, curve, defineStory, dot, ellipse, ink, type Kit, noiseBurst, NOTE, now, piece, poly, raw, rect, rng, svg, tone, tune, type Node, type Pt } from './kit';
 
 // ------------------------------------------------------------------ sounds
 
@@ -99,9 +100,23 @@ function roomArt(): string {
     piece(rect(-20, -20, 1220, 860), '#5a3f55', { edge: 'clean', shadow: false }),
     piece(rect(-20, -20, 1220, 44), '#43304a', { rough: 0.8 }),
     piece(rect(300, 40, 580, 540, 6), '#6b4a62', { edge: 'cut', fibre: false, shadow: false }),
-    piece(poly([[330, 70], [590, 40], [850, 70], [850, 140], [330, 140]]), C.wood, { edge: 'cut', fibre: false, shadow: false, opacity: 0.0 }),
     ...lamp(340), ...lamp(840), ...lamp(590),
-    piece(rect(36, 238, 258, 250, 4), '#33241c', { edge: 'cut', fibre: false, shadow: false, opacity: 0.0 }),
+    // hanging D.A. banner
+    piece(rect(470, 60, 240, 170, 6), C.redDark),
+    piece(rect(480, 70, 220, 12, 3), C.gold, { edge: 'cut', fibre: false, shadow: false }),
+    piece(rect(480, 208, 220, 12, 3), C.gold, { edge: 'cut', fibre: false, shadow: false }),
+    raw(`<text x="590" y="170" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="64" fill="${C.goldLight}">D.A.</text>`),
+    ink([[590, 230], [590, 258]], { width: 4, color: C.gold }),
+    piece(ellipse(590, 268, 10, 14), C.gold, { edge: 'cut', fibre: false, shadow: false }),
+    // tall mirror
+    piece(rect(322, 192, 126, 236, 56), C.gold, { edge: 'cut', fibre: false }),
+    piece(rect(330, 200, 110, 220, 50), '#9fb6c8', { edge: 'cut', fibre: false, shadow: false, opacity: 0.6 }),
+    // straw practice dummy
+    piece(rect(752, 330, 16, 120, 3), C.brownDark, { edge: 'cut', fibre: false, shadow: false }),
+    piece(curve([[730, 330], [744, 270], [776, 270], [790, 330], [760, 346]], 2), C.sand),
+    piece(circle(760, 246, 22), C.sand),
+    ink([[750, 242], [756, 248]], { width: 3, color: C.brownDark }),
+    ink([[766, 242], [772, 248]], { width: 3, color: C.brownDark }),
     ...books,
     piece(curve([[-40, 860], [-40, 620], [590, 606], [1220, 620], [1220, 860]], 2), '#7a5238', { rough: 1.2 }),
     piece(ellipse(590, 700, 420, 56), C.redDark, { edge: 'cut', fibre: false }),
@@ -183,22 +198,20 @@ function patronus(kind: 'stag' | 'otter' | 'hare'): string {
 // -------------------------------------------------------------------- story
 
 const WORDS: Array<[string, number, number]> = [
-  ['chair', 90, 120],
-  ['hair', 290, 40],
-  ['stairs', 515, 0],
-  ['beard', 740, 40],
-  ['letter', 940, 120],
+  ['hair', 160, 70],
+  ['stairs', 410, 40],
+  ['beard', 660, 40],
+  ['letter', 900, 70],
 ];
 
 export default defineStory({
   lines: {
-    wall: { who: 'narrator', text: 'A blank, boring wall… then a door rumbles out of nowhere!' },
-    room: { who: 'neville', text: 'The Room of Requirement! Cushions, books, and a chair!' },
-    oops: { who: 'narrator', text: '“Expelliarmus!” Whoops! Neville’s own wand flies up!' },
-    again: { who: 'neville', text: 'It’s stuck in my hair! Let me try again!' },
-    works: { who: 'narrator', text: 'Zing! This time it works! Everyone cheers!' },
-    patronus: { who: 'narrator', text: 'Now Patronuses! A silver stag, otter and hare gallop round!' },
-    words: { who: 'narrator', text: 'Chair, hair, stairs, beard, letter: your words dance too!' },
+    wall: { who: 'narrator', text: 'A blank, boring wall… then, rumble rumble! A door appears!' },
+    room: { who: 'neville', text: 'Wow! The Room of Requirement! Cushions, books… and a comfy chair!' },
+    oops: { who: 'neville', text: 'Right… Expelliarmus! Whoops! My own wand flew off!' },
+    again: { who: 'neville', text: 'Oh no, it’s stuck in my hair! Hang on… let me try again!' },
+    works: { who: 'neville', text: 'Expelliarmus! …I did it! I really did it!' },
+    patronus: { who: 'narrator', text: 'Now, Patronuses! A silver stag, an otter and a hare gallop round!' },
     beam: { who: 'neville', text: 'We did it, {name}! Dumbledore would be so proud!' },
   },
 
@@ -211,24 +224,42 @@ export default defineStory({
     const neville = k.character('neville', { x: 600, y: 310, w: 270, z: 20 });
     k.set([hero, neville], { opacity: 0 });
 
+    k.music('sneaky');
+    k.ambient('dust');
+    const dim = k.dim(0.3);
+    const torchL = k.light(150, 230, 110, { color: C.orange, flicker: true });
+    const torchR = k.light(1030, 230, 110, { color: C.orange, flicker: true });
+
     // A blank wall… then a door.
-    await k.wait(600);
+    await k.wait(200);
     k.sfx.whoosh();
+    k.fx.patter(5);
     await k.enter(hero, 'left');
+    k.float(hero, 3, 2.6);
     const door = k.add(doorArt(), { x: 460, y: 230, w: 260, z: 8 });
     k.set(door, { opacity: 0, transformOrigin: '50% 100%' });
     doorRumble();
     void k.quake(4);
     void k.appear(door, 1.2);
+    void k.camera({ zoom: 1.25, x: 590, y: 420 }, 1.5);
     await k.say('wall');
 
     // The door swings open on the room.
     k.fx.creak();
+    k.music('adventure');
     void k.fade(room, 1, 1);
+    void k.fade(dim, 0.1, 1);
+    void k.fade(torchL, 0, 1);
+    void k.fade(torchR, 0, 1);
+    for (const x of [340, 590, 840]) k.light(x, 182, 90, { color: C.candle });
     void k.glow(C.goldLight, 0.3, 1.2);
+    void k.camera({}, 0.9);
     await k.fade(door, 0, 0.9);
     k.remove(door);
     k.sfx.whoosh();
+    const chair = k.picture('chair', { x: 930, y: 430, w: 170, z: 12 });
+    k.set(chair, { opacity: 0 });
+    void k.appear(chair, 0.5);
     await k.enter(neville, 'right');
     k.sparkle(590, 330, 10, 220);
     await k.say('room', neville);
@@ -242,6 +273,7 @@ export default defineStory({
     zing(false);
     await k.shake(neville, 5, 2);
     void k.to(wand, 0.9, { x: 120, y: -330, rotation: 500, ease: 'power1.out' });
+    void k.camera({ zoom: 1.45, x: 735, y: 400 }, 0.8);
     await k.say('oops', neville);
     await k.wait(100);
     k.fx.boing();
@@ -249,22 +281,38 @@ export default defineStory({
     k.sparkle(700, 350, 6, 60);
     await k.say('again', neville);
 
+    // He pulls the wand out of his hair.
+    k.fx.pop();
+    k.fx.boing();
+    await k.to(wand, 0.4, { x: 0, y: 0, rotation: -20, ease: 'back.out(2)' });
+
     // Second try: perfect.
     zing(true);
-    await k.beam([600, 450], [450, 470], '#ff9a9a', 0.5);
+    k.sfx.success();
+    void k.camera({}, 0.9);
+    await k.beam([600, 455], [450, 470], '#ff9a9a', 0.5);
     void k.spin(wand2, 2, 0.8);
     await k.to(wand2, 0.8, { x: -230, y: -190, ease: 'power1.out' });
     void k.fx.twinkle();
     k.puff(220, 360, 80, C.white);
     k.remove(wand2);
+    gsap.killTweensOf(hero, 'y');
     void k.hop(neville, 40, 2);
-    await k.all(k.say('works'), k.hop(hero, 40, 2));
+    await k.all(k.say('works', neville), k.hop(hero, 40, 2));
+    k.float(hero, 3, 2.6);
 
     // Patronuses.
+    k.music('magic');
     patronusTune();
+    k.sfx.reveal();
     void k.glow('#9fd8ff', 0.3, 2.5);
+    void k.fade(dim, 0.4, 1);
+    k.ambient('stars', { count: 16, area: [200, 80, 800, 380], z: 30 });
+    const aura = k.light(590, 280, 320, { color: '#bfe6ff', strength: 0.4 });
+    void k.camera({ zoom: 1.15, x: 590, y: 300 }, 2.5);
+    const starts = [[200, 170], [470, 250], [800, 190]];
     const animals = (['stag', 'otter', 'hare'] as const).map((kind, i) => {
-      const a = k.add(patronus(kind), { x: [180, 440, 860][i], y: [430, 480, 450][i], w: [240, 230, 190][i], z: 15 });
+      const a = k.add(patronus(kind), { x: starts[i][0], y: starts[i][1], w: [240, 230, 190][i], z: 15 });
       k.set(a, { opacity: 0 });
       return a;
     });
@@ -272,41 +320,50 @@ export default defineStory({
       void k.fade(a, 1, 0.6);
       k.float(a, 12, 1.1 + i * 0.2);
     });
-    k.sparkle(300, 480, 12, 160);
+    k.sparkle(300, 250, 12, 160);
+    let first = true;
     const gallop = async (a: HTMLElement, path: Array<[number, number]>) => {
-      for (const [x, y] of path) await k.to(a, 0.8, { x, y, ease: 'sine.inOut' });
+      let n = 0;
+      for (const [x, y] of path) {
+        if (first) { first = false; k.fx.whizz(); }
+        void k.to(a, 0.8, { rotation: n++ % 2 ? -6 : 6, ease: 'sine.inOut' });
+        await k.to(a, 0.8, { x, y, ease: 'sine.inOut' });
+      }
     };
-    await k.all(
-      k.say('patronus'),
-      gallop(animals[0], [[260, -120], [120, -50], [380, -150], [200, -60]]),
-      gallop(animals[1], [[-220, -170], [180, -60], [-120, -150], [120, -50]]),
-      gallop(animals[2], [[-300, -150], [-120, -60], [-380, -130], [-240, -50]]),
-    );
-
-    // The words dance in.
-    const pics = WORDS.map(([w, x, y]) => {
-      const p = k.picture(w, { x, y, w: 150, z: 30 });
-      k.set(p, { opacity: 0 });
-      return p;
-    });
     const popWords = async () => {
-      await k.wait(1200);
+      const pics = WORDS.map(([w, x, y]) => {
+        const p = k.picture(w, { x, y, w: 140, z: 30 });
+        k.set(p, { opacity: 0 });
+        return p;
+      });
+      await k.wait(1500);
       for (const [i, p] of pics.entries()) {
         k.fx.pop();
         await k.appear(p, 0.3);
         k.float(p, 6, 1.6 + i * 0.15);
-        k.sparkle(WORDS[i][1] + 75, WORDS[i][2] + 75, 5, 70);
+        k.sparkle(WORDS[i][1] + 70, WORDS[i][2] + 70, 5, 70);
         await k.wait(220);
       }
     };
-    await k.all(k.say('words'), popWords());
+    await k.all(
+      k.say('patronus'),
+      popWords(),
+      gallop(animals[0], [[200, -60], [-100, -20], [220, -50], [60, 0]]),
+      gallop(animals[1], [[-200, -40], [180, -60], [-120, -30], [100, 0]]),
+      gallop(animals[2], [[-220, -50], [-60, 0], [-200, -60], [-100, -10]]),
+    );
 
     // Neville beams.
+    void k.fade(aura, 0.1, 1);
+    await k.camera({}, 1.2);
+    gsap.killTweensOf(hero, 'y');
     await k.all(k.say('beam', neville), k.hop(neville, 50, 3));
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(590, 300, 16, 260);
-    await k.all(k.hop(hero, 50, 2), k.hop(neville, 30, 2));
-    await k.wait(900);
+    await k.hop(hero, 50, 2);
+    await k.all(k.to(neville, 0.12, { scaleY: 0.9 }), k.hop(neville, 30, 2));
+    await k.to(neville, 0.12, { scaleY: 1 });
+    await k.wait(1500);
   },
 });

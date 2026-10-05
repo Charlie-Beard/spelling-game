@@ -438,49 +438,43 @@ function table(plates: number[]): string {
   ]);
 }
 
-const cover = svg({ w: 10, h: 10, name: 'b5c1-cover', boil: false }, [piece(rect(-5, -5, 20, 20), '#16192c', { edge: 'clean', shadow: false })]);
-
 // ---------------------------------------------------------------- helpers
 
-/** Bounds along in big doggy leaps. */
+/** Bounds along in big doggy leaps, with a crouch first and a squash on every landing. */
 async function bound(k: Kit, el: HTMLElement, dx: number, hops: number, height = 40, each = 0.3): Promise<void> {
   if (k.calm) return k.to(el, each * hops, { x: `+=${dx}` });
+  await k.to(el, 0.1, { scaleY: 0.92, transformOrigin: '50% 100%' });
   for (let i = 0; i < hops; i++) {
     await k.all(
       k.to(el, each, { x: `+=${dx / hops}`, ease: 'none' }),
-      k.to(el, each / 2, { y: `-=${height}`, rotation: dx < 0 ? 4 : -4, ease: 'power1.out' }).then(() => k.to(el, each / 2, { y: `+=${height}`, rotation: 0, ease: 'power1.in' })),
+      k.to(el, each / 2, { y: `-=${height}`, scaleY: 1, scaleX: 1, rotation: dx < 0 ? 4 : -4, ease: 'power1.out' }).then(() => k.to(el, each / 2, { y: `+=${height}`, rotation: 0, ease: 'power1.in' })),
     );
+    k.fx.thud();
+    await k.to(el, 0.08, { scaleY: 0.9, scaleX: 1.08, transformOrigin: '50% 100%' });
+    await k.to(el, 0.15, { scaleY: 1, scaleX: 1, ease: 'back.out(3)' });
   }
-}
-
-/** Fades the dark cover up, clears the stage and fades it away again around `build`. */
-async function changeScene(k: Kit, build: () => void): Promise<HTMLElement> {
-  const c = k.add(cover, { x: 0, y: 0, w: 1180, h: 820, z: 60 });
-  k.set(c, { opacity: 0 });
-  await k.fade(c, 1, 0.45);
-  for (const el of [...k.root.querySelectorAll<HTMLElement>(':scope > .story-actor')]) if (el !== c) k.remove(el);
-  k.caption('');
-  build();
-  return c;
 }
 
 // ------------------------------------------------------------------- story
 
 export default defineStory({
   lines: {
-    intro: { who: 'narrator', text: 'Here’s number eleven… and here’s number thirteen. But where is number twelve?' },
-    lick: { who: 'narrator', text: 'Woof! A big shaggy black dog bounds up… and licks your face!' },
-    fooled: { who: 'sirius', text: 'Ha! Fooled you! It’s only me, Sirius. Welcome to my house!' },
-    portrait: { who: 'sirius', text: 'Uh-oh, we woke up the grumpy old portrait! Quick, {name}, shut the curtains!' },
+    intro: { who: 'narrator', text: 'Number eleven… number thirteen… but where’s number twelve?' },
+    lick: { who: 'narrator', text: 'Woof! A big shaggy dog bounds up… and licks your face! Slurp!' },
+    fooled: { who: 'sirius', text: 'Ha ha! Fooled you! It’s only me, Sirius. Welcome to my house!' },
+    portrait: { who: 'sirius', text: 'Oh no, we’ve woken the grumpy old portrait! Quick, {name}, shut the curtains!' },
     dinner: { who: 'sirius', text: 'Phew! Thank you. Now… who’s hungry? Dinner time!' },
-    jam: { who: 'moody', text: 'Constant vigilance… and pass the jam!' },
-    end: { who: 'narrator', text: 'Clink, clink go the forks! Welcome to the Order of the Phoenix!' },
+    jam: { who: 'moody', text: 'Constant vigilance! Mmm… and pass the jam, please!' },
+    end: { who: 'sirius', text: 'Cheers, everyone! Welcome to the Order of the Phoenix!' },
   },
 
   async play(k) {
     // ---- Outside: a quiet London street at night.
+    k.music('magic');
     k.backdrop(street());
-    const star = k.picture('star', { x: 1030, y: 14, w: 130, z: 3 });
+    k.ambient('stars', { count: 20, area: [0, 0, 1180, 260], z: 5 });
+    k.dim(0.3);
+    const star = k.picture('star', { x: 960, y: 120, w: 110, z: 3 });
     k.float(star, 6, 2.6);
     const h12 = k.add(house(12, { wall: '#4e4846', stucco: '#8a837a', door: '#1e1e22', lit: [false, false, false, true, false, true], grim: true }), { x: 440, y: 80, w: 300, z: 4, still: true });
     k.set(h12, { scaleX: 0.02, scaleY: 0.85, transformOrigin: '50% 100%', opacity: 0 });
@@ -492,13 +486,15 @@ export default defineStory({
     k.set(hero, { x: -320 });
 
     k.fx.wind(2);
-    await k.walk(hero, 320, 0.9, 3);
+    k.fx.patter(5, 0.12);
+    await k.walk(hero, 320, 0.7, 3);
     k.fx.twinkle();
     void k.pop(star, 1.2);
     await k.say('intro');
 
     // Creak… the houses shuffle apart, and number 12 squeezes out between them!
     housesCreak();
+    void k.camera({ zoom: 1.3, x: 590, y: 380 }, 1.6);
     k.set(h12, { opacity: 1 });
     await k.all(
       k.to(h11, 1.8, { x: -150, ease: 'power1.inOut' }),
@@ -512,14 +508,21 @@ export default defineStory({
       }),
       k.shake(hero, 8, 2),
     );
+    k.sfx.reveal();
     k.fx.pop();
     k.puff(590, 560, 200, C.stone);
     k.sparkle(590, 300, 16, 200);
     k.fx.twinkle();
+    k.light(150, 236, 120, { color: C.candle, flicker: true });
+    k.light(590, 440, 140, { color: '#efc96a', strength: 0.3 });
     await k.hop(hero, 40, 1);
 
     // Up to the door of number 12…
+    void k.camera({}, 1);
+    k.fx.patter(6, 0.12);
     await k.walk(hero, 260, 0.8, 3);
+    k.fx.knock(3);
+    await k.wait(300);
     k.fx.creak();
     await k.wait(100);
 
@@ -531,8 +534,12 @@ export default defineStory({
     let portraitEl!: HTMLElement;
     let curtL!: HTMLElement;
     let curtR!: HTMLElement;
-    let c = await changeScene(k, () => {
+    await k.cut(() => {
       k.backdrop(hall());
+      k.ambient('dust', { z: 30 });
+      k.dim(0.2);
+      k.light(320, 196, 110, { color: C.candle, flicker: true });
+      k.light(880, 196, 110, { color: C.candle, flicker: true });
       portraitEl = k.add(portrait(), { x: 420, y: 58, w: 340, z: 6 });
       curtL = k.add(curtain(), { x: 396, y: 40, w: 200, z: 7, still: true });
       curtR = k.add(curtain(), { x: 584, y: 40, w: 200, z: 7, still: true, flip: true });
@@ -549,30 +556,29 @@ export default defineStory({
     const tail = dog.querySelector<SVGGElement>('[data-part="tail"]');
     const tongue = dog.querySelector<SVGGElement>('[data-part="tongue"]');
     const wag = tail && !k.calm ? gsap.to(tail, { rotation: 22, svgOrigin: '330 150', duration: 0.16, yoyo: true, repeat: -1, ease: 'steps(1)' }) : null;
-    await k.fade(c, 0, 0.45);
-    k.remove(c);
 
-    // A big shaggy dog bounds in, barking happily…
+    // A big shaggy dog bounds in, barking happily, right up to you…
     happyBarks(3);
-    await bound(k, dog, -560, 2, 46, 0.25);
-    happyBarks(2);
+    await bound(k, dog, -950, 3, 46, 0.25);
 
     // …and gives you a great big lick!
+    void k.camera({ zoom: 1.4, x: 300, y: 480 }, 0.6);
     await k.all(
       k.say('lick'),
       (async () => {
-        await bound(k, dog, -540, 1, 30, 0.25);
+        await k.wait(500);
         tongue?.setAttribute('opacity', '1');
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 3; i++) {
           slurp();
           await k.all(k.to(dog, 0.18, { rotation: 6, y: '-=10' }).then(() => k.to(dog, 0.18, { rotation: 0, y: '+=10' })), k.shake(hero2, 5, 1));
         }
         tongue?.setAttribute('opacity', '0');
-        await bound(k, dog, 520, 2, 30);
       })(),
     );
+    await bound(k, dog, 520, 1, 30);
 
     // Pop! The dog turns into Sirius, laughing.
+    void k.camera({}, 0.9);
     k.fx.poof();
     k.puff(900, 520, 300, '#3a3438');
     wag?.kill();
@@ -583,6 +589,7 @@ export default defineStory({
 
     // All that noise wakes the cross old portrait!
     swish();
+    void k.camera({ zoom: 1.3, x: 590, y: 320 }, 0.7);
     await k.all(k.to(curtL, 0.35, { scaleX: 0.2, ease: 'power2.out' }), k.to(curtR, 0.35, { scaleX: 0.2, ease: 'power2.out' }));
     grumble(7);
     await k.all(k.shake(portraitEl, 5, 2), k.shake(hero2, 8, 1), k.shake(sirius, 8, 1));
@@ -600,18 +607,22 @@ export default defineStory({
     await k.beam([275, 512], [590, 250]);
     swish();
     await k.all(k.to(curtL, 0.25, { scaleX: 1, ease: 'back.out(1.6)' }), k.to(curtR, 0.25, { scaleX: 1, ease: 'back.out(1.6)' }));
+    void k.camera({}, 0.9);
     grumble(4, true);
     await k.wait(100);
     k.fx.twinkle();
     await k.all(k.hop(hero2, 40, 1), k.hop(sirius, 30, 1));
 
-    // Dinner time! Sirius toots his horn.
-    await k.say('dinner', sirius);
-    k.fx.pop();
-    await k.appear(horn, 0.3);
-    toot();
-    await k.all(k.to(horn, 0.2, { scale: 1.15, rotation: -6 }).then(() => k.to(horn, 0.2, { scale: 1, rotation: 0 })).then(() => k.pop(horn, 1.15)), k.hop(sirius, 20, 2));
-    await k.wait(100);
+    // Dinner time! Sirius toots his horn just before he finishes speaking.
+    await k.all(
+      k.say('dinner', sirius),
+      k.wait(2400).then(async () => {
+        k.fx.pop();
+        await k.appear(horn, 0.3);
+        toot();
+        await k.all(k.to(horn, 0.2, { scale: 1.15, rotation: -6 }).then(() => k.to(horn, 0.2, { scale: 1, rotation: 0 })).then(() => k.pop(horn, 1.15)), k.hop(sirius, 20, 2));
+      }),
+    );
 
     // ---- Down in the kitchen: a cosy Order dinner.
     const at = { hero: 40, sirius: 290, lupin: 660, moody: 910 };
@@ -620,8 +631,13 @@ export default defineStory({
     let moody!: HTMLElement;
     let sirius3!: HTMLElement;
     const crew: HTMLElement[] = [];
-    c = await changeScene(k, () => {
+    await k.cut(() => {
+      k.music('cosy');
       k.backdrop(kitchen());
+      k.ambient('embers', { area: [480, 300, 220, 300], z: 5 });
+      k.dim(0.15);
+      k.light(590, 500, 260, { color: C.orange, flicker: true });
+      k.light(590, 124, 90, { color: C.candle });
       const char = (id: string, x: number) => k.character(id, { x, y: 290, w: 230, z: 20 });
       crew.push(char('hero', at.hero));
       sirius3 = char('sirius', at.sirius);
@@ -638,35 +654,46 @@ export default defineStory({
       jar = k.picture('jar', { x: 530, y: 425, w: 130, z: 33 });
     });
     crackle(2.5);
-    await k.fade(c, 0, 0.45);
-    k.remove(c);
+    k.float(crew[0], 3, 2.4);
+    k.float(crew[2], 3, 2.4);
     clink();
 
-    // Moody wants the jam…
+    // Moody wants the jam… Lupin sends it flying down the table.
     await k.say('jam', moody);
     k.fx.spell();
-    await k.beam([482, 442], [595, 480]);
+    await k.beam([775, 442], [595, 480]);
     k.fx.whizz();
-    await k.to(jar, 0.4, { x: 410, ease: 'power2.out' });
+    void k.camera({ zoom: 1.35, x: 800, y: 440 }, 1);
+    await k.all(
+      k.to(jar, 0.5, { x: 820, ease: 'power2.out' }),
+      k.to(jar, 0.25, { y: '-=40', ease: 'power1.out' }).then(() => k.to(jar, 0.25, { y: '+=40', ease: 'power1.in' })),
+    );
     k.fx.pop();
     await k.all(k.pop(jar, 1.15), k.hop(moody, 30, 1));
 
     // Forks clink, everyone cheers!
     const clinkForks = async () => {
-      clink();
-      await k.all(...forks.map((f, i) => k.to(f, 0.18, { rotation: i < 2 ? 22 : -22 }).then(() => k.to(f, 0.25, { rotation: 0, ease: 'back.out(2)' }))));
+      await k.all(
+        ...forks.map((f, i) =>
+          k.wait(i * 60).then(() => {
+            clink();
+            return k.to(f, 0.18, { rotation: i < 2 ? 22 : -22 }).then(() => k.to(f, 0.25, { rotation: 0, ease: 'back.out(2)' }));
+          }),
+        ),
+      );
     };
+    void k.camera({}, 1.2);
     k.fx.jingle();
     k.confetti(36);
     k.sparkle(590, 420, 16, 200);
     await k.all(
-      k.say('end'),
+      k.say('end', sirius3),
       (async () => {
         await clinkForks();
         await k.hop(sirius3, 30, 1);
       })(),
     );
     crackle(1.5);
-    await k.wait(400);
+    await k.wait(1500);
   },
 });
